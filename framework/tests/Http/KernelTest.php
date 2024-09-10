@@ -2,13 +2,19 @@
 
 namespace Tests\Http;
 
+use DJWeb\Framework\Container\Container;
+use DJWeb\Framework\Container\Contracts\ContainerInterface;
 use DJWeb\Framework\Http\Kernel;
 use DJWeb\Framework\Http\Request;
 use DJWeb\Framework\Http\Response;
+use DJWeb\Framework\Routing\Router;
 use PHPUnit\Framework\TestCase;
 
 class KernelTest extends TestCase
 {
+    private ContainerInterface $container;
+    private Router $router;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -22,11 +28,20 @@ class KernelTest extends TestCase
             'SERVER_PORT' => 80,
             'SERVER_NAME' => 'test.local'
         ];
+        $this->container = new Container();
+        $this->container->set(ContainerInterface::class, $this->container);
+        $this->router = new Router($this->container);
+        $this->router->addRoute(
+            'GET',
+            '/',
+            fn() => (new Response())->setContent('hello world')
+        );
+        $this->container->set(Router::class, $this->router);
     }
 
     public function testHandleReturnsResponse()
     {
-        $kernel = new Kernel();
+        $kernel = new Kernel($this->container);
         $request = Request::createFromSuperglobals();
         $response = $kernel->handle($request);
         $this->assertInstanceOf(Response::class, $response);
@@ -34,9 +49,9 @@ class KernelTest extends TestCase
 
     public function testHandleResponseContent()
     {
-        $kernel = new Kernel();
+        $kernel = new Kernel($this->container);
         $request = Request::createFromSuperglobals();
         $response = $kernel->handle($request);
-        $this->assertEquals('Hello world from kernel', (string)$response->getBody());
+        $this->assertEquals('hello world', (string)$response->getBody());
     }
 }

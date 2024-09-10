@@ -2,7 +2,7 @@
 
 namespace Tests\Helpers;
 
-use Framework\Http\Response;
+use DJWeb\Framework\Http\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 

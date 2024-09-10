@@ -1,11 +1,12 @@
 <?php
 
-use DJWeb\Framework\Http\Kernel;
+use DJWeb\Framework\Application;
 
 require_once '../vendor/autoload.php';
 try {
-    $kernel = new Kernel();
-    echo $kernel->handle(\DJWeb\Framework\Http\Request::createFromSuperglobals())->getBody()->getContents();
+    $app = new Application();
+    echo $app->handle()->getBody()->getContents();
 } catch (\Throwable $e) {
+    dump($e->getTrace());
     dd($e->getMessage());
 }
