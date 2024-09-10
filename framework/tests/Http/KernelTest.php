@@ -5,7 +5,6 @@ namespace Tests\Http;
 use DJWeb\Framework\Http\Kernel;
 use DJWeb\Framework\Http\Request;
 use DJWeb\Framework\Http\Response;
-use DJWeb\Framework\Routing\Router;
 use PHPUnit\Framework\TestCase;
 
 class KernelTest extends TestCase
@@ -32,6 +31,7 @@ class KernelTest extends TestCase
         $response = $kernel->handle($request);
         $this->assertInstanceOf(Response::class, $response);
     }
+
     public function testHandleResponseContent()
     {
         $kernel = new Kernel();

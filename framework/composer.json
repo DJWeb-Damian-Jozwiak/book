@@ -3,7 +3,8 @@
   "description": "Framework for my PHP project",
   "require": {
     "PHP": "^8.3",
-    "psr/http-message": "^2.0"
+    "psr/http-message": "^2.0",
+    "psr/container": "^2.0"
   },
   "scripts": {
     "phpstan": "vendor/bin/phpstan analyse",
