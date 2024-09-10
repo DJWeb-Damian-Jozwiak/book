@@ -1,0 +1,21 @@
+{
+  "name": "damian-jozwiak/app",
+  "description": "Framework for my PHP project",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "repositories": [
+    {
+      "PHP": "^8.3",
+      "type": "path",
+      "url": "/var/www/own_framework/framework"
+    }
+  ],
+  "require": {
+    "my_project/framework": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  }
+}

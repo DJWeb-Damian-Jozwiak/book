@@ -1,0 +1,30 @@
+{
+  "name": "my_project/framework",
+  "description": "Framework for my PHP project",
+  "require": {
+    "PHP": "^8.3"
+  },
+  "scripts": {
+    "phpstan": "vendor/bin/phpstan analyse",
+    "test": "vendor/bin/phpunit",
+    "test-coverage": [
+      "export XDEBUG_MODE=coverage || set XDEBUG_MODE=coverage",
+      "vendor/bin/phpunit --coverage-text"
+    ]
+  },
+  "autoload": {
+    "psr-4": {
+      "DJWeb\\Framework\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11",
+    "phpstan/phpstan": "^1.11",
+    "symfony/var-dumper": "^5.0"
+  }
+}
