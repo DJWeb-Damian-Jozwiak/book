@@ -2,14 +2,15 @@
   "name": "my_project/framework",
   "description": "Framework for my PHP project",
   "require": {
-    "PHP": "^8.3"
+    "PHP": "^8.3",
+    "psr/http-message": "^2.0"
   },
   "scripts": {
     "phpstan": "vendor/bin/phpstan analyse",
     "test": "vendor/bin/phpunit",
     "test-coverage": [
       "export XDEBUG_MODE=coverage || set XDEBUG_MODE=coverage",
-      "vendor/bin/phpunit --coverage-text"
+      "vendor/bin/phpunit --coverage-html coverage"
     ]
   },
   "autoload": {
