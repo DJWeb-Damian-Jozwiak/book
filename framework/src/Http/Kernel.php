@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Http;
 
 use Psr\Http\Message\RequestInterface;
@@ -9,6 +11,6 @@ class Kernel
 {
     public function handle(RequestInterface $request): ResponseInterface
     {
-        return (new Response(200))->setContent("Hello world from kernel");
+        return (new Response(200))->setContent('Hello world from kernel');
     }
 }

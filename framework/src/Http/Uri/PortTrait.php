@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace DJWeb\Framework\Http\Uri;
 
 use InvalidArgumentException;
@@ -19,7 +21,7 @@ trait PortTrait
     private function validatePort(?int $port): void
     {
         if ($port !== null && ($port < 1 || $port > 65535)) {
-            throw new InvalidArgumentException("Invalid port: $port");
+            throw new InvalidArgumentException("Invalid port: {$port}");
         }
     }
 }

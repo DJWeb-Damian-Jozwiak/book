@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace DJWeb\Framework\Http\Uri;
 
 use Psr\Http\Message\UriInterface;
@@ -13,6 +15,6 @@ trait FragmentTrait
     }
     public function withFragment(string $fragment): UriInterface
     {
-        return $this->clone($this,'fragment', $fragment);
+        return $this->clone($this, 'fragment', $fragment);
     }
 }

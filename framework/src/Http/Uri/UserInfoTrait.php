@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace DJWeb\Framework\Http\Uri;
 
 trait UserInfoTrait
@@ -12,7 +14,7 @@ trait UserInfoTrait
     public function withUserInfo(string $user, ?string $password = null): self
     {
         $new = clone $this;
-        $new->userInfo = $password ? "$user:$password" : $user;
+        $new->userInfo = $password ? "{$user}:{$password}" : $user;
         return $new;
     }
 

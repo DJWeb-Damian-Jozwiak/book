@@ -1,6 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 namespace DJWeb\Framework\Http;
+
 use DJWeb\Framework\Http\Uri\FragmentTrait;
 use DJWeb\Framework\Http\Uri\HostTrait;
 use DJWeb\Framework\Http\Uri\PathTrait;
@@ -40,21 +43,6 @@ class Uri implements UriInterface
         $this->query = $query;
         $this->fragment = $fragment;
     }
-
-
-    private function clone(
-        UriInterface $obj,
-        string $propertyName,
-        string|int|float|null $propertyValue
-    ): static {
-        $clone = clone $obj;
-        $reflection = new ReflectionClass($clone);
-        $property = $reflection->getProperty($propertyName);
-        $property->setAccessible(true);
-        $property->setValue($clone, $propertyValue);
-        /** @phpstan-ignore-next-line */
-        return $clone;
-    }
     public function __toString(): string
     {
         $uri = $this->scheme ? $this->scheme . ':' : '';
@@ -70,5 +58,19 @@ class Uri implements UriInterface
             $uri .= '#' . $this->fragment;
         }
         return $uri;
+    }
+
+    private function clone(
+        UriInterface $obj,
+        string $propertyName,
+        string|int|float|null $propertyValue
+    ): static {
+        $clone = clone $obj;
+        $reflection = new ReflectionClass($clone);
+        $property = $reflection->getProperty($propertyName);
+        $property->setAccessible(true);
+        $property->setValue($clone, $propertyValue);
+        /** @phpstan-ignore-next-line */
+        return $clone;
     }
 }

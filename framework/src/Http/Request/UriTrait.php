@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Http\Request;
 
 use DJWeb\Framework\Http\Uri;
@@ -15,7 +17,7 @@ trait UriTrait
             scheme: $this->server['REQUEST_SCHEME'],
             host: $this->server['SERVER_NAME'],
             port: $this->server['SERVER_PORT'],
-            query: !empty($this->getParams) ? http_build_query($this->getParams) : ''
+            query: ! empty($this->getParams) ? http_build_query($this->getParams) : ''
         );
     }
 
@@ -35,5 +37,4 @@ trait UriTrait
     {
         return $this->uri->getPath();
     }
-
 }

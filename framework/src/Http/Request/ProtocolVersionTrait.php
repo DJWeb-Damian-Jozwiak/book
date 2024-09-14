@@ -1,8 +1,8 @@
 <?php
 
-namespace DJWeb\Framework\Http\Request;
+declare(strict_types=1);
 
-use Psr\Http\Message\MessageInterface;
+namespace DJWeb\Framework\Http\Request;
 
 trait ProtocolVersionTrait
 {

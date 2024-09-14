@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Http;
 
 use Psr\Http\Message\StreamInterface;
@@ -17,7 +19,7 @@ class Stream implements StreamInterface
 
     public function __destruct()
     {
-       $this->close();
+        $this->close();
     }
     public function __toString(): string
     {
@@ -27,7 +29,7 @@ class Stream implements StreamInterface
     public function getContents(): string
     {
         $content = stream_get_contents($this->stream, -1, 0);
-        if (!$content) {
+        if (! $content) {
             return '';
         }
         return $content;
@@ -35,7 +37,7 @@ class Stream implements StreamInterface
     public function setContent(string $content): StreamInterface
     {
         $stream = $this->openStream('w+b');
-        if (!$stream) {
+        if (! $stream) {
             throw new \RuntimeException('Unable to open temp file');
         }
         fwrite($stream, $content);
@@ -43,14 +45,9 @@ class Stream implements StreamInterface
         $this->rewind();
         return $this;
     }
-
-    protected function openStream(string $mode): mixed
-    {
-        return fopen('php://temp', $mode);
-    }
     public function close(): void
     {
-        if(!$this->stream) {
+        if (! $this->stream) {
             return;
         }
         fclose($this->stream);
@@ -116,5 +113,10 @@ class Stream implements StreamInterface
     {
         $meta = stream_get_meta_data($this->stream);
         return $key ? ($meta[$key] ?? null) : $meta;
+    }
+
+    protected function openStream(string $mode): mixed
+    {
+        return fopen('php://temp', $mode);
     }
 }

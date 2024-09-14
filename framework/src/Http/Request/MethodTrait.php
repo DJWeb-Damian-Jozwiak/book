@@ -33,7 +33,7 @@ trait MethodTrait
     {
         $method = strtoupper($method);
         if (! in_array($method, self::$validMethods, true)) {
-            throw new InvalidArgumentException("Invalid HTTP method: $method");
+            throw new InvalidArgumentException("Invalid HTTP method: {$method}");
         }
         $clone = clone $this;
         $clone->method = $method;

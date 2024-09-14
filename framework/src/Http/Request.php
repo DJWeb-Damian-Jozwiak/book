@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Http;
 
 use DJWeb\Framework\Http\Request\BodyTrait;
@@ -33,7 +35,8 @@ class Request implements RequestInterface
         public readonly array $cookies,
         public readonly array $files,
         public readonly array $server,
-    ) {}
+    ) {
+    }
 
     public function withRequestTarget(string $requestTarget): RequestInterface
     {
@@ -42,6 +45,21 @@ class Request implements RequestInterface
         }
         $uri = $this->uri->withPath($requestTarget);
         return $this->withUri($uri);
+    }
+    public static function createFromSuperglobals(): self
+    {
+        $request = (new Request(
+            $_GET,
+            $_POST,
+            $_COOKIE,
+            $_FILES,
+            $_SERVER
+        ));
+        $request = $request->withMethod($request->server['REQUEST_METHOD'])
+            ->withHeaders(new Headers($request->server));
+        $request->buildUri();
+        $request->loadBodyFromStream();
+        return $request;
     }
 
     private function clone(
@@ -55,15 +73,5 @@ class Request implements RequestInterface
         $property->setAccessible(true);
         $property->setValue($clone, $propertyValue);
         return $clone;
-    }
-    public static function createFromSuperglobals(): self {
-        $request = (new Request(
-            $_GET, $_POST, $_COOKIE, $_FILES, $_SERVER
-        ));
-        $request = $request->withMethod($request->server['REQUEST_METHOD'])
-            ->withHeaders(new Headers($request->server));
-        $request->buildUri();
-        $request->loadBodyFromStream();
-        return $request;
     }
 }

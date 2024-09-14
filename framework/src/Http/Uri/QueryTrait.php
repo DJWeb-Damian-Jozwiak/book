@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Http\Uri;
 
 trait QueryTrait
@@ -16,6 +18,7 @@ trait QueryTrait
 
     /**
      * @param array<string, string|int|float> $params
+     *
      * @return \DJWeb\Framework\Http\Uri
      */
     public function withQueryParams(array $params): self

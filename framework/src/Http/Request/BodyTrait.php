@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Http\Request;
 
 use DJWeb\Framework\Http\Stream;
@@ -8,15 +10,12 @@ use Psr\Http\Message\StreamInterface;
 trait BodyTrait
 {
     private StreamInterface $body;
-
-    private function loadBodyFromStream(): void
+    public function getBody(): StreamInterface
     {
-        $this->body = new Stream(fopen('php://input', 'r'));
-    }
-    public function getBody(): StreamInterface {
         return $this->body;
     }
-    public function withBody(StreamInterface $body): self {
+    public function withBody(StreamInterface $body): self
+    {
         $clone = clone $this;
         $clone->body = $body;
         return $clone;
@@ -33,10 +32,15 @@ trait BodyTrait
     public function json(string $key, mixed $default = null): mixed
     {
         $body = $this->getBody()->getContents();
-        if(!json_validate($body)) {
+        if (! json_validate($body)) {
             throw new \RuntimeException('Invalid JSON body');
         }
         $jsonData = json_decode($body, true);
         return $jsonData[$key] ?? $default;
+    }
+
+    private function loadBodyFromStream(): void
+    {
+        $this->body = new Stream(fopen('php://input', 'r'));
     }
 }

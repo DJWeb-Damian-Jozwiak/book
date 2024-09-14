@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Http\Request;
 
 use ArrayObject;
-
 
 /**
  * @phpstan-ignore-next-line
@@ -22,6 +23,59 @@ class Headers extends ArrayObject
     public static function empty(): Headers
     {
         return new Headers([]);
+    }
+
+    /**
+     * @return array<array<string>>
+     */
+    public function getHeaders(): array
+    {
+        return (array) $this;
+    }
+
+    public function hasHeader(string $name): bool
+    {
+        return isset($this[$name]);
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getHeader(string $name): array
+    {
+        return isset($this[$name]) ? (array) $this[$name] : [];
+    }
+
+    public function getHeaderLine(string $name): string
+    {
+        return implode(', ', $this[$name] ?? []);
+    }
+
+    /**
+     * @param array<string>|string $value
+     */
+    public function withHeader(string $name, array|string $value): self
+    {
+        $clone = clone $this;
+        $clone[$name] = (array) $value;
+        return $clone;
+    }
+
+    /**
+     * @param array<string>|string $value
+     */
+    public function withAddedHeader(string $name, array|string $value): self
+    {
+        $clone = clone $this;
+        $clone[$name][] = $value;
+        return $clone;
+    }
+
+    public function withoutHeader(string $name): self
+    {
+        $clone = clone $this;
+        unset($clone[$name]);
+        return $clone;
     }
 
     /**
@@ -45,63 +99,5 @@ class Headers extends ArrayObject
             }
         }
         return $headers;
-    }
-
-    /**
-     * @return array<array<string>>
-     */
-    public function getHeaders(): array
-    {
-        return (array)$this;
-    }
-
-    public function hasHeader(string $name): bool
-    {
-        return isset($this[$name]);
-    }
-
-    /**
-     * @param string $name
-     * @return array<string>
-     */
-    public function getHeader(string $name): array
-    {
-        return isset($this[$name])  ? (array)$this[$name] : [];
-    }
-
-    public function getHeaderLine(string $name): string
-    {
-        return implode(', ', $this[$name] ?? []);
-    }
-
-    /**
-     * @param string $name
-     * @param array<string>|string $value
-     * @return self
-     */
-    public function withHeader(string $name, array|string $value): self
-    {
-        $clone = clone $this;
-        $clone[$name] = (array)$value;
-        return $clone;
-    }
-
-    /**
-     * @param string $name
-     * @param array<string>|string $value
-     * @return self
-     */
-    public function withAddedHeader(string $name, array|string $value): self
-    {
-        $clone = clone $this;
-        $clone[$name][] = $value;
-        return $clone;
-    }
-
-    public function withoutHeader(string $name): self
-    {
-        $clone = clone $this;
-        unset($clone[$name]);
-        return $clone;
     }
 }

@@ -1,9 +1,10 @@
 <?php
+
 declare(strict_types=1);
+
 namespace DJWeb\Framework\Http\Uri;
 
 use InvalidArgumentException;
-use Psr\Http\Message\UriInterface;
 
 trait SchemeTrait
 {
@@ -19,8 +20,8 @@ trait SchemeTrait
     }
     private function validateScheme(string $scheme): void
     {
-        if (!in_array($scheme, ['http', 'https'])) {
-            throw new InvalidArgumentException("Invalid scheme: $scheme");
+        if (! in_array($scheme, ['http', 'https'])) {
+            throw new InvalidArgumentException("Invalid scheme: {$scheme}");
         }
     }
 }
