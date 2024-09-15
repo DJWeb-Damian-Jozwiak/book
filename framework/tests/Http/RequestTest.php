@@ -1,192 +1,211 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Http;
 
+use DJWeb\Framework\Http\HeaderManager;
 use DJWeb\Framework\Http\Request;
-use DJWeb\Framework\Http\Request\Headers;
-use InvalidArgumentException;
+use DJWeb\Framework\Http\RequestFactory;
+use DJWeb\Framework\Http\UriManager;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UriInterface;
 
 class RequestTest extends TestCase
 {
-    public function setUp(): void
+    private Request $request;
+    private UriInterface $uri;
+    private StreamInterface $body;
+    private HeaderManager $headerManager;
+
+    protected function setUp(): void
     {
-        parent::setUp();
-        $_GET = ['key' => 'value'];
-        $_POST = ['postKey' => 'postValue'];
-        $_COOKIE = ['cookieName' => 'cookieValue'];
-        $_FILES = ['fileField' => ['name' => 'test.txt']];
-        $_SERVER = [
-            'REQUEST_METHOD' => 'GET',
-            'REQUEST_SCHEME' => 'http',
-            'SERVER_PORT' => 80,
-            'SERVER_NAME' => 'test.local'
+        $this->uri = new UriManager('https://example.com/test');
+        $this->body = $this->createMock(StreamInterface::class);
+        $this->headerManager = new HeaderManager([
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json'
+        ]);
+        $this->request = new Request(
+            'GET',
+            $this->uri,
+            $this->body,
+            $this->headerManager,
+            ['query' => 'value'],
+            ['post' => 'data']
+        );
+    }
+
+    public function testGetRequestTarget(): void
+    {
+        $this->assertEquals(
+            '/test?query=value',
+            $this->request->getRequestTarget()
+        );
+
+        $request = new Request(
+            'GET',
+            new UriManager('https://example.com'),
+            $this->body,
+            new HeaderManager()
+        );
+        $this->assertTrue($request->isGet());
+        $this->assertEquals('/', $request->getRequestTarget());
+    }
+
+    public function testWithRequestTarget(): void
+    {
+        $new = $this->request->withRequestTarget('/new-target');
+        $this->assertNotSame($this->request, $new);
+    }
+
+    public function testGetMethod(): void
+    {
+        $this->assertEquals('GET', $this->request->getMethod());
+    }
+
+    public function testWithMethod(): void
+    {
+        $new = $this->request->withMethod('POST');
+        $this->assertTrue($new->isPost());
+        $this->assertNotSame($this->request, $new);
+        $this->assertEquals('POST', $new->getMethod());
+        $this->assertEquals('GET', $this->request->getMethod());
+    }
+
+    public function testDifferentPort()
+    {
+        $uri = (new UriManager('https://example.com/test'))->withPort(8080);
+        $request = (new RequestFactory())->createRequest('GET', '/test')
+            ->withUri($uri);
+        $this->assertEquals(
+            'https://example.com:8080/test',
+            (string)$request->getUri()
+        );
+    }
+
+    public function testWithUri(): void
+    {
+        $newUri = new UriManager('https://example.org/new');
+        $new = $this->request->withUri($newUri);
+        $this->assertNotSame($this->request, $new);
+        $this->assertSame($newUri, $new->getUri());
+    }
+
+    public function testWithUriUpdatesHost(): void
+    {
+        $newUri = new UriManager('https://newexample.com');
+        $new = $this->request->withUri($newUri);
+        $this->assertTrue($new->hasHeader('Host'));
+        $this->assertEquals('newexample.com', $new->getHeaderLine('Host'));
+    }
+
+    public function testWithUriPreservesHost(): void
+    {
+        $this->request = $this->request->withHeader('Host', 'example.com');
+        $newUri = new UriManager('https://newexample.com');
+        $new = $this->request->withUri($newUri, true);
+        $this->assertEquals('example.com', $new->getHeaderLine('Host'));
+    }
+
+    public function testGetProtocolVersion(): void
+    {
+        $this->assertEquals('1.1', $this->request->getProtocolVersion());
+    }
+
+    public function testWithProtocolVersion(): void
+    {
+        $new = $this->request->withProtocolVersion('2.0');
+        $this->assertNotSame($this->request, $new);
+        $this->assertEquals('2.0', $new->getProtocolVersion());
+        $this->assertEquals('1.1', $this->request->getProtocolVersion());
+    }
+
+    public function testGetHeaders(): void
+    {
+        $expected = [
+            'Content-Type' => ['application/json'],
+            'Accept' => ['application/json'],
         ];
-    }
-    public function testCreateFromSuperglobals()
-    {
-        $request = Request::createFromSuperglobals();
-        $this->assertInstanceOf(RequestInterface::class, $request);
-        $this->assertEquals(['key' => 'value'], $request->getParams);
-        $this->assertEquals(['postKey' => 'postValue'], $request->postParams);
-        $this->assertEquals(['cookieName' => 'cookieValue'], $request->cookies);
-        $this->assertEquals(['fileField' => ['name' => 'test.txt']],
-            $request->files);
-        $this->assertEquals($_SERVER, $request->server);
+        $this->assertEquals($expected, $this->request->getHeaders());
     }
 
-    public function testWithRequestTarget()
+    public function testHasHeader(): void
     {
-        $request = Request::createFromSuperglobals();
-        $newRequest = $request->withRequestTarget('/new-target');
-        $this->assertInstanceOf(RequestInterface::class, $newRequest);
-        $this->assertNotSame($request, $newRequest);
-        $this->assertEquals('/new-target', $newRequest->getRequestTarget());
+        $this->assertTrue($this->request->hasHeader('Content-Type'));
+        $this->assertTrue($this->request->hasHeader('Accept'));
+        $this->assertFalse($this->request->hasHeader('X-Custom'));
     }
 
-
-    public function testWithRequestTargetEmpty()
+    public function testGetHeader(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $request = Request::createFromSuperglobals();
-        $request->withRequestTarget('');
+        $this->assertEquals(['application/json'],
+            $this->request->getHeader('Content-Type'));
+        $this->assertEquals([], $this->request->getHeader('X-Custom'));
     }
 
-    public function testRequestMethod()
+    public function testGetHeaderLine(): void
     {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        $request = Request::createFromSuperglobals();
-        $this->assertEquals('POST', $request->getMethod());
+        $this->assertEquals(
+            'application/json',
+            $this->request->getHeaderLine('Content-Type')
+        );
+        $this->assertEquals('', $this->request->getHeaderLine('X-Custom'));
     }
 
-    public function testInvalidRequestMethod()
+    public function testWithHeader(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $_SERVER['REQUEST_METHOD'] = 'INVALID';
-        $request = Request::createFromSuperglobals();
-        $this->assertEquals('POST', $request->getMethod());
+        $new = $this->request->withHeader('X-Custom', 'value');
+        $this->assertNotSame($this->request, $new);
+        $this->assertTrue($new->hasHeader('X-Custom'));
+        $this->assertEquals(['value'], $new->getHeader('X-Custom'));
+        $this->assertFalse($this->request->hasHeader('X-Custom'));
     }
 
-    public function testRequestUri()
+    public function testWithAddedHeader(): void
     {
-        $request = Request::createFromSuperglobals();
-        $this->assertEquals('http://test.local:80?key=value', (string)$request->getUri());
+        $new = $this->request->withAddedHeader('Accept', 'text/html');
+        $this->assertNotSame($this->request, $new);
+        $this->assertEquals(['application/json', 'text/html'],
+            $new->getHeader('Accept'));
+        $this->assertEquals(['application/json'],
+            $this->request->getHeader('Accept'));
     }
 
-    public function testGetHeaders()
+    public function testWithoutHeader(): void
     {
-        $headers = new Headers(['Content-Type' => ['application/json']]);
-        $request = Request::createFromSuperglobals()->withHeaders($headers);
-        $this->assertEquals(['Content-Type' => ['application/json']], $request->getHeaders());
+        $new = $this->request->withoutHeader('Content-Type');
+        $this->assertNotSame($this->request, $new);
+        $this->assertFalse($new->hasHeader('Content-Type'));
+        $this->assertTrue($this->request->hasHeader('Content-Type'));
     }
 
-    public function testWithHeader()
+    public function testGetBody(): void
     {
-        $headers = Headers::empty();
-        $request = Request::createFromSuperglobals()->withHeaders($headers);
-        $newRequest = $request->withHeader('Content-Type', 'application/json');
-        $this->assertNotSame($request, $newRequest);
-        $this->assertEquals(['application/json'], $newRequest->getHeader('Content-Type'));
+        $this->assertSame($this->body, $this->request->getBody());
     }
 
-    public function testWithAddedHeader()
+    public function testWithBody(): void
     {
-        $headers = new Headers(['Accept' => ['application/json']]);
-        $request = Request::createFromSuperglobals()->withHeaders($headers);
-        $newRequest = $request->withAddedHeader('Accept', 'text/html');
-        $this->assertNotSame($request, $newRequest);
-        $this->assertEquals(['application/json', 'text/html'], $newRequest->getHeader('Accept'));
+        $newBody = $this->createMock(StreamInterface::class);
+        $new = $this->request->withBody($newBody);
+        $this->assertNotSame($this->request, $new);
+        $this->assertSame($newBody, $new->getBody());
+        $this->assertSame($this->body, $this->request->getBody());
     }
 
-    public function testWithoutHeader()
+    public function testQueryAndPostParams(): void
     {
-        $headers = new Headers(['Content-Type' => ['application/json'], 'HTTP_METHOD' => 'POST']);
-        $request = Request::createFromSuperglobals()->withHeaders($headers);
-        $newRequest = $request->withoutHeader('Content-Type');
-        $this->assertNotSame($request, $newRequest);
-        $this->assertFalse($newRequest->hasHeader('Content-Type'));
-        $this->assertEquals(['POST'], $request->getHeader('Method'));
-    }
-
-    public function testHasHeader()
-    {
-        $headers = new Headers(['Content-Type' => ['application/json']]);
-        $request = Request::createFromSuperglobals()->withHeaders($headers);
-        $this->assertTrue($request->hasHeader('Content-Type'));
-        $this->assertFalse($request->hasHeader('Authorization'));
-    }
-
-    public function testGetHeader()
-    {
-        $headers = new Headers(['Content-Type' => ['application/json']]);
-        $request = Request::createFromSuperglobals()->withHeaders($headers);
-        $this->assertEquals(['application/json'], $request->getHeader('Content-Type'));
-    }
-    public function testGetHeaderLine()
-    {
-        $headers = new Headers(['Content-Type' => ['application/json']]);
-        $request = Request::createFromSuperglobals()->withHeaders($headers);
-        $this->assertEquals('application/json', $request->getHeaderLine('Content-Type'));
-    }
-
-    public function testGetProtocolVersion()
-    {
-        $request = Request::createFromSuperglobals();
-        $this->assertEquals('1.1', $request->getProtocolVersion());
-    }
-    public function testWithProtocolVersion()
-    {
-        $request = Request::createFromSuperglobals();
-        $newRequest = $request->withProtocolVersion('2.0');
-        $this->assertNotSame($request, $newRequest);
-        $this->assertEquals('2.0', $newRequest->getProtocolVersion());
-    }
-
-    public function testWithBody()
-    {
-        $stream = $this->createMock(StreamInterface::class);
-        $request = Request::createFromSuperglobals();
-        $newRequest = $request->withBody($stream);
-        $this->assertNotSame($request, $newRequest);
-        $this->assertSame($stream, $newRequest->getBody());
-    }
-
-    public function testGet()
-    {
-        $_GET = ['key' => 'value'];
-        $request = Request::createFromSuperglobals();
-        $this->assertEquals('value', $request->get('key'));
-        $this->assertNull($request->get('nonexistent'));
-        $this->assertEquals('default', $request->get('nonexistent', 'default'));
-    }
-
-    public function testPost()
-    {
-        $_POST = ['key' => 'value'];
-        $request = Request::createFromSuperglobals();
-        $this->assertEquals('value', $request->post('key'));
-        $this->assertNull($request->post('nonexistent'));
-        $this->assertEquals('default', $request->post('nonexistent', 'default'));
-    }
-
-    public function testJson()
-    {
-        $stream = $this->createMock(StreamInterface::class);
-        $stream->method('getContents')->willReturn('{"key":"value"}');
-        $request = Request::createFromSuperglobals()->withBody($stream);
-        $this->assertEquals('value', $request->json('key'));
-        $this->assertNull($request->json('nonexistent'));
-        $this->assertEquals('default', $request->json('nonexistent', 'default'));
-    }
-
-    public function testJsonInvalid()
-    {
-        $this->expectException(\RuntimeException::class);
-        $stream = $this->createMock(StreamInterface::class);
-        $stream->method('getContents')->willReturn('invalid json');
-        $request = Request::createFromSuperglobals()->withBody($stream);
-        $request->json('key');
+        $this->assertEquals(
+            ['query' => 'value', 'post' => 'data'],
+            $this->request->all()
+        );
+        $this->assertEquals('value', $this->request->query('query'));
+        $this->assertEquals('data', $this->request->post('post'));
+        $this->assertTrue($this->request->has('query'));
+        $this->assertTrue($this->request->has('post'));
+        $this->assertEquals('value', $this->request->input('query'));
+        $this->assertEquals('data', $this->request->input('post'));
     }
 }

@@ -3,10 +3,12 @@
   "description": "Framework for my PHP project",
   "require": {
     "PHP": "^8.3",
-    "psr/http-message": "^2.0"
+    "psr/http-message": "^2.0",
+    "psr/http-factory": "^1.1"
   },
   "scripts": {
     "insights": "./vendor/bin/phpinsights -vvv",
+    "insights-fix": "./vendor/bin/phpinsights --fix",
     "phpstan": "vendor/bin/phpstan analyse",
     "test": "vendor/bin/phpunit",
     "test-coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-html coverage"

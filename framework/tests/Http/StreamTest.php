@@ -24,27 +24,11 @@ class StreamTest extends TestCase
 
     public function testBrokenStream()
     {
-        $object = new Stream(fopen('php://memory', 'w'));
+        $object = new Stream('php://memory', 'w');
 
         $result = (string)$object;
 
         $this->assertEquals('', $result);
-    }
-
-    public function testSetContentFailure()
-    {
-        $mock = $this->getMockBuilder(Stream::class)
-            ->onlyMethods(['openStream'])
-            ->getMock();
-
-        $mock->expects($this->once())
-            ->method('openStream')
-            ->willReturn(false);
-
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Unable to open temp file');
-
-        $mock->withContent('Test content');
     }
 
     public function testClose()
@@ -52,6 +36,27 @@ class StreamTest extends TestCase
         $stream = new Stream();
         $stream->close();
         $this->assertFalse(is_resource($stream->detach()));
+    }
+
+    public function testCloseMethodDoesNothingIfStreamIsAlreadyClosed(): void
+    {
+        $stream = new Stream();
+        $stream->close(); // Close once
+        $streamBefore = $this->getStreamResourceFromBaseStream($stream);
+
+        $stream->close(); // Close again
+        $streamAfter = $this->getStreamResourceFromBaseStream($stream);
+
+        $this->assertSame($streamBefore, $streamAfter);
+    }
+
+
+    private function getStreamResourceFromBaseStream($stream)
+    {
+        $reflection = new \ReflectionClass($stream);
+        $streamProperty = $reflection->getProperty('stream');
+        $streamProperty->setAccessible(true);
+        return $streamProperty->getValue($stream);
     }
 
     public function testDetach()
@@ -121,6 +126,9 @@ class StreamTest extends TestCase
         $stream->write('Hello, World!');
         $stream->rewind();
         $this->assertEquals('Hello', $stream->read(5));
+        $stream->close();
+        unset($stream);
+        gc_collect_cycles();
     }
 
     public function testGetContents()
@@ -135,16 +143,7 @@ class StreamTest extends TestCase
     {
         $stream = new Stream();
         $meta = $stream->getMetadata();
-        $this->assertIsArray($meta);
-        $this->assertArrayHasKey('mode', $meta);
-        $this->assertEquals('w+b', $meta['mode']);
-    }
-
-    public function testGetMetadataKey()
-    {
-        $stream = new Stream();
-        $this->assertEquals('w+b', $stream->getMetadata('mode'));
-        $this->assertNull($stream->getMetadata('nonexistent'));
+        $this->assertInstanceOf(Stream\StreamMetaData::class, $meta);
     }
 
 }

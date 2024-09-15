@@ -4,77 +4,77 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Http;
 
-use DJWeb\Framework\Http\Request\BodyTrait;
-use DJWeb\Framework\Http\Request\Headers;
-use DJWeb\Framework\Http\Request\HeadersTrait;
-use DJWeb\Framework\Http\Request\MethodTrait;
-use DJWeb\Framework\Http\Request\ProtocolVersionTrait;
-use DJWeb\Framework\Http\Request\UriTrait;
-use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
-use ReflectionClass;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UriInterface;
 
-class Request implements RequestInterface
+class Request extends BaseRequest implements RequestInterface
 {
-    use HeadersTrait;
-    use BodyTrait;
-    use MethodTrait;
-    use UriTrait;
-    use ProtocolVersionTrait;
+    /**
+     * @var array<string, int|float|string|bool|null>
+     */
+    private array $queryParams;
+    /**
+     * @var array<string, int|float|string|bool|null>
+     */
+    private array $postParams;
 
     /**
-     * @param array<string, string|int|float|bool|null> $getParams // $_GET
-     * @param array<string, string|int|float|bool|null> $postParams // $_POST
-     * @param array<string, string|int|float|bool|null> $cookies // $_COOKIE
-     * @param array<string, array{name: string, type: string, tmp_name: string, error: int, size: int}|null> $files // $_FILES
-     * @param array<string, string|int|array|string[]|null> $server // $_SERVER
+     * @param array<string, int|float|string|bool|null>|null $queryParams
+     * @param array<string, int|float|string|bool|null>|null $postParams
      */
-    private function __construct(
-        public readonly array $getParams,
-        public readonly array $postParams,
-        public readonly array $cookies,
-        public readonly array $files,
-        public readonly array $server,
+    public function __construct(
+        string $method,
+        UriInterface $uri,
+        StreamInterface $body,
+        HeaderManager $headerManager,
+        ?array $queryParams = null,
+        ?array $postParams = null,
     ) {
+        parent::__construct($method, $uri, $body, $headerManager);
+        $this->postParams = $postParams ?? $_POST;
+        $this->queryParams = $queryParams ?? $_GET;
+        $this->uri = $this->uri->withQuery(
+            http_build_query($this->queryParams)
+        );
     }
 
-    public function withRequestTarget(string $requestTarget): RequestInterface
+    public function query(string $key, mixed $default = null): mixed
     {
-        if (! $requestTarget) {
-            throw new InvalidArgumentException(
-                'Request target cannot be empty.'
-            );
-        }
-        $uri = $this->uri->withPath($requestTarget);
-        return $this->withUri($uri);
+        return $this->queryParams[$key] ?? $default;
     }
 
-    public static function createFromSuperglobals(): self
+    public function post(string $key, mixed $default = null): mixed
     {
-        $request = (new Request(
-            $_GET,
-            $_POST,
-            $_COOKIE,
-            $_FILES,
-            $_SERVER
-        ));
-        $request = $request->withMethod($request->server['REQUEST_METHOD'])
-            ->withHeaders(new Headers($request->server));
-        $request->buildUri();
-        $request->loadBodyFromStream();
-        return $request;
+        return $this->postParams[$key] ?? $default;
     }
 
-    private function clone(
-        RequestInterface $request,
-        string $propertyName,
-        mixed $propertyValue
-    ): RequestInterface {
-        $clone = clone $request;
-        $reflection = new ReflectionClass($clone);
-        $property = $reflection->getProperty($propertyName);
-        $property->setAccessible(true);
-        $property->setValue($clone, $propertyValue);
-        return $clone;
+    public function isGet(): bool
+    {
+        return $this->method === 'GET';
+    }
+
+    public function isPost(): bool
+    {
+        return $this->method === 'POST';
+    }
+
+    public function input(string $key, mixed $default = null): mixed
+    {
+        return $this->post($key) ?? $this->query($key) ?? $default;
+    }
+
+    public function has(string $key): bool
+    {
+        return isset($this->queryParams[$key])
+            || isset($this->postParams[$key]);
+    }
+
+    /**
+     * @return array<string, int|float|string|bool|null>
+     */
+    public function all(): array
+    {
+        return array_merge($this->queryParams, $this->postParams);
     }
 }
