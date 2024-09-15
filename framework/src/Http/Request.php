@@ -23,11 +23,11 @@ class Request implements RequestInterface
     use ProtocolVersionTrait;
 
     /**
-     * @param array<string, mixed> $getParams  // $_GET
-     * @param array<string, mixed> $postParams // $_POST
-     * @param array<string, mixed> $cookies    // $_COOKIE
-     * @param array<string, mixed> $files      // $_FILES
-     * @param array<string, mixed> $server     // $_SERVER
+     * @param array<string, string|int|float|bool|null> $getParams // $_GET
+     * @param array<string, string|int|float|bool|null> $postParams // $_POST
+     * @param array<string, string|int|float|bool|null> $cookies // $_COOKIE
+     * @param array<string, array{name: string, type: string, tmp_name: string, error: int, size: int}|null> $files // $_FILES
+     * @param array<string, string|int|array|string[]|null> $server // $_SERVER
      */
     private function __construct(
         public readonly array $getParams,
@@ -40,12 +40,15 @@ class Request implements RequestInterface
 
     public function withRequestTarget(string $requestTarget): RequestInterface
     {
-        if (empty($requestTarget)) {
-            throw new InvalidArgumentException('Request target cannot be empty.');
+        if (! $requestTarget) {
+            throw new InvalidArgumentException(
+                'Request target cannot be empty.'
+            );
         }
         $uri = $this->uri->withPath($requestTarget);
         return $this->withUri($uri);
     }
+
     public static function createFromSuperglobals(): self
     {
         $request = (new Request(

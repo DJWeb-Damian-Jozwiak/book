@@ -4,6 +4,7 @@ namespace Tests\Http;
 
 use DJWeb\Framework\Http\Stream;
 use PHPUnit\Framework\TestCase;
+
 class StreamTest extends TestCase
 {
     public function testToString()
@@ -13,10 +14,11 @@ class StreamTest extends TestCase
         $stream->rewind();
         $this->assertEquals('Hello, World!', (string)$stream);
     }
+
     public function testSetContent()
     {
         $stream = new Stream();
-        $stream->setContent('Hello, World!');
+        $stream->withContent('Hello, World!');
         $this->assertEquals('Hello, World!', $stream->getContents());
     }
 
@@ -42,7 +44,7 @@ class StreamTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Unable to open temp file');
 
-        $mock->setContent('Test content');
+        $mock->withContent('Test content');
     }
 
     public function testClose()
@@ -51,6 +53,7 @@ class StreamTest extends TestCase
         $stream->close();
         $this->assertFalse(is_resource($stream->detach()));
     }
+
     public function testDetach()
     {
         $stream = new Stream();
@@ -99,16 +102,19 @@ class StreamTest extends TestCase
         $stream = new Stream();
         $this->assertTrue($stream->isWritable());
     }
+
     public function testWrite()
     {
         $stream = new Stream();
         $this->assertEquals(13, $stream->write('Hello, World!'));
     }
+
     public function testIsReadable()
     {
         $stream = new Stream();
         $this->assertTrue($stream->isReadable());
     }
+
     public function testRead()
     {
         $stream = new Stream();
@@ -116,6 +122,7 @@ class StreamTest extends TestCase
         $stream->rewind();
         $this->assertEquals('Hello', $stream->read(5));
     }
+
     public function testGetContents()
     {
         $stream = new Stream();
@@ -132,6 +139,7 @@ class StreamTest extends TestCase
         $this->assertArrayHasKey('mode', $meta);
         $this->assertEquals('w+b', $meta['mode']);
     }
+
     public function testGetMetadataKey()
     {
         $stream = new Stream();

@@ -17,7 +17,7 @@ trait UriTrait
             scheme: $this->server['REQUEST_SCHEME'],
             host: $this->server['SERVER_NAME'],
             port: $this->server['SERVER_PORT'],
-            query: ! empty($this->getParams) ? http_build_query($this->getParams) : ''
+            query: $this->getParams ? http_build_query($this->getParams) : ''
         );
     }
 

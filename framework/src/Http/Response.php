@@ -15,6 +15,7 @@ class Response implements ResponseInterface
     use HeadersTrait;
     use BodyTrait;
     use ProtocolVersionTrait;
+
     public function __construct(
         private int $statusCode = 200,
         private string $reasonPhrase = '',
@@ -22,7 +23,7 @@ class Response implements ResponseInterface
         $this->body = new Stream();
     }
 
-    public function setContent(string $content): ResponseInterface
+    public function withContent(string $content): ResponseInterface
     {
         $this->body->write($content);
         return $this;
