@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Exceptions;
 
-class InvalidArgumentException extends \InvalidArgumentException
+class InvalidArgument extends \InvalidArgumentException
 {
 }

@@ -31,14 +31,14 @@ class RouteCollection implements \IteratorAggregate, \Countable
      */
     public function addRoute(Route $route): void
     {
-        if (($name = $route->name) && isset($this->namedRoutes[$name])) {
-            throw new DuplicateRouteError($name);
+        if ($route->name && isset($this->namedRoutes[$route->name])) {
+            throw new DuplicateRouteError($route->name);
         }
 
         $this->routes[] = $route;
 
-        if ($name) {
-            $this->namedRoutes[$name] = $route;
+        if ($route->name) {
+            $this->namedRoutes[$route->name] = $route;
         }
     }
 
@@ -51,7 +51,8 @@ class RouteCollection implements \IteratorAggregate, \Countable
      */
     public function findRoute(RequestInterface $request): ?Route
     {
-        $matchingRoutes = array_filter($this->routes, static fn (Route $route) => $route->matches($request));
+        $matcher = new RouteMatcher();
+        $matchingRoutes = array_filter($this->routes, static fn (Route $route) => $matcher->matches($request, $route));
         return array_values($matchingRoutes)[0] ?? null;
     }
 

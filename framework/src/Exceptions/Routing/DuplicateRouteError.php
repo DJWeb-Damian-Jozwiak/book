@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Exceptions\Routing;
 
-use DJWeb\Framework\Exceptions\InvalidArgumentException;
+use DJWeb\Framework\Exceptions\InvalidArgument;
 
-class DuplicateRouteError extends InvalidArgumentException
+class DuplicateRouteError extends InvalidArgument
 {
     public function __construct(string $name)
     {

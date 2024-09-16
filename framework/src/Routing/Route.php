@@ -9,11 +9,11 @@ use Psr\Http\Message\ResponseInterface;
 
 class Route
 {
-    public readonly string $method;
     /**
      * @var callable|array<int, string>
      */
     protected $handler;
+    private readonly string $method;
 
     /**
      * @param string $path
@@ -40,6 +40,11 @@ class Route
         $this->handler = $handler;
     }
 
+    public function getMethod(): string
+    {
+        return $this->method;
+    }
+
     /**
      * @return callable|array<int, string>
      */
@@ -48,48 +53,9 @@ class Route
         return $this->handler;
     }
 
-    /**
-     * Check if this route matches the given request.
-     *
-     * @param RequestInterface $request The incoming request
-     *
-     * @return bool True if the route matches, false otherwise
-     */
-    public function matches(RequestInterface $request): bool
-    {
-        return $this->matchesPath($request->getUri()->getPath()) &&
-            $this->matchesMethod($request->getMethod());
-    }
-
     public function execute(RequestInterface $request): ResponseInterface
     {
         /** @phpstan-ignore-next-line */
         return call_user_func($this->handler, $request);
-    }
-
-    /**
-     * Check if the given path matches this route's path.
-     *
-     * @param string $path The path to check
-     *
-     * @return bool True if the path matches, false otherwise
-     */
-    protected function matchesPath(string $path): bool
-    {
-        $trimmed = rtrim($this->path, '/');
-        $trimmed2 = rtrim($path, '/');
-        return $trimmed === $trimmed2;
-    }
-
-    /**
-     * Check if the given method matches this route's method.
-     *
-     * @param string $method The HTTP method to check
-     *
-     * @return bool True if the method matches, false otherwise
-     */
-    private function matchesMethod(string $method): bool
-    {
-        return $this->method === strtoupper($method);
     }
 }

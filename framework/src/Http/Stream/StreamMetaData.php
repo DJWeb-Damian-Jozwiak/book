@@ -17,8 +17,8 @@ readonly class StreamMetaData
         public string $wrapper_type = '',
         public string $stream_type = '',
         public string $uri = '',
-        private string $mode = 'r',
-        private bool $seekable = false,
+        public string $mode = 'r',
+        public bool $seekable = false,
         public int $unread_bytes = 0,
     ) {
     }

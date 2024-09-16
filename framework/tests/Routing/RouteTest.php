@@ -3,6 +3,7 @@
 namespace Tests\Routing;
 
 use DJWeb\Framework\Routing\Route;
+use DJWeb\Framework\Routing\RouteMatcher;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -22,7 +23,8 @@ class RouteTest extends TestCase
         $request->method('getUri')->willReturn($uri);
         $request->method('getMethod')->willReturn('GET');
 
-        $this->assertTrue($route->matches($request));
+        $matcher = new RouteMatcher();
+        $this->assertTrue($matcher->matches($request, $route));
     }
 
     public function testInvalidHandler(): void
@@ -43,7 +45,8 @@ class RouteTest extends TestCase
         $request->method('getUri')->willReturn($uri);
         $request->method('getMethod')->willReturn('GET');
 
-        $this->assertFalse($route->matches($request));
+        $matcher = new RouteMatcher();
+        $this->assertFalse($matcher->matches($request, $route));
     }
 
     public function testRouteDoesNotMatchDifferentMethod(): void
@@ -58,7 +61,8 @@ class RouteTest extends TestCase
         $request->method('getUri')->willReturn($uri);
         $request->method('getMethod')->willReturn('POST');
 
-        $this->assertFalse($route->matches($request));
+        $matcher = new RouteMatcher();
+        $this->assertFalse($matcher->matches($request, $route));
     }
 
     public function testRouteExecution(): void
@@ -79,7 +83,7 @@ class RouteTest extends TestCase
         }, 'test_route');
 
         $this->assertSame('/test', $route->path);
-        $this->assertSame('GET', $route->method);
+        $this->assertSame('GET', $route->getMethod());
         $this->assertSame('test_route', $route->name);
     }
 

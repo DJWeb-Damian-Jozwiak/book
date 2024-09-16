@@ -11,9 +11,10 @@ class UriPathBuilder
     public static function buildUriPath(UriInterface $uri): string
     {
         $path = $uri->getPath();
-        if ($path !== '' && $path[0] !== '/' && $uri->getAuthority() !== '') {
+        $authority = $uri->getAuthority();
+        if (PathCheckerWithAuthority::check($path, $authority)) {
             $path = '/' . $path;
-        } elseif ($path === '/' && $uri->getAuthority() === '') {
+        } elseif (PathCheckerWithoutAuthority::check($path, $authority)) {
             $path = '';
         }
         return $path;

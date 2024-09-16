@@ -84,8 +84,9 @@ class Stream extends BaseStream
         return $data ? $data : '';
     }
 
-    public function getMetadata($key = null): StreamMetaData
+    public function getMetadata($key = null): StreamMetaData|string|float|bool|int|null
     {
-        return $this->metaData;
+        $metadata = (array) $this->metaData;
+        return $metadata[$key] ?? $this->metaData;
     }
 }
