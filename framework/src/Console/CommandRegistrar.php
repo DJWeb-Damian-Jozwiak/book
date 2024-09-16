@@ -23,7 +23,6 @@ class CommandRegistrar
         );
         $files = $this->filterFiles($commandFiles, $commandsNamespace, $commandsDirectory);
 
-
         foreach ($files as $file) {
             $className = $this->getClassName($commandsNamespace, $file, $commandsDirectory);
             /** @phpstan-ignore-next-line */
@@ -37,15 +36,14 @@ class CommandRegistrar
 
     public function getClassName(string $commandsNamespace, mixed $file, string $commandsDirectory): string
     {
-        $item = $commandsNamespace . str_replace(
-                ['/', '.php'],
-                ['\\', ''],
-                substr(
-                    $file->getPathname(),
-                    strlen($commandsDirectory)
-                )
-            );
-        return $item;
+        return $commandsNamespace . str_replace(
+            ['/', '.php'],
+            ['\\', ''],
+            substr(
+                $file->getPathname(),
+                strlen($commandsDirectory)
+            )
+        );
     }
 
     /**
