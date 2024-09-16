@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Routing;
 
 use DJWeb\Framework\Exceptions\Routing\DuplicateRouteError;
@@ -24,6 +26,7 @@ class RouteCollection implements \IteratorAggregate, \Countable
      * Add a route to the collection.
      *
      * @param Route $route The route to add
+     *
      * @throws DuplicateRouteError If a route with the same name already exists
      */
     public function addRoute(Route $route): void
@@ -43,11 +46,12 @@ class RouteCollection implements \IteratorAggregate, \Countable
      * Find a route that matches the given request.
      *
      * @param RequestInterface $request The request to match against
+     *
      * @return Route|null The matching route, or null if no match is found
      */
     public function findRoute(RequestInterface $request): ?Route
     {
-        $matchingRoutes = array_filter($this->routes, fn(Route $route) => $route->matches($request));
+        $matchingRoutes = array_filter($this->routes, static fn (Route $route) => $route->matches($request));
         return array_values($matchingRoutes)[0] ?? null;
     }
 
@@ -55,6 +59,7 @@ class RouteCollection implements \IteratorAggregate, \Countable
      * Get a route by its name.
      *
      * @param string $name The name of the route
+     *
      * @return Route|null The named route, or null if not found
      */
     public function getNamedRoute(string $name): ?Route

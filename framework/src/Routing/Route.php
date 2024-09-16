@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Routing;
 
 use Psr\Http\Message\RequestInterface;
@@ -26,10 +28,10 @@ class Route
         public readonly ?string $name = null
     ) {
         if (is_array(
-                $handler
-            ) && (!isset($handler[0], $handler[1]) || !is_string(
-                    $handler[0]
-                ) || !is_string($handler[1]))) {
+            $handler
+        ) && (! isset($handler[0], $handler[1]) || ! is_string(
+            $handler[0]
+        ) || ! is_string($handler[1]))) {
             throw new \InvalidArgumentException(
                 'If $handler is an array, it must contain two string elements: [controllerClass, methodName]'
             );
@@ -47,20 +49,10 @@ class Route
     }
 
     /**
-     * Check if the given method matches this route's method.
-     *
-     * @param string $method The HTTP method to check
-     * @return bool True if the method matches, false otherwise
-     */
-    private function matchesMethod(string $method): bool
-    {
-        return $this->method === strtoupper($method);
-    }
-
-    /**
      * Check if this route matches the given request.
      *
      * @param RequestInterface $request The incoming request
+     *
      * @return bool True if the route matches, false otherwise
      */
     public function matches(RequestInterface $request): bool
@@ -69,22 +61,35 @@ class Route
             $this->matchesMethod($request->getMethod());
     }
 
-    /**
-     * Check if the given path matches this route's path.
-     *
-     * @param string $path The path to check
-     * @return bool True if the path matches, false otherwise
-     */
-    protected function matchesPath(string $path): bool
-    {
-        $trimmed = rtrim($this->path, "/");
-        $trimmed2 = rtrim($path, "/");
-        return $trimmed === $trimmed2;
-    }
-
     public function execute(RequestInterface $request): ResponseInterface
     {
         /** @phpstan-ignore-next-line */
         return call_user_func($this->handler, $request);
+    }
+
+    /**
+     * Check if the given path matches this route's path.
+     *
+     * @param string $path The path to check
+     *
+     * @return bool True if the path matches, false otherwise
+     */
+    protected function matchesPath(string $path): bool
+    {
+        $trimmed = rtrim($this->path, '/');
+        $trimmed2 = rtrim($path, '/');
+        return $trimmed === $trimmed2;
+    }
+
+    /**
+     * Check if the given method matches this route's method.
+     *
+     * @param string $method The HTTP method to check
+     *
+     * @return bool True if the method matches, false otherwise
+     */
+    private function matchesMethod(string $method): bool
+    {
+        return $this->method === strtoupper($method);
     }
 }

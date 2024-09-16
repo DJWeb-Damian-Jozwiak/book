@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\ServiceProviders;
 
 use DJWeb\Framework\Container\Contracts\ContainerContract;

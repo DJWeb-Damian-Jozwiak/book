@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework;
 
 use DJWeb\Framework\Container\Container;
@@ -22,13 +24,12 @@ class Application extends Container
         $this->registerServiceProvider(new RouterServiceProvider());
     }
 
-
     public function handle(): ResponseInterface
     {
         $request = $this->get(ServerRequestInterface::class);
         return (new Kernel($this))
-            ->withRoutes(function (Router $router) {
-                $router->addRoute('GET', '/', function (RequestInterface $request) {
+            ->withRoutes(static function (Router $router): void {
+                $router->addRoute('GET', '/', static function (RequestInterface $request) {
                     return (new Response())->withContent('Hello, World!');
                 }, 'home');
             })

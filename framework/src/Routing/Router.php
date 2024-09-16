@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Routing;
 
 use DJWeb\Framework\Container\Contracts\ContainerContract;
@@ -14,7 +16,6 @@ readonly class Router
         private RouteCollection $routes = new RouteCollection()
     ) {
     }
-
 
     /**
      * Add a new route to the collection.
@@ -35,7 +36,9 @@ readonly class Router
      * Dispatch the request to the appropriate handler.
      *
      * @param RequestInterface $request The incoming request
+     *
      * @return ResponseInterface The response from the handler
+     *
      * @throws RouteNotFoundError If no matching route is found
      */
     public function dispatch(RequestInterface $request): ResponseInterface
