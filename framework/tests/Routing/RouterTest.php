@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Routing;
 
 use DJWeb\Framework\Container\Container;
-use DJWeb\Framework\Container\Contracts\ContainerInterface;
+use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\Exceptions\Routing\RouteNotFoundError;
 use DJWeb\Framework\Routing\Router;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +17,7 @@ use Tests\Helpers\TestController;
 class RouterTest extends TestCase
 {
     private Router $router;
-    private ContainerInterface $container;
+    private ContainerContract $container;
 
     protected function setUp(): void
     {

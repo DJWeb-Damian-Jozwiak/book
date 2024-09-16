@@ -46,7 +46,7 @@ class RequestTest extends TestCase
 
         $request = new Request(
             'GET',
-            new UriManager('https://example.com'),
+            new UriManager('http://example.com'),
             $this->body,
             new HeaderManager()
         );
