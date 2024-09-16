@@ -18,6 +18,7 @@ class OptionsResolver
         array $inputValues = []
     ): void {
         $reflection = new \ReflectionClass($command);
+        /** @var array<string, CommandOption> $attributes */
         $attributes = (new CommandPropertyResolver())
             ->findPropertiesWithAttribute($command, CommandOption::class);
         foreach ($attributes as $name => $instance) {

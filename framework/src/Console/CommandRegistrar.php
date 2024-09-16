@@ -26,9 +26,10 @@ class CommandRegistrar
 
         foreach ($files as $file) {
             $className = $this->getClassName($commandsNamespace, $file, $commandsDirectory);
+            /** @phpstan-ignore-next-line */
             $reflectionClass = new ReflectionClass($className);
 
-            if ($reflectionClass->isSubclassOf(Command::class) && !$reflectionClass->isAbstract()) {
+            if ($reflectionClass->isSubclassOf(Command::class) && ! $reflectionClass->isAbstract()) {
                 new $className($this->app);
             }
         }
@@ -36,7 +37,7 @@ class CommandRegistrar
 
     public function getClassName(string $commandsNamespace, mixed $file, string $commandsDirectory): string
     {
-        return $commandsNamespace . str_replace(
+        $item = $commandsNamespace . str_replace(
                 ['/', '.php'],
                 ['\\', ''],
                 substr(
@@ -44,10 +45,11 @@ class CommandRegistrar
                     strlen($commandsDirectory)
                 )
             );
+        return $item;
     }
 
     /**
-     * @param RecursiveIteratorIterator $commandFiles
+     * @param RecursiveIteratorIterator<RecursiveDirectoryIterator> $commandFiles
      * @param string $commandsNamespace
      * @param string $commandsDirectory
      *
@@ -62,10 +64,10 @@ class CommandRegistrar
         foreach ($commandFiles as $file) {
             $files[] = $file;
         }
-        $files = array_filter($files, static fn(\SplFileInfo $file) => $file->isFile());
+        $files = array_filter($files, static fn (\SplFileInfo $file) => $file->isFile());
         return array_filter(
             $files,
-            fn(
+            fn (
                 \SplFileInfo $file
             ) => class_exists(
                 $this->getClassName($commandsNamespace, $file, $commandsDirectory)

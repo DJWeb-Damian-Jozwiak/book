@@ -11,7 +11,7 @@ class ApplicationTest extends TestCase
     public function testCreate()
     {
         $path = dirname(__DIR__) . '/' . 'Helpers';
-        $namespace = 'Tests\\Helpers\\';
+        $namespace = 'Tests\\Helpers';
         $app = Application::getInstance();
         $app->registerCommands(
             new CommandNamespace($namespace, $path)

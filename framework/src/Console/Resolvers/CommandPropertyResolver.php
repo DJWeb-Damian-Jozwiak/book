@@ -10,7 +10,7 @@ use ReflectionClass;
 class CommandPropertyResolver
 {
     /**
-     * @return array<int, object>
+     * @return array<string, object>
      */
     public function findPropertiesWithAttribute(Command $command, string $attributeName): array
     {

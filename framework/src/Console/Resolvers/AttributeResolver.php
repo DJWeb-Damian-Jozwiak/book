@@ -18,6 +18,7 @@ class AttributeResolver
         array $inputValues = []
     ): void {
         $reflection = new \ReflectionClass($command);
+        /** @var array<string, CommandArgument> $attributes */
         $attributes = (new CommandPropertyResolver())
             ->findPropertiesWithAttribute($command, CommandArgument::class);
         foreach ($attributes as $name => $instance) {
@@ -28,7 +29,7 @@ class AttributeResolver
                     "Enter value for {$instance->name}: "
                 );
             }
-            $value = $instance->value ?? $instance->default;
+            $value = $instance->value;
             $reflection->getProperty($name)->setValue($command, $value);
         }
     }

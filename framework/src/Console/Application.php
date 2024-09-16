@@ -13,11 +13,6 @@ class Application extends \DJWeb\Framework\Base\Application
     private static ?string $base = null;
     private static ?Application $instance = null;
 
-    public static function withBase(string $base): void
-    {
-        self::$base = $base;
-    }
-
     private Kernel $kernel;
 
     protected function __construct()
@@ -29,6 +24,11 @@ class Application extends \DJWeb\Framework\Base\Application
         $dir = __DIR__ . DIRECTORY_SEPARATOR . 'Commands';
         $namespace = 'DJWeb\\Framework\\Console\\Commands\\';
         $this->registerCommands(new CommandNamespace($namespace, $dir));
+    }
+
+    public static function withBase(string $base): void
+    {
+        self::$base = $base;
     }
 
     public static function getInstance(): Application
