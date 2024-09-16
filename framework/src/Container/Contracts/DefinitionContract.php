@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Container\Contracts;
 
-interface DefinitionInterface
+interface DefinitionContract
 {
     /**
      * Add an argument to the definition.
      *
      * @param mixed $argument The argument to add.
+     *
      * @return self
      */
     public function addArgument(mixed $argument): self;
@@ -17,6 +20,7 @@ interface DefinitionInterface
      *
      * @param string $method The method name.
      * @param array<int, string> $arguments The arguments for the method call.
+     *
      * @return self
      */
     public function addMethodCall(string $method, array $arguments = []): self;

@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Container;
 
-use DJWeb\Framework\Exceptions\Container\ContainerException;
+use DJWeb\Framework\Exceptions\Container\ContainerError;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionNamedType;
@@ -14,7 +16,9 @@ class ReflectionResolver
      * Get the constructor parameters for a given class.
      *
      * @param class-string $className The fully qualified class name
-     * @return ReflectionParameter[] An array of constructor parameters
+     *
+     * @return array<int, ReflectionParameter> An array of constructor parameters
+     *
      * @throws ReflectionException If the class does not exist or has no constructor
      */
     public function getConstructorParameters(string $className): array
@@ -29,6 +33,7 @@ class ReflectionResolver
      * Get the type of a parameter.
      *
      * @param ReflectionParameter $parameter The parameter to analyze
+     *
      * @return string|null The type of the parameter or null if it can't be determined
      */
     public function getParameterType(ReflectionParameter $parameter): ?string
@@ -41,6 +46,7 @@ class ReflectionResolver
      * Check if a parameter has a default value.
      *
      * @param ReflectionParameter $parameter The parameter to check
+     *
      * @return bool True if the parameter has a default value, false otherwise
      */
     public function hasDefaultValue(ReflectionParameter $parameter): bool
@@ -52,13 +58,15 @@ class ReflectionResolver
      * Get the default value of a parameter.
      *
      * @param ReflectionParameter $parameter The parameter to get the default value from
+     *
      * @return mixed The default value of the parameter
-     * @throws ContainerException If the parameter has no default value
+     *
+     * @throws ContainerError If the parameter has no default value
      */
     public function getDefaultValue(ReflectionParameter $parameter): mixed
     {
-        if (!$this->hasDefaultValue($parameter)) {
-            throw new ContainerException("Parameter {$parameter->getName()} has no default value.");
+        if (! $this->hasDefaultValue($parameter)) {
+            throw new ContainerError("Parameter {$parameter->getName()} has no default value.");
         }
 
         return $parameter->getDefaultValue();
@@ -68,6 +76,7 @@ class ReflectionResolver
      * Check if a parameter allows null.
      *
      * @param ReflectionParameter $parameter The parameter to check
+     *
      * @return bool True if the parameter allows null, false otherwise
      */
     public function allowsNull(ReflectionParameter $parameter): bool
@@ -79,6 +88,7 @@ class ReflectionResolver
      * Get the default value for a built-in type.
      *
      * @param string $type The built-in type
+     *
      * @return mixed The default value for the type
      */
     public function getDefaultValueForBuiltInType(string $type): mixed
@@ -92,5 +102,4 @@ class ReflectionResolver
             default => null,
         };
     }
-
 }

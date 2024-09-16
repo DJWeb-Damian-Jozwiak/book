@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Container;
 
-use DJWeb\Framework\Container\Contracts\DefinitionInterface;
+use DJWeb\Framework\Container\Contracts\DefinitionContract;
 
-class Definition implements DefinitionInterface
+class Definition implements DefinitionContract
 {
     /**
      * @var array<int, mixed>
@@ -14,8 +16,6 @@ class Definition implements DefinitionInterface
      * @var array<int, array{0: string, 1: array<int, mixed>}>
      */
     private array $methodCalls = [];
-    public bool $shared = true;
-    public ?\Closure $factory = null;
 
     public function __construct(
         public readonly string $id,
@@ -23,11 +23,11 @@ class Definition implements DefinitionInterface
     ) {
     }
 
-
     /**
      * Add a constructor argument.
      *
      * @param mixed $argument The argument to add
+     *
      * @return self
      */
     public function addArgument(mixed $argument): self
@@ -41,6 +41,7 @@ class Definition implements DefinitionInterface
      *
      * @param string $method The method name
      * @param array<int, mixed> $arguments The arguments for the method call
+     *
      * @return self
      */
     public function addMethodCall(string $method, array $arguments = []): self
@@ -48,7 +49,6 @@ class Definition implements DefinitionInterface
         $this->methodCalls[] = [$method, $arguments];
         return $this;
     }
-
 
     /**
      * Get the constructor arguments.

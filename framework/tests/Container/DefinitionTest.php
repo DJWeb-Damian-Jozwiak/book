@@ -32,20 +32,4 @@ class DefinitionTest extends TestCase
         ];
         $this->assertEquals($expectedCalls, $definition->getMethodCalls());
     }
-
-    public function testSetShared()
-    {
-        $definition = new Definition('service_id', 'ServiceClass');
-        $this->assertTrue($definition->shared); // Default value
-        $definition->shared = false;
-        $this->assertFalse($definition->shared);
-    }
-
-    public function testSetFactory()
-    {
-        $definition = new Definition('service_id', 'ServiceClass');
-        $factory = fn() => new \stdClass();
-        $definition->factory = $factory;
-        $this->assertSame($factory, $definition->factory);
-    }
 }
