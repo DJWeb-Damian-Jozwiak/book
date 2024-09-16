@@ -6,7 +6,6 @@ use DJWeb\Framework\Console\Utils\CommandNamespace;
 require_once 'vendor/autoload.php';
 require_once 'helpers/functions.php';
 
-Application::withBase(dirname(__DIR__));
 $app = Application:: getInstance();
 $app->registerCommands(
     new CommandNamespace(
