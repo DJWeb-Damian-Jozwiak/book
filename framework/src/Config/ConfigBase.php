@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Config;
 
 use DJWeb\Framework\Application;
@@ -16,24 +18,6 @@ class ConfigBase
     {
         $this->loadEnvironmentVariables();
         $this->loadConfigFiles();
-    }
-
-    private function loadEnvironmentVariables(): void
-    {
-        $dotenv = Dotenv::createImmutable($this->app->base_path);
-        $dotenv->load();
-    }
-
-    private function loadConfigFiles(): void
-    {
-        $configPath = $this->app->base_path . DIRECTORY_SEPARATOR . 'config';
-        $files = scandir($configPath) ?: [];
-        foreach ($files as $file) {
-            if (pathinfo($file, PATHINFO_EXTENSION) === 'php') {
-                $key = pathinfo($file, PATHINFO_FILENAME);
-                $this->config[$key] = require $configPath . DIRECTORY_SEPARATOR . $file;
-            }
-        }
     }
 
     public function get(
@@ -60,10 +44,29 @@ class ConfigBase
         $this->setRecursive($this->config, $keys, $value);
     }
 
+    private function loadEnvironmentVariables(): void
+    {
+        $dotenv = Dotenv::createImmutable($this->app->base_path);
+        $dotenv->load();
+    }
+
+    private function loadConfigFiles(): void
+    {
+        $configPath = $this->app->base_path . DIRECTORY_SEPARATOR . 'config';
+        $files = scandir($configPath) ?: [];
+        foreach ($files as $file) {
+            if (pathinfo($file, PATHINFO_EXTENSION) === 'php') {
+                $key = pathinfo($file, PATHINFO_FILENAME);
+                $this->config[$key] = require $configPath . DIRECTORY_SEPARATOR . $file;
+            }
+        }
+    }
+
     /**
      * @param array<string, string|float|int|null> $array
      * @param array<int, string> $keys
      * @param string|float|int|null $value
+     *
      * @return void
      */
     private function setRecursive(

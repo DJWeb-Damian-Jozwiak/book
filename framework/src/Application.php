@@ -21,6 +21,36 @@ class Application extends Container
     private ConfigBase $config;
     private Kernel $kernel;
 
+    private function __construct()
+    {
+        parent::__construct();
+        $this->registerServiceProvider(new HttpServiceProvider());
+        $this->registerServiceProvider(new RouterServiceProvider());
+        $this->kernel = new Kernel($this);
+    }
+
+    public function __clone()
+    {
+        throw new ContainerError('Cannot clone Application');
+    }
+
+    public function __serialize(): array
+    {
+        return [
+            'base_path' => $this->base_path,
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return void
+     */
+    public function __unserialize(array $data): void
+    {
+        throw new ContainerError('Cannot unserialize Application');
+    }
+
     public static function getInstance(): self
     {
         if (self::$instance === null) {
@@ -32,19 +62,6 @@ class Application extends Container
     public function getConfig(): ConfigBase
     {
         return $this->config;
-    }
-
-    public function __clone()
-    {
-        throw new ContainerError('Cannot clone Application');
-    }
-
-    private function __construct()
-    {
-        parent::__construct();
-        $this->registerServiceProvider(new HttpServiceProvider());
-        $this->registerServiceProvider(new RouterServiceProvider());
-        $this->kernel = new Kernel($this);
     }
 
     public function loadConfig(): void
@@ -67,21 +84,5 @@ class Application extends Container
         ServiceProviderContract $provider
     ): void {
         $provider->register($this);
-    }
-
-    public function __serialize(): array
-    {
-        return [
-            'base_path' => $this->base_path
-        ];
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     * @return void
-     */
-    public function __unserialize(array $data): void
-    {
-        throw new ContainerError('Cannot unserialize Application');
     }
 }
