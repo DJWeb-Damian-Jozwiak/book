@@ -12,9 +12,9 @@ class ConfigTest extends TestCase
     public function testLoadConfig()
     {
         $app = Application::getInstance();
-        $app->base_path = dirname(__DIR__);
-        if (!file_exists($app->base_path . '/.env')) {
-            file_put_contents($app->base_path . '/.env', '');
+        $app->addBasePath(dirname(__DIR__));
+        if (!file_exists($app->getBasePath() . '/.env')) {
+            file_put_contents($app->getBasePath() . '/.env', '');
         }
         $app->loadConfig();
         $this->assertInstanceOf(ConfigBase::class, $app->getConfig());
@@ -23,9 +23,9 @@ class ConfigTest extends TestCase
     public function testGetAndSet()
     {
         $app = Application::getInstance();
-        $app->base_path = __DIR__;
-        if (!file_exists($app->base_path . '/.env')) {
-            file_put_contents($app->base_path . '/.env', '');
+        $app->addBasePath(__DIR__);
+        if (!file_exists($app->getBasePath() . '/.env')) {
+            file_put_contents($app->getBasePath() . '/.env', '');
         }
         $app->loadConfig();
         Config::set('app.value.name', 'Aplikacja');

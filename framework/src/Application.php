@@ -16,7 +16,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class Application extends Container
 {
-    public string $base_path = '';
+    private string $base_path = '';
+
     private static ?Application $instance = null;
     private ConfigBase $config;
     private Kernel $kernel;
@@ -48,7 +49,18 @@ class Application extends Container
      */
     public function __unserialize(array $data): void
     {
+        json_encode($data, flags: JSON_THROW_ON_ERROR);
         throw new ContainerError('Cannot unserialize Application');
+    }
+
+    public function addBasePath(string $base_path): void
+    {
+        $this->base_path = $base_path;
+    }
+
+    public function getBasePath(): string
+    {
+        return $this->base_path;
     }
 
     public static function getInstance(): self
