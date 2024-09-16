@@ -11,7 +11,7 @@ class TestController
     public function testMethod(ServerRequestInterface $request): ResponseInterface
     {
         $response = new Response();
-        $response->setContent('ok');
+        $response->withContent('ok');
         return $response;
     }
 }

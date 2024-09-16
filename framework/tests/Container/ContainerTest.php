@@ -3,7 +3,7 @@
 namespace Tests\Container;
 
 use DJWeb\Framework\Container\Container;
-use DJWeb\Framework\Container\Contracts\ServiceProviderInterface;
+use DJWeb\Framework\Container\Contracts\ServiceProviderContract;
 use DJWeb\Framework\Container\Definition;
 use PHPUnit\Framework\TestCase;
 use Tests\Helpers\Database;
@@ -29,7 +29,7 @@ class ContainerTest extends TestCase
 
     public function testRegisterServiceProvider(): void
     {
-        $provider = $this->createMock(ServiceProviderInterface::class);
+        $provider = $this->createMock(ServiceProviderContract::class);
         $provider->expects($this->once())
             ->method('register')
             ->with($this->container);

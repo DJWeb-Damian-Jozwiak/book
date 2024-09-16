@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework;
 
 use DJWeb\Framework\Config\ConfigBase;
 use DJWeb\Framework\Container\Container;
-use DJWeb\Framework\Container\Contracts\ServiceProviderInterface;
-use DJWeb\Framework\Exceptions\Container\ContainerException;
+use DJWeb\Framework\Container\Contracts\ServiceProviderContract;
 use DJWeb\Framework\Http\Kernel;
 use DJWeb\Framework\ServiceProviders\HttpServiceProvider;
 use DJWeb\Framework\ServiceProviders\RouterServiceProvider;
@@ -49,7 +50,6 @@ class Application extends Container
     {
         $this->config = new ConfigBase($this);
     }
-
 
     public function handle(): ResponseInterface
     {
