@@ -7,6 +7,7 @@ namespace DJWeb\Framework;
 use DJWeb\Framework\Config\ConfigBase;
 use DJWeb\Framework\Container\Container;
 use DJWeb\Framework\Container\Contracts\ServiceProviderContract;
+use DJWeb\Framework\Exceptions\Container\ContainerError;
 use DJWeb\Framework\Http\Kernel;
 use DJWeb\Framework\ServiceProviders\HttpServiceProvider;
 use DJWeb\Framework\ServiceProviders\RouterServiceProvider;
@@ -35,7 +36,7 @@ class Application extends Container
 
     public function __clone()
     {
-        throw new ContainerException('Cannot clone Application');
+        throw new ContainerError('Cannot clone Application');
     }
 
     private function __construct()
@@ -63,7 +64,7 @@ class Application extends Container
     }
 
     protected function registerServiceProvider(
-        ServiceProviderInterface $provider
+        ServiceProviderContract $provider
     ): void {
         $provider->register($this);
     }
@@ -81,6 +82,6 @@ class Application extends Container
      */
     public function __unserialize(array $data): void
     {
-        throw new ContainerException('Cannot unserialize Application');
+        throw new ContainerError('Cannot unserialize Application');
     }
 }
