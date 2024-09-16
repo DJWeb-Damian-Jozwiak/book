@@ -3,7 +3,7 @@
 namespace DJWeb\Framework;
 
 use DJWeb\Framework\Container\Container;
-use DJWeb\Framework\Container\Contracts\ServiceProviderInterface;
+use DJWeb\Framework\Container\Contracts\ServiceProviderContract;
 use DJWeb\Framework\Http\Kernel;
 use DJWeb\Framework\Http\Response;
 use DJWeb\Framework\Routing\Router;
@@ -29,13 +29,13 @@ class Application extends Container
         return (new Kernel($this))
             ->withRoutes(function (Router $router) {
                 $router->addRoute('GET', '/', function (RequestInterface $request) {
-                    return (new Response())->setContent('Hello, World!');
+                    return (new Response())->withContent('Hello, World!');
                 }, 'home');
             })
             ->handle($request);
     }
 
-    protected function registerServiceProvider(ServiceProviderInterface $provider): void
+    protected function registerServiceProvider(ServiceProviderContract $provider): void
     {
         $provider->register($this);
     }

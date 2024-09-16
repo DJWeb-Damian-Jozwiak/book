@@ -4,7 +4,7 @@ namespace Tests\Routing;
 
 use DJWeb\Framework\Container\Container;
 use DJWeb\Framework\Container\Contracts\ContainerInterface;
-use DJWeb\Framework\Exceptions\Routing\RouteNotFoundException;
+use DJWeb\Framework\Exceptions\Routing\RouteNotFoundError;
 use DJWeb\Framework\Routing\Router;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
@@ -69,7 +69,7 @@ class RouterTest extends TestCase
     public function testDispatchMissingRoute()
     {
         $request = $this->createMock(ServerRequestInterface::class);
-        $this->expectException(RouteNotFoundException::class);
+        $this->expectException(RouteNotFoundError::class);
         $this->router->dispatch($request);
     }
 }

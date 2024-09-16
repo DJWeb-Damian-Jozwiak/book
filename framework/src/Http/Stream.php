@@ -1,24 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Http;
 
+use DJWeb\Framework\Http\Stream\BaseStream;
+use DJWeb\Framework\Http\Stream\StreamMetaData;
 use Psr\Http\Message\StreamInterface;
 
-class Stream implements StreamInterface
+class Stream extends BaseStream
 {
-    private mixed $stream;
-    private ?int $size;
-    public function __construct(mixed $stream = null)
-    {
-        $this->stream = $stream ?? fopen('php://temp', 'r+');
-        $data = fstat($this->stream);
-        $this->size = is_array($data) ? $data['size'] : 0;
-    }
-
-    public function __destruct()
-    {
-       $this->close();
-    }
     public function __toString(): string
     {
         return $this->getContents();
@@ -26,35 +17,14 @@ class Stream implements StreamInterface
 
     public function getContents(): string
     {
-        $content = stream_get_contents($this->stream, -1, 0);
-        if (!$content) {
-            return '';
-        }
-        return $content;
-    }
-    public function setContent(string $content): StreamInterface
-    {
-        $stream = $this->openStream('w+b');
-        if (!$stream) {
-            throw new \RuntimeException('Unable to open temp file');
-        }
-        fwrite($stream, $content);
-        $this->stream = $stream;
-        $this->rewind();
-        return $this;
+        return $this->contentManager->getContents();
     }
 
-    protected function openStream(string $mode): mixed
+    public function withContent(string $content): StreamInterface
     {
-        return fopen('php://temp', $mode);
+        return $this->contentManager->withContent($content);
     }
-    public function close(): void
-    {
-        if(!$this->stream) {
-            return;
-        }
-        fclose($this->stream);
-    }
+
     public function detach()
     {
         $stream = $this->stream;
@@ -62,49 +32,51 @@ class Stream implements StreamInterface
         $this->size = null;
         return $stream;
     }
+
     public function getSize(): ?int
     {
         $data = fstat($this->stream);
         $this->size = is_array($data) ? $data['size'] : 0;
         return $this->size;
     }
+
     public function tell(): int
     {
         $size = ftell($this->stream);
         return $size ? $size : 0;
     }
+
     public function eof(): bool
     {
         return feof($this->stream);
     }
+
     public function isSeekable(): bool
     {
-        $meta = stream_get_meta_data($this->stream);
-        return $meta['seekable'];
+        return $this->metaData->isSeekable();
     }
+
     public function seek($offset, $whence = SEEK_SET): void
     {
         fseek($this->stream, $offset, $whence);
     }
-    public function rewind(): void
-    {
-        rewind($this->stream);
-    }
+
     public function isWritable(): bool
     {
-        $meta = stream_get_meta_data($this->stream);
-        return str_contains($meta['mode'], 'w');
+        return $this->metaData->isWritable();
     }
+
     public function write($string): int
     {
         $size = fwrite($this->stream, $string);
         return $size ? $size : 0;
     }
+
     public function isReadable(): bool
     {
-        $meta = stream_get_meta_data($this->stream);
-        return str_contains($meta['mode'], 'r') || $this->isWritable();
+        return $this->metaData->isReadable();
     }
+
     public function read($length): string
     {
         /** @phpstan-ignore argument.type */
@@ -112,9 +84,8 @@ class Stream implements StreamInterface
         return $data ? $data : '';
     }
 
-    public function getMetadata($key = null)
+    public function getMetadata($key = null): StreamMetaData
     {
-        $meta = stream_get_meta_data($this->stream);
-        return $key ? ($meta[$key] ?? null) : $meta;
+        return $this->metaData;
     }
 }

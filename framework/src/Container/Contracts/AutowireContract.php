@@ -1,25 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Container\Contracts;
 
-use DJWeb\Framework\Exceptions\Container\NotFoundException;
+use DJWeb\Framework\Exceptions\Container\NotFoundError;
 use ReflectionException;
 
 /**
- * Interface AutowireInterface
+ * Interface AutowireContract
  *
  * Defines the contract for the Autowire class.
  */
-interface AutowireInterface
+interface AutowireContract
 {
     /**
      * Autowire and instantiate a class.
      *
      * @template T of object
+     *
      * @param class-string<T> $className The name of the class to instantiate
+     *
      * @return T The instantiated object
+     *
      * @throws ReflectionException If the class cannot be reflected
-     * @throws NotFoundException If a dependency cannot be resolved
+     * @throws NotFoundError If a dependency cannot be resolved
      */
     public function instantiate(string $className): object;
 
@@ -27,8 +32,10 @@ interface AutowireInterface
      * Resolve parameters for dependency injection.
      *
      * @param array<\ReflectionParameter> $parameters
+     *
      * @return array<mixed>
-     * @throws NotFoundException If a dependency cannot be resolved
+     *
+     * @throws NotFoundError If a dependency cannot be resolved
      */
     public function resolveParameters(array $parameters): array;
 }

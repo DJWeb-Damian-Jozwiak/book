@@ -1,43 +1,139 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Http;
 
-use DJWeb\Framework\Http\Request\BodyTrait;
-use DJWeb\Framework\Http\Request\HeadersTrait;
-use DJWeb\Framework\Http\Request\ProtocolVersionTrait;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionClass;
+use Psr\Http\Message\StreamInterface;
 
 class Response implements ResponseInterface
 {
-    use HeadersTrait;
-    use BodyTrait;
-    use ProtocolVersionTrait;
+    private string $reasonPhrase = '';
+    private HeaderManager $headers;
+    private StreamInterface $body;
 
-    private function clone(
-        ResponseInterface $request,
-        string $propertyName,
-        mixed $propertyValue
-    ): ResponseInterface {
-        $clone = clone $request;
-        $reflection = new ReflectionClass($clone);
-        $property = $reflection->getProperty($propertyName);
-        $property->setAccessible(true);
-        $property->setValue($clone, $propertyValue);
-        return $clone;
-    }
+    /**
+     * @param array<string, string|array<int, string>> $headers
+     */
     public function __construct(
-        private int $statusCode = 200,
-        private string $reasonPhrase = '',
-    )
-    {
-        $this->body = new Stream();
+        array $headers = [],
+        ?StreamInterface $body = null,
+        private string $version = '1.1',
+        private int $status = 200,
+        ?string $reason = null
+    ) {
+        $this->headers = new HeaderManager($headers);
+        $this->body = $body ?? $this->createDefaultBody();
+        $this->reasonPhrase = $reason ?? $this->getDefaultReasonPhrase($status);
     }
 
-    public function setContent(string $content): ResponseInterface
+    public function getProtocolVersion(): string
+    {
+        return $this->version;
+    }
+
+    public function withProtocolVersion(string $version): static
+    {
+        $new = clone $this;
+        $new->version = $version;
+        return $new;
+    }
+
+    public function getHeaders(): array
+    {
+        return $this->headers->getHeaders();
+    }
+
+    public function hasHeader(string $name): bool
+    {
+        return $this->headers->hasHeader($name);
+    }
+
+    public function getHeader(string $name): array
+    {
+        return $this->headers->getHeader($name);
+    }
+
+    public function getHeaderLine(string $name): string
+    {
+        return $this->headers->getHeaderLine($name);
+    }
+
+    public function withHeader(string $name, $value): static
+    {
+        $new = clone $this;
+        $new->headers = $this->headers->withHeader($name, $value);
+        return $new;
+    }
+
+    public function withAddedHeader(string $name, $value): static
+    {
+        $new = clone $this;
+        $new->headers = $this->headers->withAddedHeader($name, $value);
+        return $new;
+    }
+
+    public function withoutHeader(string $name): static
+    {
+        $new = clone $this;
+        $new->headers = $this->headers->withoutHeader($name);
+        return $new;
+    }
+
+    public function getBody(): StreamInterface
+    {
+        return $this->body;
+    }
+
+    public function withBody(StreamInterface $body): static
+    {
+        $new = clone $this;
+        $new->body = $body;
+        return $new;
+    }
+
+    public function getStatusCode(): int
+    {
+        return $this->status;
+    }
+
+    public function withStatus(int $code, string $reasonPhrase = ''): static
+    {
+        $new = clone $this;
+        $new->status = $code;
+        $new->reasonPhrase =
+            $reasonPhrase ? $reasonPhrase
+                : $this->getDefaultReasonPhrase($code);
+        return $new;
+    }
+
+    public function withContent(string $content): ResponseInterface
     {
         $this->body->write($content);
         return $this;
+    }
+
+    /**
+     * @param array<int|string, mixed> $data
+     */
+    public function withJson(
+        array $data,
+        ?int $status = null,
+        int $options = 0
+    ): ResponseInterface {
+        $json = json_encode($data, $options);
+        $json = $json === false ? '' : $json;
+
+        $new = $this
+            ->withHeader('Content-Type', 'application/json')
+            ->withContent($json);
+
+        if ($status !== null) {
+            $new = $new->withStatus($status);
+        }
+
+        return $new;
     }
 
     public function getReasonPhrase(): string
@@ -45,15 +141,34 @@ class Response implements ResponseInterface
         return $this->reasonPhrase;
     }
 
-    public function getStatusCode(): int
+    public function redirect(string $url, int $status = 302): self
     {
-        return $this->statusCode;
+        return $this
+            ->withStatus($status)
+            ->withHeader('Location', $url);
     }
 
-    public function withStatus($code, $reasonPhrase = ''): static
+    private function createDefaultBody(): StreamInterface
     {
-        $cloned = $this->clone($this,'statusCode', $code);
-        /** @phpstan-ignore return.type */
-        return $this->clone($cloned,'reasonPhrase', $reasonPhrase);
+        return new Stream('php://temp', 'r+');
+    }
+
+    private function getDefaultReasonPhrase(int $statusCode): string
+    {
+        $phrases = [
+            200 => 'OK',
+            201 => 'Created',
+            204 => 'No Content',
+            301 => 'Moved Permanently',
+            302 => 'Found',
+            400 => 'Bad Request',
+            401 => 'Unauthorized',
+            403 => 'Forbidden',
+            404 => 'Not Found',
+            405 => 'Method Not Allowed',
+            500 => 'Internal Server Error',
+        ];
+
+        return $phrases[$statusCode] ?? '';
     }
 }

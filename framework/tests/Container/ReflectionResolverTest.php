@@ -3,7 +3,7 @@
 namespace Tests\Container;
 
 use DJWeb\Framework\Container\ReflectionResolver;
-use DJWeb\Framework\Exceptions\Container\ContainerException;
+use DJWeb\Framework\Exceptions\Container\ContainerError;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionParameter;
@@ -60,7 +60,7 @@ class ReflectionResolverTest extends TestCase
     {
         $params = $this->resolver->getConstructorParameters(Database::class);
 
-        $this->expectException(ContainerException::class);
+        $this->expectException(ContainerError::class);
         $this->resolver->getDefaultValue($params[0]);
     }
 

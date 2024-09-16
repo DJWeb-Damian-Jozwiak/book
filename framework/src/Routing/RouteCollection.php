@@ -2,7 +2,7 @@
 
 namespace DJWeb\Framework\Routing;
 
-use DJWeb\Framework\Exceptions\Routing\DuplicateRouteException;
+use DJWeb\Framework\Exceptions\Routing\DuplicateRouteError;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -24,12 +24,12 @@ class RouteCollection implements \IteratorAggregate, \Countable
      * Add a route to the collection.
      *
      * @param Route $route The route to add
-     * @throws DuplicateRouteException If a route with the same name already exists
+     * @throws DuplicateRouteError If a route with the same name already exists
      */
     public function addRoute(Route $route): void
     {
         if (($name = $route->name) && isset($this->namedRoutes[$name])) {
-            throw new DuplicateRouteException($name);
+            throw new DuplicateRouteError($name);
         }
 
         $this->routes[] = $route;

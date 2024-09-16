@@ -5,7 +5,7 @@ namespace Tests\Http;
 use DJWeb\Framework\Container\Container;
 use DJWeb\Framework\Container\Contracts\ContainerInterface;
 use DJWeb\Framework\Http\Kernel;
-use DJWeb\Framework\Http\Request;
+use DJWeb\Framework\Http\RequestFactory;
 use DJWeb\Framework\Http\Response;
 use DJWeb\Framework\Routing\Router;
 use PHPUnit\Framework\TestCase;

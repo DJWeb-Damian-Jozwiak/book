@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Container;
 
-use DJWeb\Framework\Container\Contracts\ContainerInterface;
-use DJWeb\Framework\Container\Contracts\ServiceProviderInterface;
-use DJWeb\Framework\Exceptions\Container\NotFoundException;
+use DJWeb\Framework\Container\Contracts\ContainerContract;
+use DJWeb\Framework\Container\Contracts\ServiceProviderContract;
+use DJWeb\Framework\Exceptions\Container\NotFoundError;
 
-class Container implements ContainerInterface
+class Container implements ContainerContract
 {
     /** @var array<string, mixed> */
     private array $entries = [];
@@ -19,12 +21,14 @@ class Container implements ContainerInterface
 
     /**
      * @param class-string $id
+     *
      * @return mixed
-     * @throws NotFoundException
+     *
+     * @throws NotFoundError
      */
     public function get(string $id): mixed
     {
-        if (!$this->has($id)) {
+        if (! $this->has($id)) {
             return $this->autowire->instantiate($id);
         }
         $entry = $this->entries[$id];
@@ -34,11 +38,6 @@ class Container implements ContainerInterface
         return $entry;
     }
 
-
-    /**
-     * @param string $id
-     * @return bool
-     */
     public function has(string $id): bool
     {
         return isset($this->entries[$id]);
@@ -46,11 +45,13 @@ class Container implements ContainerInterface
 
     /**
      * Sets item in container
+     *
      * @param string $key
      * @param mixed $value
-     * @return ContainerInterface
+     *
+     * @return ContainerContract
      */
-    public function set(string $key, mixed $value): ContainerInterface
+    public function set(string $key, mixed $value): ContainerContract
     {
         $this->entries[$key] = $value;
         return $this;
@@ -60,9 +61,10 @@ class Container implements ContainerInterface
      * Add a definition to the container.
      *
      * @param Definition $definition
+     *
      * @return self
      */
-    public function addDefinition(Definition $definition): ContainerInterface
+    public function addDefinition(Definition $definition): ContainerContract
     {
         $this->entries[$definition->id] = $definition;
         return $this;
@@ -71,13 +73,13 @@ class Container implements ContainerInterface
     /**
      * Register a service provider.
      *
-     * @param ServiceProviderInterface $provider
+     * @param ServiceProviderContract $provider
+     *
      * @return self
      */
-    public function register(ServiceProviderInterface $provider): ContainerInterface
+    public function register(ServiceProviderContract $provider): ContainerContract
     {
         $provider->register($this);
         return $this;
     }
-
 }
