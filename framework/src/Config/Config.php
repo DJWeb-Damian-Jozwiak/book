@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Config;
 
-use DJWeb\Framework\Application;
+use DJWeb\Framework\Web\Application;
 
 class Config
 {

@@ -2,10 +2,10 @@
 
 namespace Tests;
 
-use DJWeb\Framework\Application;
 use DJWeb\Framework\Exceptions\Container\ContainerError;
 use DJWeb\Framework\Http\Response;
 use DJWeb\Framework\Routing\Router;
+use DJWeb\Framework\Web\Application;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 

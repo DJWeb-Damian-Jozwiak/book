@@ -2,9 +2,9 @@
 
 namespace Tests;
 
-use DJWeb\Framework\Application;
 use DJWeb\Framework\Config\Config;
 use DJWeb\Framework\Config\ConfigBase;
+use DJWeb\Framework\Web\Application;
 use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase

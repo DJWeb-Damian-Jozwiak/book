@@ -2,33 +2,17 @@
 
 declare(strict_types=1);
 
-namespace DJWeb\Framework;
+namespace DJWeb\Framework\Base;
 
 use DJWeb\Framework\Config\ConfigBase;
 use DJWeb\Framework\Container\Container;
 use DJWeb\Framework\Container\Contracts\ServiceProviderContract;
 use DJWeb\Framework\Exceptions\Container\ContainerError;
-use DJWeb\Framework\Http\Kernel;
-use DJWeb\Framework\ServiceProviders\HttpServiceProvider;
-use DJWeb\Framework\ServiceProviders\RouterServiceProvider;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 
 class Application extends Container
 {
     private string $base_path = '';
-
-    private static ?Application $instance = null;
     private ConfigBase $config;
-    private Kernel $kernel;
-
-    private function __construct()
-    {
-        parent::__construct();
-        $this->registerServiceProvider(new HttpServiceProvider());
-        $this->registerServiceProvider(new RouterServiceProvider());
-        $this->kernel = new Kernel($this);
-    }
 
     public function __clone()
     {
@@ -49,8 +33,13 @@ class Application extends Container
      */
     public function __unserialize(array $data): void
     {
-        json_encode($data, flags: JSON_THROW_ON_ERROR);
+        json_encode($data, JSON_THROW_ON_ERROR);
         throw new ContainerError('Cannot unserialize Application');
+    }
+
+    public function getConfig(): ConfigBase
+    {
+        return $this->config;
     }
 
     public function addBasePath(string $base_path): void
@@ -63,33 +52,9 @@ class Application extends Container
         return $this->base_path;
     }
 
-    public static function getInstance(): self
-    {
-        if (self::$instance === null) {
-            self::$instance = new self();
-        }
-        return self::$instance;
-    }
-
-    public function getConfig(): ConfigBase
-    {
-        return $this->config;
-    }
-
     public function loadConfig(): void
     {
         $this->config = new ConfigBase($this);
-    }
-
-    public function handle(): ResponseInterface
-    {
-        $request = $this->get(ServerRequestInterface::class);
-        return $this->kernel->handle($request);
-    }
-
-    public function withRoutes(callable $callback): void
-    {
-        $this->kernel->withRoutes($callback);
     }
 
     protected function registerServiceProvider(
