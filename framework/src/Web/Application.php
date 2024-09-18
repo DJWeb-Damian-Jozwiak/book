@@ -13,7 +13,6 @@ use Psr\Http\Message\ServerRequestInterface;
 class Application extends \DJWeb\Framework\Base\Application
 {
     private Kernel $kernel;
-    private static ?Application $instance = null;
 
     protected function __construct()
     {
@@ -27,14 +26,6 @@ class Application extends \DJWeb\Framework\Base\Application
     {
         $request = $this->get(ServerRequestInterface::class);
         return $this->kernel->handle($request);
-    }
-
-    public static function getInstance(): Application
-    {
-        if (self::$instance === null) {
-            self::$instance = new Application();
-        }
-        return self::$instance;
     }
 
     public function withRoutes(callable $callback): void

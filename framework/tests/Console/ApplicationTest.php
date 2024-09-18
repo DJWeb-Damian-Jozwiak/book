@@ -8,6 +8,10 @@ use PHPUnit\Framework\TestCase;
 
 class ApplicationTest extends TestCase
 {
+    public function tearDown(): void
+    {
+        Application::withInstance(null);
+    }
     public function testCreate()
     {
         $path = dirname(__DIR__) . '/' . 'Helpers';

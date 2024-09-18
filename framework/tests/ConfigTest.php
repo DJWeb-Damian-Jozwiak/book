@@ -9,6 +9,10 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
 {
+    public function tearDown(): void
+    {
+        Application::withInstance(null);
+    }
     public function testLoadConfig()
     {
         $app = Application::getInstance();

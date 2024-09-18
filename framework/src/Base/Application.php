@@ -11,6 +11,8 @@ use DJWeb\Framework\Exceptions\Container\ContainerError;
 
 class Application extends Container
 {
+
+    protected static ?self $instance = null;
     private string $base_path = '';
     private ConfigBase $config;
 
@@ -35,6 +37,20 @@ class Application extends Container
     {
         json_encode($data, JSON_THROW_ON_ERROR);
         throw new ContainerError('Cannot unserialize Application');
+    }
+
+    public static function getInstance(): Application
+    {
+        if (self::$instance === null) {
+            /** @phpstan-ignore-next-line instance */
+            self::$instance = new static();
+        }
+        return self::$instance;
+    }
+
+    public static function withInstance(?self $instance): void
+    {
+        self::$instance = $instance;
     }
 
     public function getConfig(): ConfigBase

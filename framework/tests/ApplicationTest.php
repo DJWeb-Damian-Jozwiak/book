@@ -11,6 +11,10 @@ use Psr\Http\Message\ResponseInterface;
 
 class ApplicationTest extends TestCase
 {
+    public function tearDown(): void
+    {
+        Application::withInstance(null);
+    }
     public function testApplicationHandlesRequest(): void
     {
         $app = Application::getInstance();

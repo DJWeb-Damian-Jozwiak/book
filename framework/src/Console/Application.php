@@ -10,8 +10,6 @@ use DJWeb\Framework\ServiceProviders\ConsoleServiceProvider;
 
 class Application extends \DJWeb\Framework\Base\Application
 {
-    private static ?Application $instance = null;
-
     private Kernel $kernel;
 
     protected function __construct()
@@ -22,14 +20,6 @@ class Application extends \DJWeb\Framework\Base\Application
         $dir = __DIR__ . DIRECTORY_SEPARATOR . 'Commands';
         $namespace = 'DJWeb\\Framework\\Console\\Commands\\';
         $this->registerCommands(new CommandNamespace($namespace, $dir));
-    }
-
-    public static function getInstance(): Application
-    {
-        if (self::$instance === null) {
-            self::$instance = new Application();
-        }
-        return self::$instance;
     }
 
     public function handle(): int
