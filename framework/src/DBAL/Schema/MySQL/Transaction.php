@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace DJWeb\Framework\DBAL\Schema\MySQL;
 
 use DJWeb\Framework\DBAL\Contracts\ConnectionContract;
+use DJWeb\Framework\DBAL\Contracts\Schema\TransactionContract;
 
-readonly class Transaction
+readonly class Transaction implements TransactionContract
 {
     public function __construct(
         private ConnectionContract $connection,

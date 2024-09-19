@@ -2,6 +2,7 @@
 
 namespace Tests\DBAL\Schema\MySQL;
 
+use DJWeb\Framework\DBAL\Contracts\ConnectionContract;
 use DJWeb\Framework\DBAL\Contracts\Schema\ColumnManagerContract;
 use DJWeb\Framework\DBAL\Contracts\Schema\DatabaseInfoContract;
 use DJWeb\Framework\DBAL\Contracts\Schema\IndexManagerContract;
@@ -11,6 +12,7 @@ use DJWeb\Framework\DBAL\Schema\MySQL\Columns\IntColumn;
 use DJWeb\Framework\DBAL\Schema\MySQL\Columns\VarcharColumn;
 use DJWeb\Framework\DBAL\Schema\MySQL\Managers\ColumnFactory;
 use DJWeb\Framework\DBAL\Schema\MySQL\Schema;
+use DJWeb\Framework\DBAL\Schema\MySQL\Transaction;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -158,7 +160,8 @@ class SchemaTest extends TestCase
             $this->columnManagerMock,
             $this->indexManagerMock,
             $this->databaseInfoMock,
-            new ColumnFactory()
+            new ColumnFactory(),
+            new Transaction($this->createMock(ConnectionContract::class))
         );
     }
 }

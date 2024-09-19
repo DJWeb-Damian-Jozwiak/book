@@ -10,6 +10,7 @@ use DJWeb\Framework\DBAL\Contracts\Schema\DatabaseInfoContract;
 use DJWeb\Framework\DBAL\Contracts\Schema\IndexManagerContract;
 use DJWeb\Framework\DBAL\Contracts\Schema\SchemaContract;
 use DJWeb\Framework\DBAL\Contracts\Schema\TableManagerContract;
+use DJWeb\Framework\DBAL\Contracts\Schema\TransactionContract;
 use DJWeb\Framework\DBAL\Schema\Column;
 
 readonly class Schema implements SchemaContract
@@ -20,6 +21,7 @@ readonly class Schema implements SchemaContract
         private IndexManagerContract $indexManager,
         private DatabaseInfoContract $databaseInfo,
         private ColumnFactoryContract $columnFactory,
+        private Transaction $transaction,
     ) {
     }
 
@@ -102,5 +104,10 @@ readonly class Schema implements SchemaContract
     public function createFromDescription(array $description): Column
     {
         return $this->columnFactory->createFromDescription($description);
+    }
+
+    public function getTransaction(): TransactionContract
+    {
+        return $this->transaction;
     }
 }

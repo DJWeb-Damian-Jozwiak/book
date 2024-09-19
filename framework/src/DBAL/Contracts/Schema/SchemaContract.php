@@ -57,4 +57,6 @@ interface SchemaContract
      * @param array<string, mixed> $description
      */
     public function createFromDescription(array $description): Column;
+
+    public function getTransaction(): TransactionContract;
 }
