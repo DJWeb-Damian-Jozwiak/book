@@ -4,6 +4,7 @@ namespace Tests\DBAL\Schema\MySQL\Managers;
 
 use DJWeb\Framework\DBAL\Contracts\ConnectionContract;
 use DJWeb\Framework\DBAL\Contracts\Schema\DatabaseInfoContract;
+use DJWeb\Framework\DBAL\Schema\Column;
 use DJWeb\Framework\DBAL\Schema\MySQL\Managers\DatabaseInfo;
 use DJWeb\Framework\Exceptions\DBAL\Schema\SchemaError;
 use PDOException;
@@ -62,7 +63,7 @@ class DatabaseInfoTest extends TestCase
             ->willReturn($stmtMock);
 
         $columns = $this->databaseInfo->getColumns('users');
-        $this->assertEquals($expectedColumns, $columns);
+        $this->assertInstanceOf(Column::class, $columns[0]);
     }
 
     public function testGetColumnsThrowsExceptionOnPDOError()

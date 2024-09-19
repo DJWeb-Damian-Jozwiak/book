@@ -14,6 +14,9 @@ readonly class IndexManager implements IndexManagerContract
     {
     }
 
+    /**
+     * @param array<int, string> $columns
+     */
     public function createIndex(
         string $tableName,
         string $indexName,
@@ -30,6 +33,9 @@ readonly class IndexManager implements IndexManagerContract
         $this->executeSql($sql, 'Failed to drop index: ');
     }
 
+    /**
+     * @param array<int, string> $columns
+     */
     public function primary(string $tableName, array $columns): void
     {
         $columnList = implode(', ', $columns);
@@ -37,6 +43,9 @@ readonly class IndexManager implements IndexManagerContract
         $this->executeSql($sql, 'Failed to create primary key: ');
     }
 
+    /**
+     * @param array<int, string> $columns
+     */
     public function unique(
         string $tableName,
         string $indexName,

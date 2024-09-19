@@ -23,11 +23,17 @@ readonly class Schema implements SchemaContract
     ) {
     }
 
+    /**
+     * @param array<int, Column> $columns
+     */
     public function createTable(string $tableName, array $columns): void
     {
         $this->tableManager->createTable($tableName, $columns);
     }
 
+    /**
+     * @param array<int, mixed> $modifications
+     */
     public function alterTable(string $tableName, array $modifications): void
     {
         $this->tableManager->alterTable($tableName, $modifications);
@@ -56,6 +62,9 @@ readonly class Schema implements SchemaContract
         $this->columnManager->dropColumn($tableName, $columnName);
     }
 
+    /**
+     * @param array<int, string> $columns
+     */
     public function createIndex(
         string $tableName,
         string $indexName,
@@ -69,16 +78,27 @@ readonly class Schema implements SchemaContract
         $this->indexManager->dropIndex($tableName, $indexName);
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getTables(): array
     {
         return $this->databaseInfo->getTables();
     }
 
+    /**
+     * @param string $tableName
+     *
+     * @return array<int, Column>
+     */
     public function getColumns(string $tableName): array
     {
         return $this->databaseInfo->getColumns($tableName);
     }
 
+    /**
+     * @param array<string, mixed> $description
+     */
     public function createFromDescription(array $description): Column
     {
         return $this->columnFactory->createFromDescription($description);

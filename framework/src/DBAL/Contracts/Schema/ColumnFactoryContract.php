@@ -8,5 +8,8 @@ use DJWeb\Framework\DBAL\Schema\Column;
 
 interface ColumnFactoryContract
 {
+    /**
+     * @param array<string, mixed> $description
+     */
     public function createFromDescription(array $description): Column;
 }

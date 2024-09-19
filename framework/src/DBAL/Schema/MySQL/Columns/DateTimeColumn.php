@@ -19,21 +19,12 @@ class DateTimeColumn extends Column
         if ($this->current) {
             $this->current();
         }
-        if ($this->currentOnUpdate) {
-            $this->currentOnUpdate();
-        }
     }
 
     public function current(): self
     {
         $this->default = 'CURRENT_TIMESTAMP';
         $this->current = true;
-        return $this;
-    }
-
-    public function currentOnUpdate(): self
-    {
-        $this->currentOnUpdate = true;
         return $this;
     }
 

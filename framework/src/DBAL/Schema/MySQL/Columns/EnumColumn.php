@@ -9,6 +9,9 @@ use DJWeb\Framework\Exceptions\DBAL\Schema\UnsupportedColumnType;
 
 class EnumColumn extends Column
 {
+    /**
+     * @param array<int, ?string> $values
+     */
     public function __construct(
         string $name,
         public readonly array $values,
@@ -23,7 +26,10 @@ class EnumColumn extends Column
 
     public function getSqlDefinition(): string
     {
-        $values = implode(',', array_map(static fn ($v) => "'{$v}'", $this->values));
+        $values = implode(
+            ',',
+            array_map(static fn ($v) => "'{$v}'", $this->values)
+        );
         $sql = "{$this->name} {$this->type}({$values})";
         $sql .= $this->nullable ? ' NULL' : ' NOT NULL';
         if ($this->default !== null) {

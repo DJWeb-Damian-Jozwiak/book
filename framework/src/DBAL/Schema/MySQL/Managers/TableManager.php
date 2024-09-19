@@ -7,6 +7,8 @@ namespace DJWeb\Framework\DBAL\Schema\MySQL\Managers;
 use DJWeb\Framework\DBAL\Contracts\ConnectionContract;
 use DJWeb\Framework\DBAL\Contracts\Schema\TableManagerContract;
 use DJWeb\Framework\DBAL\Schema\Column;
+use DJWeb\Framework\DBAL\Schema\MySQL\Managers\Builders\AlterTableBuilder;
+use DJWeb\Framework\DBAL\Schema\MySQL\Managers\Builders\CreateTableBuilder;
 use DJWeb\Framework\Exceptions\DBAL\Schema\TableError;
 
 readonly class TableManager implements TableManagerContract
@@ -15,34 +17,21 @@ readonly class TableManager implements TableManagerContract
     {
     }
 
+    /**
+     * @param array<int, Column> $columns
+     */
     public function createTable(string $tableName, array $columns): void
     {
-        $columnDefinitions = array_map(static function (Column $column) {
-            return $column->getSqlDefinition();
-        }, $columns);
-        $sql = "CREATE TABLE {$tableName} (" . implode(
-            ', ',
-            $columnDefinitions
-        ) . ')';
+        $sql = (new CreateTableBuilder())->build($tableName, $columns);
         $this->executeSql($sql, 'Failed to create table: ');
     }
 
+    /**
+     * @param array<int, mixed> $modifications
+     */
     public function alterTable(string $tableName, array $modifications): void
     {
-        $alterStatements = [];
-        foreach ($modifications as $modification) {
-            if ($modification instanceof Column) {
-                $alterStatements[] = 'ADD COLUMN ' . $modification->getSqlDefinition(
-                );
-            } elseif (is_array($modification) && count($modification) === 2) {
-                $alterStatements[] = "CHANGE COLUMN {$modification[0]} " . $modification[1]->getSqlDefinition(
-                );
-            } elseif (is_string($modification)) {
-                $alterStatements[] = "DROP COLUMN {$modification}";
-            }
-        }
-
-        $sql = "ALTER TABLE {$tableName} " . implode(', ', $alterStatements);
+        $sql = (new AlterTableBuilder())->build($tableName, $modifications);
         $this->executeSql($sql, 'Failed to alter table: ');
     }
 

@@ -6,6 +6,7 @@ namespace DJWeb\Framework\DBAL\Schema\MySQL\Managers;
 
 use DJWeb\Framework\DBAL\Contracts\ConnectionContract;
 use DJWeb\Framework\DBAL\Contracts\Schema\DatabaseInfoContract;
+use DJWeb\Framework\DBAL\Schema\Column;
 use DJWeb\Framework\Exceptions\DBAL\Schema\SchemaError;
 use PDO;
 
@@ -15,22 +16,35 @@ readonly class DatabaseInfo implements DatabaseInfoContract
     {
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getTables(): array
     {
         $sql = 'SHOW TABLES';
         $stmt = $this->connection->query($sql);
+        /** @phpstan-ignore-next-line */
         return $stmt->fetchAll(\PDO::FETCH_COLUMN);
     }
 
+    /**
+     * @return array<int, Column>
+     */
     public function getColumns(string $tableName): array
     {
-        if (empty($tableName)) {
+        if (! $tableName) {
             throw new SchemaError('Table name cannot be empty');
         }
 
         try {
+            $factory = new ColumnFactory();
             $stmt = $this->connection->query("DESCRIBE `{$tableName}`");
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            /** @phpstan-ignore-next-line */
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return array_map(
+                static fn (array $row) => $factory->createFromDescription($row),
+                $data
+            );
         } catch (\Throwable $e) {
             throw new SchemaError(
                 "Failed to get columns for table {$tableName}: " . $e->getMessage(

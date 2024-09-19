@@ -25,7 +25,7 @@ class IntColumn extends Column
         if ($this->unsigned) {
             $sql .= ' UNSIGNED';
         }
-        $sql .= $this->nullable && ! $this->autoIncrement ? ' NULL' : ' NOT NULL';
+        $sql .= $this->nullable ? ' NULL' : ' NOT NULL';
         if ($this->default !== null) {
             $sql .= " DEFAULT {$this->default}";
         }

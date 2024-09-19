@@ -12,6 +12,35 @@ use SensitiveParameter;
 class MySqlConnection implements ConnectionContract
 {
     private ?PDO $connection = null;
+
+    public function getConnection(): ?PDO
+    {
+        return $this->connection;
+    }
+
+    public function disconnect(): void
+    {
+        $this->connection = null;
+    }
+
+    /**
+     * @param array<string|int, string|float|int|null> $params
+     */
+    public function query(
+        string $sql,
+        array $params = []
+    ): \PDOStatement|false|null {
+        if (! $this->connection) {
+            $this->connect();
+        }
+
+        $statement = $this->connection?->prepare($sql);
+        /** @phpstan-ignore-next-line */
+        $statement->execute($params);
+
+        return $statement;
+    }
+
     public function connect(): void
     {
         if ($this->connection) {
@@ -28,33 +57,8 @@ class MySqlConnection implements ConnectionContract
         );
     }
 
-    public function getConnection(): ?PDO
-    {
-        return $this->connection;
-    }
-
-    public function disconnect(): void
-    {
-        $this->connection = null;
-    }
-
     /**
-     * @param array<string|int, string|float|int|null> $params
-     */
-    public function query(string $sql, array $params = []): \PDOStatement|false
-    {
-        if (! $this->connection) {
-            $this->connect();
-        }
-
-        $statement = $this->connection->prepare($sql);
-        $statement->execute($params);
-
-        return $statement;
-    }
-
-    /**
-     * @return array<int, int>
+     * @return array<int, int|false>
      */
     public function getConnectionOptions(): array
     {
