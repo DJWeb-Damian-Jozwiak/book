@@ -11,7 +11,7 @@ class CommandOption
 {
     public function __construct(
         public string $name,
-        public bool|string|int|float|null $value = null,
+        public bool|string|int|float|null|\Closure $value = null,
         public bool $default = true,
         public bool $required = false,
     ) {

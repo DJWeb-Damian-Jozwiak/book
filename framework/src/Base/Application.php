@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace DJWeb\Framework\Base;
 
 use DJWeb\Framework\Config\ConfigBase;
+use DJWeb\Framework\Config\Contracts\ConfigContract;
 use DJWeb\Framework\Container\Container;
 use DJWeb\Framework\Container\Contracts\ServiceProviderContract;
 use DJWeb\Framework\Exceptions\Container\ContainerError;
 
 class Application extends Container
 {
-
     protected static ?self $instance = null;
     private string $base_path = '';
-    private ConfigBase $config;
+    private ConfigContract $config;
 
     public function __clone()
     {
@@ -53,7 +53,7 @@ class Application extends Container
         self::$instance = $instance;
     }
 
-    public function getConfig(): ConfigBase
+    public function getConfig(): ConfigContract
     {
         return $this->config;
     }
