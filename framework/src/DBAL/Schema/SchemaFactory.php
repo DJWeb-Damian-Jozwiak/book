@@ -12,6 +12,7 @@ use DJWeb\Framework\DBAL\Schema\MySQL\Managers\DatabaseInfo;
 use DJWeb\Framework\DBAL\Schema\MySQL\Managers\IndexManager;
 use DJWeb\Framework\DBAL\Schema\MySQL\Managers\TableManager;
 use DJWeb\Framework\DBAL\Schema\MySQL\Schema;
+use DJWeb\Framework\DBAL\Schema\MySQL\Transaction;
 
 class SchemaFactory
 {
@@ -28,7 +29,8 @@ class SchemaFactory
             $columnManager,
             $indexManager,
             $databaseInfo,
-            $columnFactory
+            $columnFactory,
+            new Transaction($connection),
         );
     }
 }

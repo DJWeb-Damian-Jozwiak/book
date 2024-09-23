@@ -6,15 +6,10 @@ use DJWeb\Framework\Exceptions\Container\ContainerError;
 use DJWeb\Framework\Http\Response;
 use DJWeb\Framework\Routing\Router;
 use DJWeb\Framework\Web\Application;
-use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 
-class ApplicationTest extends TestCase
+class ApplicationTest extends BaseTestCase
 {
-    public function tearDown(): void
-    {
-        Application::withInstance(null);
-    }
     public function testApplicationHandlesRequest(): void
     {
         $app = Application::getInstance();

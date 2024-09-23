@@ -5,19 +5,14 @@ namespace Tests;
 use DJWeb\Framework\Config\Config;
 use DJWeb\Framework\Config\ConfigBase;
 use DJWeb\Framework\Web\Application;
-use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends TestCase
+class ConfigTest extends BaseTestCase
 {
-    public function tearDown(): void
-    {
-        Application::withInstance(null);
-    }
     public function testLoadConfig()
     {
         $app = Application::getInstance();
         $app->addBasePath(dirname(__DIR__));
-        if (!file_exists($app->getBasePath() . '/.env')) {
+        if (! file_exists($app->getBasePath() . '/.env')) {
             file_put_contents($app->getBasePath() . '/.env', '');
         }
         $app->loadConfig();
@@ -28,7 +23,7 @@ class ConfigTest extends TestCase
     {
         $app = Application::getInstance();
         $app->addBasePath(__DIR__);
-        if (!file_exists($app->getBasePath() . '/.env')) {
+        if (! file_exists($app->getBasePath() . '/.env')) {
             file_put_contents($app->getBasePath() . '/.env', '');
         }
         $app->loadConfig();

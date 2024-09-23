@@ -140,6 +140,12 @@ class SchemaTest extends TestCase
         );
     }
 
+    public function testGetTransaction()
+    {
+        $transaction = $this->schema->getTransaction();
+        $this->assertInstanceOf(Transaction::class, $transaction);
+    }
+
     protected function setUp(): void
     {
         $this->tableManagerMock = $this->createMock(

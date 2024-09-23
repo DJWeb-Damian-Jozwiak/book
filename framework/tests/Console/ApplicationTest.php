@@ -4,14 +4,10 @@ namespace Tests\Console;
 
 use DJWeb\Framework\Console\Application;
 use DJWeb\Framework\Console\Utils\CommandNamespace;
-use PHPUnit\Framework\TestCase;
+use Tests\BaseTestCase;
 
-class ApplicationTest extends TestCase
+class ApplicationTest extends BaseTestCase
 {
-    public function tearDown(): void
-    {
-        Application::withInstance(null);
-    }
     public function testCreate()
     {
         $path = dirname(__DIR__) . '/' . 'Helpers';
