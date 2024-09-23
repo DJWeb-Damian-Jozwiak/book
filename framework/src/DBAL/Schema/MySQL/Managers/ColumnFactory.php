@@ -106,6 +106,10 @@ class ColumnFactory implements ColumnFactoryContract
     {
         preg_match('/enum\((.*)\)/i', $description['Type'], $matches);
         $values = str_getcsv($matches[1] ?? '');
+        $values = array_filter(
+            $values,
+            static fn (string|null $value) => (bool) $value
+        );
         $values = array_map(
             static fn (string $value) => str_replace("'", '', $value),
             $values
