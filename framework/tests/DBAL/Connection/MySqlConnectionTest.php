@@ -4,51 +4,18 @@ namespace Tests\DBAL\Connection;
 
 use DJWeb\Framework\Base\Application;
 use DJWeb\Framework\Config\Contracts\ConfigContract;
-use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\DBAL\Connection\MySqlConnection;
 use PDO;
 use PDOException;
 use PDOStatement;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
-use RuntimeException;
+use Tests\BaseTestCase;
 
-class MySqlConnectionTest extends TestCase
+class MySqlConnectionTest extends BaseTestCase
 {
     private MySqlConnection|MockObject $connection;
     private $applicationMock;
     private $configMock;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->connection = new MySqlConnection();
-        $this->mockApplication();
-    }
-
-    private function mockApplication(): void
-    {
-        $this->applicationMock = $this->createMock(Application::class);
-        $this->configMock = $this->createMock(ConfigContract::class);
-
-        $this->applicationMock->method('getConfig')
-            ->willReturn($this->configMock);
-
-        Application::withInstance($this->applicationMock);
-    }
-
-    private function mockConfig(): void
-    {
-        $this->configMock->method('get')
-            ->willReturnMap([
-                ['database.mysql.host', null, 'localhost'],
-                ['database.mysql.port', null, 3306],
-                ['database.mysql.database', null, 'testdb'],
-                ['database.mysql.username', null, 'testuser'],
-                ['database.mysql.password', null, 'testpass'],
-                ['database.mysql.charset', 'utf8mb4', 'utf8mb4'],
-            ]);
-    }
 
     public function testConnect(): void
     {
@@ -70,6 +37,19 @@ class MySqlConnectionTest extends TestCase
         $this->connection->connect();
         $pdo2 = $this->connection->getConnection();
         $this->assertSame($pdo, $pdo2);
+    }
+
+    private function mockConfig(): void
+    {
+        $this->configMock->method('get')
+            ->willReturnMap([
+                ['database.mysql.host', null, 'localhost'],
+                ['database.mysql.port', null, 3306],
+                ['database.mysql.database', null, 'testdb'],
+                ['database.mysql.username', null, 'testuser'],
+                ['database.mysql.password', null, 'testpass'],
+                ['database.mysql.charset', 'utf8mb4', 'utf8mb4'],
+            ]);
     }
 
     public function testDisconnect(): void
@@ -125,6 +105,24 @@ class MySqlConnectionTest extends TestCase
         $connection = new MySqlConnection();
         $this->expectException(PDOException::class);
         $connection->connect();
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->connection = new MySqlConnection();
+        $this->mockApplication();
+    }
+
+    private function mockApplication(): void
+    {
+        $this->applicationMock = $this->createMock(Application::class);
+        $this->configMock = $this->createMock(ConfigContract::class);
+
+        $this->applicationMock->method('getConfig')
+            ->willReturn($this->configMock);
+
+        Application::withInstance($this->applicationMock);
     }
 
     private function invokeMethod(

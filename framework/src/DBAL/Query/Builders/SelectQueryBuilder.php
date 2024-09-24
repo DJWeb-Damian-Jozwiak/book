@@ -23,9 +23,9 @@ class SelectQueryBuilder extends BaseQueryBuilder
     protected LimitDecoratorContract $limitDecorator;
     protected ?int $offset = null;
 
-    public function __construct(string $table, ConnectionContract $connection)
+    public function __construct(ConnectionContract $connection)
     {
-        parent::__construct($table, $connection);
+        parent::__construct($connection);
         $this->limitDecorator = new LimitDecorator();
     }
 
@@ -64,9 +64,9 @@ class SelectQueryBuilder extends BaseQueryBuilder
     public function getSQL(): string
     {
         $sql = 'SELECT ' . implode(
-            ', ',
-            $this->columns
-        ) . " FROM {$this->table} ";
+                ', ',
+                $this->columns
+            ) . " FROM {$this->table} ";
 
         foreach ($this->joins as $join) {
             $sql .= $join->getSQL() . ' ';

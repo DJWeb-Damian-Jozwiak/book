@@ -2,12 +2,17 @@
 
 namespace Tests\DBAL\Schema\MySQL;
 
+use DJWeb\Framework\Base\Application;
 use DJWeb\Framework\DBAL\Contracts\ConnectionContract;
+use DJWeb\Framework\DBAL\Query\Builders\DeleteQueryBuilder;
+use DJWeb\Framework\DBAL\Query\Builders\InsertQueryBuilder;
 use DJWeb\Framework\DBAL\Query\Builders\QueryBuilder;
+use DJWeb\Framework\DBAL\Query\Builders\SelectQueryBuilder;
+use DJWeb\Framework\DBAL\Query\Builders\UpdateQueryBuilder;
 use DJWeb\Framework\DBAL\Query\Conditions\WhereGroupCondition;
-use PHPUnit\Framework\TestCase;
+use Tests\BaseTestCase;
 
-class QueryBuilderTest extends TestCase
+class QueryBuilderTest extends BaseTestCase
 {
     private QueryBuilder $queryBuilder;
     private $mockConnection;
@@ -252,6 +257,22 @@ class QueryBuilderTest extends TestCase
     protected function setUp(): void
     {
         $this->mockConnection = $this->createMock(ConnectionContract::class);
+        Application::getInstance()->set(
+            InsertQueryBuilder::class,
+            new InsertQueryBuilder($this->mockConnection)
+        );
+        Application::getInstance()->set(
+            UpdateQueryBuilder::class,
+            new UpdateQueryBuilder($this->mockConnection)
+        );
+        Application::getInstance()->set(
+            DeleteQueryBuilder::class,
+            new DeleteQueryBuilder($this->mockConnection)
+        );
+        Application::getInstance()->set(
+            SelectQueryBuilder::class,
+            new SelectQueryBuilder($this->mockConnection)
+        );
         $this->queryBuilder = new QueryBuilder($this->mockConnection);
     }
 }

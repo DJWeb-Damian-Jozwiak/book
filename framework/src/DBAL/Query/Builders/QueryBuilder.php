@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\DBAL\Query\Builders;
 
+use DJWeb\Framework\Base\Application;
 use DJWeb\Framework\DBAL\Contracts\ConnectionContract;
+use DJWeb\Framework\DBAL\Contracts\Query\QueryBuilderFacadeContract;
 
-class QueryBuilder
+class QueryBuilder implements QueryBuilderFacadeContract
 {
     public function __construct(private ConnectionContract $connection)
     {
@@ -14,21 +16,29 @@ class QueryBuilder
 
     public function insert(string $table): InsertQueryBuilder
     {
-        return new InsertQueryBuilder($table, $this->connection);
+        /** @var InsertQueryBuilder $item */
+        $item = Application::getInstance()->get(InsertQueryBuilder::class);
+        return $item->table($table);
     }
 
     public function update(string $table): UpdateQueryBuilder
     {
-        return new UpdateQueryBuilder($table, $this->connection);
+        /** @var UpdateQueryBuilder $item */
+        $item = Application::getInstance()->get(UpdateQueryBuilder::class);
+        return $item->table($table);
     }
 
     public function delete(string $table): DeleteQueryBuilder
     {
-        return new DeleteQueryBuilder($table, $this->connection);
+        /** @var DeleteQueryBuilder $item */
+        $item = Application::getInstance()->get(DeleteQueryBuilder::class);
+        return $item->table($table);
     }
 
     public function select(string $table): SelectQueryBuilder
     {
-        return new SelectQueryBuilder($table, $this->connection);
+        /** @var SelectQueryBuilder $item */
+        $item = Application::getInstance()->get(SelectQueryBuilder::class);
+        return $item->table($table);
     }
 }
