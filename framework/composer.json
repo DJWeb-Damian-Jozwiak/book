@@ -10,12 +10,13 @@
     "ext-pdo": "*"
   },
   "scripts": {
-    "insights": "./vendor/bin/phpinsights -vvv",
-    "insights-fix": "./vendor/bin/phpinsights --fix",
-    "phpstan": "vendor/bin/phpstan -l8 analyse",
-    "test": "vendor/bin/phpunit",
-    "test-coverage-html": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-html coverage",
-    "test-coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text"
+    "insights": "php8.4 ./vendor/bin/phpinsights -vvv",
+    "insights-fix": "php8.4 ./vendor/bin/phpinsights --fix",
+    "phpstan": "php8.4 vendor/bin/phpstan -l8 analyse",
+    "test": "php8.4 vendor/bin/phpunit",
+    "test-coverage-html": "XDEBUG_MODE=coverage php8.4 vendor/bin/phpunit --coverage-html coverage",
+    "test-coverage-html2": "vendor/bin/phpunit --coverage-filter ./src --coverage-html ./coverage",
+    "test-coverage": "XDEBUG_MODE=coverage 8.4 vendor/bin/phpunit --coverage-text"
   },
   "autoload": {
     "psr-4": {

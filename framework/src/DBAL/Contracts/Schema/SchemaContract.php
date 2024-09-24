@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\DBAL\Contracts\Schema;
 
+use DJWeb\Framework\DBAL\Contracts\ConnectionContract;
 use DJWeb\Framework\DBAL\Schema\Column;
 
 interface SchemaContract
@@ -59,4 +60,6 @@ interface SchemaContract
     public function createFromDescription(array $description): Column;
 
     public function getTransaction(): TransactionContract;
+
+    public function getConnection(): ConnectionContract;
 }

@@ -31,6 +31,7 @@ class SchemaFactory
             $databaseInfo,
             $columnFactory,
             new Transaction($connection),
+            $connection
         );
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\DBAL\Schema\MySQL;
 
+use DJWeb\Framework\DBAL\Contracts\ConnectionContract;
 use DJWeb\Framework\DBAL\Contracts\Schema\ColumnFactoryContract;
 use DJWeb\Framework\DBAL\Contracts\Schema\ColumnManagerContract;
 use DJWeb\Framework\DBAL\Contracts\Schema\DatabaseInfoContract;
@@ -22,6 +23,7 @@ readonly class Schema implements SchemaContract
         private DatabaseInfoContract $databaseInfo,
         private ColumnFactoryContract $columnFactory,
         private Transaction $transaction,
+        private ConnectionContract $connection,
     ) {
     }
 
@@ -109,5 +111,10 @@ readonly class Schema implements SchemaContract
     public function getTransaction(): TransactionContract
     {
         return $this->transaction;
+    }
+
+    public function getConnection(): ConnectionContract
+    {
+        return $this->connection;
     }
 }

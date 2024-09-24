@@ -146,6 +146,12 @@ class SchemaTest extends TestCase
         $this->assertInstanceOf(Transaction::class, $transaction);
     }
 
+    public function testGetConnection()
+    {
+        $connection = $this->schema->getConnection();
+        $this->assertInstanceOf(ConnectionContract::class, $connection);
+    }
+
     protected function setUp(): void
     {
         $this->tableManagerMock = $this->createMock(
@@ -161,13 +167,15 @@ class SchemaTest extends TestCase
             DatabaseInfoContract::class
         );
 
+        $connectionMock = $this->createMock(ConnectionContract::class);
         $this->schema = new Schema(
             $this->tableManagerMock,
             $this->columnManagerMock,
             $this->indexManagerMock,
             $this->databaseInfoMock,
             new ColumnFactory(),
-            new Transaction($this->createMock(ConnectionContract::class))
+            new Transaction($this->createMock(ConnectionContract::class)),
+            $connectionMock
         );
     }
 }
