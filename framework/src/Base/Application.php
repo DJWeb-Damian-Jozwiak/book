@@ -16,6 +16,12 @@ class Application extends Container
     private string $base_path = '';
     private ConfigBase $config;
 
+    private function __construct()
+    {
+        parent::__construct();
+        $this->set(Container::class, $this);
+    }
+
     public function __clone()
     {
         throw new ContainerError('Cannot clone Application');

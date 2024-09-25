@@ -14,7 +14,7 @@ readonly class StreamContentManager
 
     public function getContents(): string
     {
-        $content = stream_get_contents($this->stream->getStream(), -1, 0);
+        $content = stream_get_contents($this->stream->stream, -1, 0);
         if (! $content) {
             return '';
         }
