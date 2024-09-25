@@ -12,7 +12,7 @@ class Route
     /**
      * @var callable|array<int, string>
      */
-    protected $handler;
+    public private(set) mixed $handler;
     private readonly string $method;
 
     /**
@@ -43,14 +43,6 @@ class Route
     public function getMethod(): string
     {
         return $this->method;
-    }
-
-    /**
-     * @return callable|array<int, string>
-     */
-    public function getHandler(): callable|array
-    {
-        return $this->handler;
     }
 
     public function execute(RequestInterface $request): ResponseInterface
