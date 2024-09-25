@@ -86,11 +86,12 @@ class Stream extends BaseStream
 
     /**
      * @param $key
+     *
      * @return array<int, string>|bool|StreamMetaData|int|string
      */
     public function getMetadata($key = null): array|bool|StreamMetaData|int|string
     {
-        $metadata = (array)$this->metaData;
+        $metadata = (array) $this->metaData;
         return $metadata[$key] ?? $this->metaData;
     }
 }

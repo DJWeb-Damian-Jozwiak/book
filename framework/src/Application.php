@@ -19,6 +19,7 @@ class Application extends Container
     public function __construct()
     {
         parent::__construct();
+        $this->set(Container::class, $this);
         $this->registerServiceProvider(new HttpServiceProvider());
         $this->registerServiceProvider(new RouterServiceProvider());
     }
@@ -35,8 +36,9 @@ class Application extends Container
             ->handle($request);
     }
 
-    protected function registerServiceProvider(ServiceProviderContract $provider): void
-    {
+    protected function registerServiceProvider(
+        ServiceProviderContract $provider
+    ): void {
         $provider->register($this);
     }
 }
