@@ -90,11 +90,9 @@ class BaseRequest implements RequestInterface
 
     public function getRequestTarget(): string
     {
-        $target = $this->uri->getPath();
-        if ($this->uri->getQuery() !== '') {
-            $target .= '?' . $this->uri->getQuery();
-        }
-        return $target ? $target : '/';
+        $target = $this->uri->getPath() . '/';
+
+        return $target . '?' . $this->uri->getQuery();
     }
 
     public function withRequestTarget(string $requestTarget): static
@@ -128,7 +126,7 @@ class BaseRequest implements RequestInterface
         $new = clone $this;
         $new->uri = $uri;
 
-        if (! $preserveHost || ! $this->hasHeader('Host')) {
+        if (! $preserveHost) {
             $new = $new->updateHostFromUri();
         }
 
