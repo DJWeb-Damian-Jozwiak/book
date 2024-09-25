@@ -8,10 +8,6 @@ final class QueryStringEncoder
 {
     public static function encodeQueryString(string $query): string
     {
-        if ($query === '') {
-            return '';
-        }
-
         $parts = explode('&', $query);
         $encodedParts = [];
 
