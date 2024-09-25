@@ -14,9 +14,24 @@ class Container implements ContainerContract
     private array $entries = [];
     private Autowire $autowire;
 
+    /**
+     * @var array<string, string|int|float|bool|null>
+     */
+    private array $bindings = [];
+
     public function __construct()
     {
         $this->autowire = new Autowire($this);
+    }
+
+    public function bind(string $key, string|int|float|bool|null $value): void
+    {
+        $this->bindings[$key] = $value;
+    }
+
+    public function getBinding(string $key): string|int|float|bool|null
+    {
+        return $this->bindings[$key] ?? null;
     }
 
     /**
@@ -77,8 +92,9 @@ class Container implements ContainerContract
      *
      * @return self
      */
-    public function register(ServiceProviderContract $provider): ContainerContract
-    {
+    public function register(
+        ServiceProviderContract $provider
+    ): ContainerContract {
         $provider->register($this);
         return $this;
     }
