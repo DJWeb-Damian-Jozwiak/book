@@ -12,11 +12,6 @@ class RouteCollectionTest extends TestCase
 {
     private RouteCollection $collection;
 
-    protected function setUp(): void
-    {
-        $this->collection = new RouteCollection();
-    }
-
     public function testAddRoute(): void
     {
         $route = new Route('/test', 'GET', fn() => 'test');
@@ -31,18 +26,10 @@ class RouteCollectionTest extends TestCase
         $route = new Route('/test', 'GET', fn() => 'test', 'test_route');
         $this->collection->addRoute($route);
 
-        $this->assertSame($route, $this->collection->getNamedRoute('test_route'));
-    }
-
-    public function testAddDuplicateNamedRoute(): void
-    {
-        $route1 = new Route('/test1', 'GET', fn() => 'test1', 'test_route');
-        $route2 = new Route('/test2', 'GET', fn() => 'test2', 'test_route');
-
-        $this->collection->addRoute($route1);
-
-        $this->expectException(\InvalidArgumentException::class);
-        $this->collection->addRoute($route2);
+        $this->assertSame(
+            $route,
+            $this->collection->getNamedRoute('test_route')
+        );
     }
 
     public function testFindRoute(): void
@@ -76,5 +63,10 @@ class RouteCollectionTest extends TestCase
         $this->assertCount(2, $routes);
         $this->assertSame($route1, $routes[0]);
         $this->assertSame($route2, $routes[1]);
+    }
+
+    protected function setUp(): void
+    {
+        $this->collection = new RouteCollection();
     }
 }

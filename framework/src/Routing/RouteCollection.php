@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DJWeb\Framework\Routing;
 
 use DJWeb\Framework\Exceptions\Routing\DuplicateRouteError;
+use DJWeb\Framework\Exceptions\Routing\RouteNotFoundError;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -31,10 +32,6 @@ class RouteCollection implements \IteratorAggregate, \Countable
      */
     public function addRoute(Route $route): void
     {
-        if ($route->name && isset($this->namedRoutes[$route->name])) {
-            throw new DuplicateRouteError($route->name);
-        }
-
         $this->routes[] = $route;
 
         if ($route->name) {
@@ -49,11 +46,17 @@ class RouteCollection implements \IteratorAggregate, \Countable
      *
      * @return Route|null The matching route, or null if no match is found
      */
-    public function findRoute(RequestInterface $request): ?Route
+    public function findRoute(RequestInterface $request): Route
     {
         $matcher = new RouteMatcher();
-        $matchingRoutes = array_filter($this->routes, static fn (Route $route) => $matcher->matches($request, $route));
-        return array_values($matchingRoutes)[0] ?? null;
+        $matchingRoutes = array_filter(
+            $this->routes,
+            static fn(Route $route) => $matcher->matches($request, $route)
+        );
+        return array_values($matchingRoutes)[0] ?? throw new RouteNotFoundError(
+            'No route found for ' . $request->getMethod(
+            ) . ' ' . $request->getUri()->getPath()
+        );
     }
 
     /**

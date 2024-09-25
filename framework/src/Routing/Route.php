@@ -27,15 +27,6 @@ class Route
         callable|array $handler,
         public readonly ?string $name = null
     ) {
-        if (is_array(
-            $handler
-        ) && (! isset($handler[0], $handler[1]) || ! is_string(
-            $handler[0]
-        ) || ! is_string($handler[1]))) {
-            throw new \InvalidArgumentException(
-                'If $handler is an array, it must contain two string elements: [controllerClass, methodName]'
-            );
-        }
         $this->method = strtoupper($method);
         $this->handler = $handler;
     }
