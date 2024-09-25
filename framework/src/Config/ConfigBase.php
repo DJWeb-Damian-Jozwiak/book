@@ -25,13 +25,20 @@ class ConfigBase extends DotContainer
 
     private function loadConfigFiles(): void
     {
-        $configPath = $this->app->getBasePath() . DIRECTORY_SEPARATOR . 'config';
-        $files = scandir($configPath) ? scandir($configPath) : [];
+        $configPath = $this->app->getBasePath(
+            ) . DIRECTORY_SEPARATOR . 'config';
+        /** @var array $files */
+        $files = scandir($configPath);
+        $files = array_filter(
+            $files,
+            fn($file) => pathinfo($file, PATHINFO_EXTENSION) === 'php'
+        );
         foreach ($files as $file) {
-            if (pathinfo($file, PATHINFO_EXTENSION) === 'php') {
-                $key = pathinfo($file, PATHINFO_FILENAME);
-                $this->set($key, require $configPath . DIRECTORY_SEPARATOR . $file);
-            }
+            $key = pathinfo($file, PATHINFO_FILENAME);
+            $this->set(
+                $key,
+                require $configPath . DIRECTORY_SEPARATOR . $file
+            );
         }
     }
 }
