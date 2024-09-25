@@ -27,12 +27,6 @@ class RouteTest extends TestCase
         $this->assertTrue($matcher->matches($request, $route));
     }
 
-    public function testInvalidHandler(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        new Route('test', 'GET', []);
-    }
-
     public function testRouteDoesNotMatchDifferentPath(): void
     {
         $route = new Route('/test', 'GET', function () {

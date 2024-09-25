@@ -49,13 +49,6 @@ readonly class Router
     {
         $route = $this->routes->findRoute($request);
 
-        if ($route === null) {
-            throw new RouteNotFoundError(
-                'No route found for ' . $request->getMethod(
-                ) . ' ' . $request->getUri()->getPath()
-            );
-        }
-
         $handler = $route->handler;
 
         if (is_array($handler)) {
