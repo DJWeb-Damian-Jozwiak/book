@@ -18,6 +18,8 @@ return [
     'add' => [],
 
     'remove' => [
+        PhpCsFixer\Fixer\ClassNotation\VisibilityRequiredFixer::class,
+        SlevomatCodingStandard\Sniffs\Classes\ForbiddenPublicPropertySniff::class,
         SlevomatCodingStandard\Sniffs\TypeHints\ParameterTypeHintSniff::class,
         SlevomatCodingStandard\Sniffs\TypeHints\ReturnTypeHintSniff::class,
         NunoMaduro\PhpInsights\Domain\Insights\ForbiddenGlobals::class,
