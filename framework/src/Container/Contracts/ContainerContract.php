@@ -17,5 +17,11 @@ interface ContainerContract extends \Psr\Container\ContainerInterface
 
     public function addDefinition(Definition $definition): ContainerContract;
 
-    public function register(ServiceProviderContract $provider): ContainerContract;
+    public function register(
+        ServiceProviderContract $provider
+    ): ContainerContract;
+
+    public function bind(string $key, string|int|float|bool|null $value): void;
+
+    public function getBinding(string $key): string|int|float|bool|null;
 }

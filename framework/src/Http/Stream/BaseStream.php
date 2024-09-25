@@ -8,7 +8,7 @@ use Psr\Http\Message\StreamInterface;
 
 abstract class BaseStream implements StreamInterface
 {
-    protected mixed $stream = null;
+    public protected(set) mixed $stream = null;
     protected ?int $size = 0;
     protected StreamContentManager $contentManager;
     protected StreamMetaData $metaData;
@@ -31,16 +31,6 @@ abstract class BaseStream implements StreamInterface
         $this->close();
     }
 
-    public function withStream(mixed $stream): void
-    {
-        $this->stream = $stream;
-    }
-
-    public function rewind(): void
-    {
-        rewind($this->stream);
-    }
-
     public function close(): void
     {
         if (! $this->stream || $this->closed) {
@@ -50,8 +40,13 @@ abstract class BaseStream implements StreamInterface
         fclose($this->stream);
     }
 
-    public function getStream(): mixed
+    public function withStream(mixed $stream): void
     {
-        return $this->stream;
+        $this->stream = $stream;
+    }
+
+    public function rewind(): void
+    {
+        rewind($this->stream);
     }
 }
