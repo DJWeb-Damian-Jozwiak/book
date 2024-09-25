@@ -51,7 +51,7 @@ class RouteCollection implements \IteratorAggregate, \Countable
         $matcher = new RouteMatcher();
         $matchingRoutes = array_filter(
             $this->routes,
-            static fn(Route $route) => $matcher->matches($request, $route)
+            static fn (Route $route) => $matcher->matches($request, $route)
         );
         return array_values($matchingRoutes)[0] ?? throw new RouteNotFoundError(
             'No route found for ' . $request->getMethod(
