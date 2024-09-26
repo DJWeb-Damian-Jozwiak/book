@@ -24,15 +24,17 @@ readonly class Kernel
      */
     public function handle(array $input = []): int
     {
-        $commandName = $input[1] ?? throw new NoCommandSpecified();
+        $commandName = $input[0] ?? throw new NoCommandSpecified();
 
         $command = $this->commandResolver->resolve($commandName);
 
-        $inputValues = $this->parseInput(array_slice($input, 1));
+        $inputValues = array_slice($input, 1);
+        $arguments = $this->parseArguments($inputValues);
+        $options = $this->parseOptions($inputValues);
 
         $command->withOutput(new ConsoleOutput($this->container));
-        $command->resolveAttributes($inputValues);
-        $command->resolveOptions($inputValues);
+        $command->resolveAttributes($arguments);
+        $command->resolveOptions($options);
 
         return $command->run();
     }
@@ -42,16 +44,33 @@ readonly class Kernel
      *
      * @return array<string|int, mixed>
      */
-    private function parseInput(array $input): array
+    private function parseArguments(array $input): array
+    {
+        $values = array_filter(
+            $input,
+            static fn ($arg) => ! str_contains($arg, '=')
+        );
+        return array_filter(
+            $values,
+            static fn ($arg) => ! str_starts_with($arg, '-')
+        );
+    }
+
+    /**
+     * @param array<int, string> $input
+     *
+     * @return array<string|int, mixed>
+     */
+    private function parseOptions(array $input): array
     {
         $values = [];
-        foreach ($input as $arg) {
-            if (str_contains($arg, '=')) {
-                [$key, $value] = explode('=', $arg, 2);
-                $values[ltrim($key, '-')] = $value;
-            } else {
-                $values[] = $arg;
-            }
+        $items = array_filter(
+            $input,
+            static fn ($arg) => str_contains($arg, '=')
+        );
+        foreach ($items as $arg) {
+            [$key, $value] = explode('=', $arg, 2);
+            $values[ltrim($key, '-')] = $value;
         }
         return $values;
     }

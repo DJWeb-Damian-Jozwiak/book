@@ -22,17 +22,29 @@ class IntColumn extends Column
     public function getSqlDefinition(): string
     {
         $sql = "{$this->name} {$this->type}({$this->length})";
-        if ($this->unsigned) {
-            $sql .= ' UNSIGNED';
-        }
-        $sql .= $this->nullable ? ' NULL' : ' NOT NULL';
-        if ($this->default !== null) {
-            $sql .= " DEFAULT {$this->default}";
-        }
-        if ($this->autoIncrement) {
-            $sql .= ' AUTO_INCREMENT';
-        }
+        $sql .= $this->getUnsignedSqlDefinition();
+        $sql .= $this->getNullableSqlDefinition();
+        $sql .= $this->getDefaultValueSqlDefinition();
+        return $sql . $this->getAutoIncrementSqlDefinition();
+    }
 
-        return $sql;
+    private function getUnsignedSqlDefinition(): string
+    {
+        return $this->unsigned ? ' UNSIGNED' : '';
+    }
+
+    private function getNullableSqlDefinition(): string
+    {
+        return $this->nullable ? ' NULL' : ' NOT NULL';
+    }
+
+    private function getDefaultValueSqlDefinition(): string
+    {
+        return $this->default !== null ? " DEFAULT {$this->default}" : '';
+    }
+
+    private function getAutoIncrementSqlDefinition(): string
+    {
+        return $this->autoIncrement ? ' AUTO_INCREMENT' : '';
     }
 }

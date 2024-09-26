@@ -30,11 +30,18 @@ class EnumColumn extends Column
             ',',
             array_map(static fn ($v) => "'{$v}'", $this->values)
         );
-        $sql = "{$this->name} {$this->type}({$values})";
-        $sql .= $this->nullable ? ' NULL' : ' NOT NULL';
-        if ($this->default !== null) {
-            $sql .= " DEFAULT '{$this->default}'";
-        }
-        return $sql;
+        $sql = "{$this->name} {$this->type}({$values}) ";
+        $sql .= $this->getNullableDefinition();
+        return trim($sql . $this->getDefaultDefinition());
+    }
+
+    private function getNullableDefinition(): string
+    {
+        return $this->nullable ? 'NULL ' : 'NOT NULL ';
+    }
+
+    private function getDefaultDefinition(): string
+    {
+        return $this->default !== null ? "DEFAULT '{$this->default}' " : '';
     }
 }

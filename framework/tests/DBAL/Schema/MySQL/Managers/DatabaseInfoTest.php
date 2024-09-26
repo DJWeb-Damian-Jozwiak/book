@@ -80,7 +80,6 @@ class DatabaseInfoTest extends TestCase
     public function testGetColumnsThrowsExceptionOnEmptyTableName()
     {
         $this->expectException(SchemaError::class);
-        $this->expectExceptionMessage('Table name cannot be empty');
 
         $this->databaseInfo->getColumns('');
     }

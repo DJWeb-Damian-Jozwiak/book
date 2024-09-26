@@ -21,16 +21,46 @@ class AttributeResolver
         /** @var array<string, CommandArgument> $attributes */
         $attributes = (new CommandPropertyResolver())
             ->findPropertiesWithAttribute($command, CommandArgument::class);
-        foreach ($attributes as $name => $instance) {
-            if (array_key_exists($instance->name, $inputValues)) {
-                $instance->value = $inputValues[$instance->name];
-            } elseif ($instance->value === null) {
-                $instance->value = $command->getOutput()->question(
-                    "Enter value for {$instance->name}: "
-                );
-            }
-            $value = $instance->value;
+        $attributes = array_values($attributes);
+        $key = 0;
+        $total = count($attributes);
+        foreach ($inputValues as $index => $value) {
+            $attributes[$index]->value = $value;
+            $key++;
+            $value = $attributes[$index]->value;
+            $name = $attributes[$index]->name;
             $reflection->getProperty($name)->setValue($command, $value);
+        }
+        self::resolveMissing($key, $total, $attributes, $command, $reflection);
+    }
+
+    /**
+     * @param int $key
+     * @param int|null $total
+     * @param array<int, CommandArgument> $attributes
+     * @param Command $command
+     * @param \ReflectionClass<Command> $reflection
+     *
+     * @return void
+     *
+     * @throws \ReflectionException
+     */
+    public static function resolveMissing(
+        int $key,
+        ?int $total,
+        array $attributes,
+        Command $command,
+        \ReflectionClass $reflection
+    ): void {
+        for ($i = $key; $i < $total; $i++) {
+            $name = $attributes[$i]->name;
+            $attributes[$i]->value = $command->getOutput()->question(
+                "Enter value for {$name}: "
+            );
+            $reflection->getProperty($name)->setValue(
+                $command,
+                $attributes[$i]->value
+            );
         }
     }
 }

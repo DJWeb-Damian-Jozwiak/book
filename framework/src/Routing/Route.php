@@ -12,7 +12,7 @@ class Route
     /**
      * @var callable|array<int, string>
      */
-    protected $handler;
+    public private(set) mixed $handler;
     private readonly string $method;
 
     /**
@@ -27,15 +27,6 @@ class Route
         callable|array $handler,
         public readonly ?string $name = null
     ) {
-        if (is_array(
-            $handler
-        ) && (! isset($handler[0], $handler[1]) || ! is_string(
-            $handler[0]
-        ) || ! is_string($handler[1]))) {
-            throw new \InvalidArgumentException(
-                'If $handler is an array, it must contain two string elements: [controllerClass, methodName]'
-            );
-        }
         $this->method = strtoupper($method);
         $this->handler = $handler;
     }
@@ -43,14 +34,6 @@ class Route
     public function getMethod(): string
     {
         return $this->method;
-    }
-
-    /**
-     * @return callable|array<int, string>
-     */
-    public function getHandler(): callable|array
-    {
-        return $this->handler;
     }
 
     public function execute(RequestInterface $request): ResponseInterface

@@ -25,7 +25,7 @@ class Application extends \DJWeb\Framework\Base\Application
     public function handle(): int
     {
         $args = $_SERVER['argv'];
-        return $this->kernel->handle($args);
+        return $this->kernel->handle(array_slice($args, 1));
     }
 
     public function registerCommands(CommandNamespace $namespace): void

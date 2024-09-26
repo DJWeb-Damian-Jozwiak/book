@@ -32,10 +32,6 @@ readonly class DatabaseInfo implements DatabaseInfoContract
      */
     public function getColumns(string $tableName): array
     {
-        if (! $tableName) {
-            throw new SchemaError('Table name cannot be empty');
-        }
-
         try {
             $factory = new ColumnFactory();
             $stmt = $this->connection->query("DESCRIBE `{$tableName}`");

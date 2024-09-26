@@ -119,21 +119,14 @@ class Response implements ResponseInterface
      */
     public function withJson(
         array $data,
-        ?int $status = null,
-        int $options = 0
+        int $status = 200
     ): ResponseInterface {
-        $json = json_encode($data, $options);
-        $json = $json === false ? '' : $json;
+        $json = json_encode($data, JSON_THROW_ON_ERROR);
 
-        $new = $this
+        return $this
             ->withHeader('Content-Type', 'application/json')
-            ->withContent($json);
-
-        if ($status !== null) {
-            $new = $new->withStatus($status);
-        }
-
-        return $new;
+            ->withContent($json)
+            ->withStatus($status);
     }
 
     public function getReasonPhrase(): string

@@ -10,6 +10,9 @@ use ReflectionClass;
 
 class CommandRegistrar
 {
+    private string $commandsNamespace;
+    private string $commandsDirectory;
+
     public function __construct(private Application $app)
     {
     }
@@ -18,57 +21,61 @@ class CommandRegistrar
         string $commandsNamespace,
         string $commandsDirectory
     ): void {
+        $this->commandsNamespace = $commandsNamespace;
+        $this->commandsDirectory = $commandsDirectory;
         $commandFiles = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($commandsDirectory)
         );
-        $files = $this->filterFiles($commandFiles, $commandsNamespace, $commandsDirectory);
+        $files = $this->filterFiles($commandFiles);
+        $files = array_filter($files, function ($file) {
+            /** @var class-string<object> $className */
+            $className = $this->getClassName($file);
+            $reflectionClass = new ReflectionClass($className);
+            return $reflectionClass->isSubclassOf(Command::class) &&
+                ! $reflectionClass->isAbstract();
+        });
 
         foreach ($files as $file) {
-            $className = $this->getClassName($commandsNamespace, $file, $commandsDirectory);
-            /** @phpstan-ignore-next-line */
-            $reflectionClass = new ReflectionClass($className);
-
-            if ($reflectionClass->isSubclassOf(Command::class) && ! $reflectionClass->isAbstract()) {
-                new $className($this->app);
-            }
+            $className = $this->getClassName(
+                $file,
+            );
+            new $className($this->app);
         }
     }
 
-    public function getClassName(string $commandsNamespace, mixed $file, string $commandsDirectory): string
-    {
-        return $commandsNamespace . str_replace(
+    public function getClassName(
+        mixed $file,
+    ): string {
+        return $this->commandsNamespace . str_replace(
             ['/', '.php'],
             ['\\', ''],
             substr(
                 $file->getPathname(),
-                strlen($commandsDirectory)
+                strlen($this->commandsDirectory)
             )
         );
     }
 
     /**
      * @param RecursiveIteratorIterator<RecursiveDirectoryIterator> $commandFiles
-     * @param string $commandsNamespace
-     * @param string $commandsDirectory
      *
      * @return array<int, \SplFileInfo>
      */
     public function filterFiles(
         RecursiveIteratorIterator $commandFiles,
-        string $commandsNamespace,
-        string $commandsDirectory
     ): array {
         $files = [];
         foreach ($commandFiles as $file) {
             $files[] = $file;
         }
-        $files = array_filter($files, static fn (\SplFileInfo $file) => $file->isFile());
+        $files = array_filter(
+            $files,
+            static fn (\SplFileInfo $file) => $file->isFile()
+        );
         return array_filter(
             $files,
-            fn (
-                \SplFileInfo $file
-            ) => class_exists(
-                $this->getClassName($commandsNamespace, $file, $commandsDirectory)
+            fn (\SplFileInfo $file) => class_exists(
+                $this->getClassName($file)
             )
         );
     }

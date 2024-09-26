@@ -13,18 +13,22 @@ class ContainerTest extends TestCase
 {
     private Container $container;
 
-    protected function setUp(): void
-    {
-        $this->container = new Container();
-    }
-
     public function testAddDefinition(): void
     {
         $definition = new Definition('service', Database::class);
         $this->container->addDefinition($definition);
 
         $this->assertTrue($this->container->has('service'));
-        $this->assertInstanceOf(Definition::class, $this->container->get('service'));
+        $this->assertInstanceOf(
+            Definition::class,
+            $this->container->get('service')
+        );
+    }
+
+    public function testBindings()
+    {
+        $this->container->bind('const', 1);
+        $this->assertEquals(1, $this->container->getBinding('const'));
     }
 
     public function testRegisterServiceProvider(): void
@@ -50,5 +54,10 @@ class ContainerTest extends TestCase
         $instance = $this->container->get(UserRepository::class);
         $this->assertInstanceOf(UserRepository::class, $instance);
         $this->assertInstanceOf(Database::class, $instance->database);
+    }
+
+    protected function setUp(): void
+    {
+        $this->container = new Container();
     }
 }

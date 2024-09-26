@@ -30,14 +30,24 @@ class DateTimeColumn extends Column
 
     public function getSqlDefinition(): string
     {
-        $sql = "{$this->name} {$this->type}";
-        $sql .= $this->nullable ? ' NULL' : ' NOT NULL';
-        if ($this->default !== null) {
-            $sql .= " DEFAULT {$this->default}";
-        }
-        if ($this->currentOnUpdate) {
-            $sql .= ' ON UPDATE CURRENT_TIMESTAMP';
-        }
-        return $sql;
+        $sql = "{$this->name} {$this->type} ";
+        $sql .= $this->getNullableDefinition();
+        $sql .= $this->getDefaultValueDefinition();
+        return trim($sql . $this->getOnUpdateDefinition());
+    }
+
+    private function getNullableDefinition(): string
+    {
+        return $this->nullable ? 'NULL ' : 'NOT NULL ';
+    }
+
+    private function getDefaultValueDefinition(): string
+    {
+        return $this->default !== null ? "DEFAULT {$this->default} " : '';
+    }
+
+    private function getOnUpdateDefinition(): string
+    {
+        return $this->currentOnUpdate ? 'ON UPDATE CURRENT_TIMESTAMP' : '';
     }
 }
