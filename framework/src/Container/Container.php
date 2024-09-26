@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Container;
 
+use DJWeb\Framework\Base\DotContainer;
 use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\Container\Contracts\ServiceProviderContract;
 use DJWeb\Framework\Exceptions\Container\NotFoundError;
@@ -11,7 +12,7 @@ use DJWeb\Framework\Exceptions\Container\NotFoundError;
 class Container implements ContainerContract
 {
     /** @var array<string, mixed> */
-    private array $entries = [];
+    private DotContainer $entries;
     private Autowire $autowire;
 
     /**
@@ -21,6 +22,7 @@ class Container implements ContainerContract
 
     public function __construct()
     {
+        $this->entries = new DotContainer();
         $this->autowire = new Autowire($this);
     }
 
@@ -43,10 +45,11 @@ class Container implements ContainerContract
      */
     public function get(string $id): mixed
     {
+        $entry = $this->entries->get($id);
         if (! $this->has($id)) {
             return $this->autowire->instantiate($id);
         }
-        $entry = $this->entries[$id];
+
         if ($entry instanceof Definition) {
             return $this->autowire->instantiate($entry::class);
         }
@@ -55,7 +58,7 @@ class Container implements ContainerContract
 
     public function has(string $id): bool
     {
-        return isset($this->entries[$id]);
+        return $this->entries->has($id);
     }
 
     /**
@@ -68,7 +71,7 @@ class Container implements ContainerContract
      */
     public function set(string $key, mixed $value): ContainerContract
     {
-        $this->entries[$key] = $value;
+        $this->entries->set($key, $value);
         return $this;
     }
 
