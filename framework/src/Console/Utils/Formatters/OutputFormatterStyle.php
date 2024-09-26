@@ -26,7 +26,7 @@ readonly class OutputFormatterStyle
             static fn (mixed $enum) => $enum->value,
             $setCodes
         );
-        $style = ! ($setCodes) ? '' : implode(';', $setCodes);
-        return $style ? "\033[{$style}m{$text}\033[0m" : $text;
+        $imploded = implode(';', $setCodes);
+        return $imploded ? "\033[{$imploded}m{$text}\033[0m" : $text;
     }
 }

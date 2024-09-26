@@ -8,6 +8,11 @@ use Tests\BaseTestCase;
 
 class ApplicationTest extends BaseTestCase
 {
+    public function tearDown(): void
+    {
+        Application::withInstance(null);
+    }
+
     public function testCreate()
     {
         $path = dirname(__DIR__) . '/' . 'Helpers';
@@ -21,7 +26,7 @@ class ApplicationTest extends BaseTestCase
         $_SERVER['argv'] = [
             'input.php',
             'test',
-            'argument=test',
+            'test',
             '--required_option=1'
         ];
         $result = $app->handle();

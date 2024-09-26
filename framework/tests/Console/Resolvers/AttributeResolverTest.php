@@ -26,7 +26,7 @@ class AttributeResolverTest extends TestCase
         $this->mockOutput->expects($this->never())->method('info');
         $this->mockOutput->expects($this->once())
             ->method('question')
-            ->with('Enter value for argument: ')
+            ->with('Enter value for testArgument: ')
             ->willReturn('test_value');
         $this->command->resolveAttributes();
         $this->assertEquals('test_value', $this->command->getTestArgument());
@@ -35,7 +35,7 @@ class AttributeResolverTest extends TestCase
     public function testResolveAttributesWithParameters()
     {
         $this->mockOutput->expects($this->never())->method('question');
-        $this->command->resolveAttributes(['argument' => 'test_value']);
+        $this->command->resolveAttributes([0 => 'test_value']);
         $this->assertEquals('test_value', $this->command->getTestArgument());
     }
 

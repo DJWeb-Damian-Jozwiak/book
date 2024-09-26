@@ -25,8 +25,12 @@ readonly class Router
      * @param callable|array<int, string> $handler The route handler
      * @param string|null $name Optional route name
      */
-    public function addRoute(string $method, string $path, callable|array $handler, ?string $name = null): self
-    {
+    public function addRoute(
+        string $method,
+        string $path,
+        callable|array $handler,
+        ?string $name = null
+    ): self {
         $route = new Route($path, $method, $handler, $name);
         $this->routes->addRoute($route);
         return $this;
@@ -45,13 +49,7 @@ readonly class Router
     {
         $route = $this->routes->findRoute($request);
 
-        if ($route === null) {
-            throw new RouteNotFoundError(
-                'No route found for ' . $request->getMethod() . ' ' . $request->getUri()->getPath()
-            );
-        }
-
-        $handler = $route->getHandler();
+        $handler = $route->handler;
 
         if (is_array($handler)) {
             [$controllerName, $method] = $handler;

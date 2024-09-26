@@ -8,6 +8,19 @@ use DJWeb\Framework\Web\Application;
 
 class ConfigTest extends BaseTestCase
 {
+    public function tearDown(): void
+    {
+        Application::withInstance(null);
+    }
+
+    public function testInvalidDirectory()
+    {
+        $app = Application::getInstance();
+        $app->addBasePath('invalid_directory');
+        $this->expectException(\RuntimeException::class);
+        $app->loadConfig();
+    }
+
     public function testLoadConfig()
     {
         $app = Application::getInstance();

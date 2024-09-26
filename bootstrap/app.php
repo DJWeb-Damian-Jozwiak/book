@@ -3,9 +3,9 @@
 require_once '../vendor/autoload.php';
 require_once '../helpers/functions.php';
 
-use DJWeb\Framework\Application;
+use DJWeb\Framework\Web\Application;
 
 
 $app = Application::getInstance();
-$app->base_path = dirname(__DIR__);
+$app->bind('base_path', dirname(__DIR__));
 $app->loadConfig();

@@ -14,8 +14,8 @@ class ConfigBase extends DotContainer implements ConfigContract
     public function __construct(private readonly Application $app)
     {
         parent::__construct();
-        $this->loadEnvironmentVariables();
         $this->loadConfigFiles();
+        $this->loadEnvironmentVariables();
     }
 
     private function loadEnvironmentVariables(): void
@@ -26,13 +26,23 @@ class ConfigBase extends DotContainer implements ConfigContract
 
     private function loadConfigFiles(): void
     {
-        $configPath = $this->app->getBasePath() . DIRECTORY_SEPARATOR . 'config';
-        $files = scandir($configPath) ? scandir($configPath) : [];
+        $configPath = $this->app->getBasePath(
+            ) . DIRECTORY_SEPARATOR . 'config';
+
+        $files = @scandir($configPath);
+        if ($files === false) {
+            throw new \RuntimeException('Could not scan config directory');
+        }
+        $files = array_filter(
+            $files,
+            static fn($file) => pathinfo($file, PATHINFO_EXTENSION) === 'php'
+        );
         foreach ($files as $file) {
-            if (pathinfo($file, PATHINFO_EXTENSION) === 'php') {
-                $key = pathinfo($file, PATHINFO_FILENAME);
-                $this->set($key, require $configPath . DIRECTORY_SEPARATOR . $file);
-            }
+            $key = pathinfo($file, PATHINFO_FILENAME);
+            $this->set(
+                $key,
+                require $configPath . DIRECTORY_SEPARATOR . $file
+            );
         }
     }
 }

@@ -25,7 +25,7 @@ readonly class StreamMetaData
 
     public static function fromStream(BaseStream $stream): StreamMetaData
     {
-        $meta = stream_get_meta_data($stream->getStream());
+        $meta = stream_get_meta_data($stream->stream);
         return new StreamMetaData(...$meta);
     }
 
