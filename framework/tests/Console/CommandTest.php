@@ -2,18 +2,22 @@
 
 namespace Tests\Console;
 
-use DJWeb\Framework\Container\Container;
-use DJWeb\Framework\Container\Contracts\ContainerContract;
+use DJWeb\Framework\Console\Application;
 use PHPUnit\Framework\TestCase;
 use Tests\Helpers\TestCommand;
 
 class CommandTest extends TestCase
 {
-    private ContainerContract $container;
+    public function tearDown(): void
+    {
+        Application::withInstance(null);
+    }
+
+    private Application $container;
 
     protected function setUp(): void
     {
-        $this->container = new Container();
+        $this->container = Application::getInstance();
     }
 
     public function testConstructorSetsContainer()

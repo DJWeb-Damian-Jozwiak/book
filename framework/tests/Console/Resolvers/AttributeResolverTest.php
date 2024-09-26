@@ -2,21 +2,26 @@
 
 namespace Tests\Console\Resolvers;
 
+use DJWeb\Framework\Console\Application;
 use DJWeb\Framework\Console\Output\Implementation\ConsoleOutput;
-use DJWeb\Framework\Container\Contracts\ContainerContract;
 use PHPUnit\Framework\TestCase;
 use Tests\Helpers\TestCommand;
 
 class AttributeResolverTest extends TestCase
 {
+    public function tearDown(): void
+    {
+        Application::withInstance(null);
+    }
+
     private TestCommand $command;
-    private $mockContainer;
+    private Application $app;
     private $mockOutput;
 
     protected function setUp(): void
     {
-        $this->mockContainer = $this->createMock(ContainerContract::class);
-        $this->command = new TestCommand($this->mockContainer);
+        $this->app = Application::getInstance();
+        $this->command = new TestCommand($this->app);
         $this->mockOutput = $this->createMock(ConsoleOutput::class);
         $this->command->withOutput($this->mockOutput);
     }

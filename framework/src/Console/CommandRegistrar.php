@@ -47,13 +47,13 @@ class CommandRegistrar
         mixed $file,
     ): string {
         return $this->commandsNamespace . str_replace(
-                ['/', '.php'],
-                ['\\', ''],
-                substr(
-                    $file->getPathname(),
-                    strlen($this->commandsDirectory)
-                )
-            );
+            ['/', '.php'],
+            ['\\', ''],
+            substr(
+                $file->getPathname(),
+                strlen($this->commandsDirectory)
+            )
+        );
     }
 
     /**
@@ -70,11 +70,11 @@ class CommandRegistrar
         }
         $files = array_filter(
             $files,
-            static fn(\SplFileInfo $file) => $file->isFile()
+            static fn (\SplFileInfo $file) => $file->isFile()
         );
         return array_filter(
             $files,
-            fn(\SplFileInfo $file) => class_exists(
+            fn (\SplFileInfo $file) => class_exists(
                 $this->getClassName($file)
             )
         );

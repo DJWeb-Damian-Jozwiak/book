@@ -66,9 +66,9 @@ class OptionsResolver
             $attributes,
             static function ($instance) use ($inputValues) {
                 return ! array_key_exists(
-                        $instance->name,
-                        $inputValues
-                    ) && $instance->required && $instance->value === null;
+                    $instance->name,
+                    $inputValues
+                ) && $instance->required && $instance->value === null;
             }
         );
 

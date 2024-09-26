@@ -41,7 +41,7 @@ class Application extends Container
         throw new ContainerError('Cannot unserialize Application');
     }
 
-    public static function getInstance(): Application
+    public static function getInstance(): static
     {
         if (self::$instance === null) {
             /** @phpstan-ignore-next-line instance */
@@ -67,9 +67,8 @@ class Application extends Container
 
     public function getBasePath(): string
     {
-        /** @var string $path */
-        $path = $this->getBinding('base_path');
-        return $path;
+        /** @phpstan-ignore-next-line */
+        return $this->getBinding('base_path');
     }
 
     public function loadConfig(): void

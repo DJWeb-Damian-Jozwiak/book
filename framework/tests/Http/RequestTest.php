@@ -51,7 +51,7 @@ class RequestTest extends TestCase
             new HeaderManager()
         );
         $this->assertTrue($request->isGet());
-        $this->assertEquals('/?', $request->getRequestTarget());
+        $this->assertEquals('/', $request->getRequestTarget());
     }
 
     public function testWithRequestTarget(): void

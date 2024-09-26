@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DJWeb\Framework\Console;
 
 use DJWeb\Framework\Console\Attributes\AsCommand;
+use DJWeb\Framework\Console\Output\Contacts\OutputContract;
 use DJWeb\Framework\Console\Output\Implementation\ConsoleOutput;
 use DJWeb\Framework\Console\Resolvers\AttributeResolver;
 use DJWeb\Framework\Console\Resolvers\OptionsResolver;
@@ -13,15 +14,16 @@ use ReflectionClass;
 
 abstract class Command
 {
-    private ConsoleOutput $output;
+    private OutputContract $output;
 
     public function __construct(
         public readonly ContainerContract $container
     ) {
         $this->registerInContainer();
+        $this->output = new ConsoleOutput($this->container);
     }
 
-    public function getOutput(): ConsoleOutput
+    public function getOutput(): OutputContract
     {
         return $this->output;
     }

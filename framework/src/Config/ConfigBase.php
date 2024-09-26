@@ -26,7 +26,7 @@ class ConfigBase extends DotContainer
     private function loadConfigFiles(): void
     {
         $configPath = $this->app->getBasePath(
-            ) . DIRECTORY_SEPARATOR . 'config';
+        ) . DIRECTORY_SEPARATOR . 'config';
 
         if (! is_dir($configPath)) {
             throw new \RuntimeException('Config directory not found');
@@ -36,7 +36,7 @@ class ConfigBase extends DotContainer
         $files = $files ? $files : [];
         $files = array_filter(
             $files,
-            static fn($file) => pathinfo($file, PATHINFO_EXTENSION) === 'php'
+            static fn ($file) => pathinfo($file, PATHINFO_EXTENSION) === 'php'
         );
         foreach ($files as $file) {
             $key = pathinfo($file, PATHINFO_FILENAME);
