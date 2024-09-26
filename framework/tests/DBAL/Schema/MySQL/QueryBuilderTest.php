@@ -209,7 +209,7 @@ class QueryBuilderTest extends BaseTestCase
         $this->assertEquals(['John Doe', '30'], $query->getParams());
     }
 
-    public function testDelete()
+    public function testDeleteSql()
     {
         $query = $this->queryBuilder->delete('users')
             ->where('verified', '=', 0);
@@ -219,6 +219,16 @@ class QueryBuilderTest extends BaseTestCase
             $query->getSQL()
         );
         $this->assertEquals([0], $query->getParams());
+    }
+
+    public function testDelete()
+    {
+        $mockPDOStatement = $this->createMock(\PDOStatement::class);
+        $this->mockConnection->expects($this->once())
+            ->method('query')
+            ->willReturn($mockPDOStatement);
+        $this->queryBuilder->delete('users')
+            ->where('verified', '=', 0)->delete();
     }
 
     public function testLeftJoin()

@@ -1,0 +1,29 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyRootNamespace\Database\Migration;
+use DummyRootNamespace\Database\Schema\Column;
+
+return new class extends Migration
+{
+    /**
+     * run migration.
+     */
+    public function up(): void
+    {
+        $this->schema->alterTable('DummyTable', [
+
+        ]);
+    }
+
+    /**
+     * rollback migration.
+     */
+    public function down(): void
+    {
+        $this->schema->alterTable('DummyTable', [
+
+        ]);
+    }
+};
