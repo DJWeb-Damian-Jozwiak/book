@@ -19,11 +19,18 @@ class VarcharColumn extends Column
 
     public function getSqlDefinition(): string
     {
-        $sql = "{$this->name} {$this->type}({$this->length})";
-        $sql .= $this->nullable ? ' NULL' : ' NOT NULL';
-        if ($this->default !== null) {
-            $sql .= " DEFAULT '{$this->default}'";
-        }
-        return $sql;
+        $sql = "{$this->name} {$this->type}({$this->length}) ";
+        $sql .= $this->getNullableDefinition();
+        return trim($sql . $this->getDefaultValueDefinition());
+    }
+
+    private function getNullableDefinition(): string
+    {
+        return $this->nullable ? 'NULL ' : 'NOT NULL ';
+    }
+
+    private function getDefaultValueDefinition(): string
+    {
+        return $this->default !== null ? "DEFAULT '{$this->default}' " : '';
     }
 }

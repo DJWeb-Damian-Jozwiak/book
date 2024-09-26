@@ -68,9 +68,8 @@ class Application extends Container
 
     public function getBasePath(): string
     {
-        /** @var string $path */
-        $path = $this->getBinding('base_path');
-        return $path;
+        /** @phpstan-ignore-next-line */
+        return $this->getBinding('base_path');
     }
 
     public function loadConfig(): void

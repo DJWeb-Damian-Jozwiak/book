@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Routing;
 
-use DJWeb\Framework\Exceptions\Routing\DuplicateRouteError;
 use DJWeb\Framework\Exceptions\Routing\RouteNotFoundError;
 use Psr\Http\Message\RequestInterface;
 
@@ -27,7 +26,6 @@ class RouteCollection implements \IteratorAggregate, \Countable
      * Add a route to the collection.
      *
      * @param Route $route The route to add
-     *
      */
     public function addRoute(Route $route): void
     {
@@ -50,7 +48,7 @@ class RouteCollection implements \IteratorAggregate, \Countable
         $matcher = new RouteMatcher();
         $matchingRoutes = array_filter(
             $this->routes,
-            static fn(Route $route) => $matcher->matches($request, $route)
+            static fn (Route $route) => $matcher->matches($request, $route)
         );
         return array_values($matchingRoutes)[0] ?? throw new RouteNotFoundError(
             'No route found for ' . $request->getMethod(
