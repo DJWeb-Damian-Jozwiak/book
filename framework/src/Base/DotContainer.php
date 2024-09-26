@@ -33,4 +33,9 @@ class DotContainer extends ArrayObject
     {
         $this->arraySet->set($key, $default);
     }
+
+    public function has(string $key): bool
+    {
+        return $this->arrayGet->get($key) !== null;
+    }
 }
