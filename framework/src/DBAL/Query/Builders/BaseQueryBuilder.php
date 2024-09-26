@@ -83,17 +83,6 @@ abstract class BaseQueryBuilder implements QueryBuilderContract
         return $this->whereCondition($condition, $and);
     }
 
-    private function whereCondition(
-        ConditionContract $condition,
-        bool $and = true
-    ): static {
-        $item = $and ?
-            new AndCondition($condition, count($this->conditions))
-            : new OrCondition($condition);
-        $this->conditions[] = $item;
-        return $this;
-    }
-
     public function whereNull(string $column, bool $and = true): self
     {
         $condition = new WhereNullCondition($column);
@@ -119,14 +108,14 @@ abstract class BaseQueryBuilder implements QueryBuilderContract
             return '';
         }
         return 'WHERE ' . implode(
-                ' ',
-                array_map(
-                    static fn(
-                        ConditionContract $condition
-                    ) => $condition->getSQL(),
-                    $this->conditions
-                )
-            );
+            ' ',
+            array_map(
+                static fn (
+                    ConditionContract $condition
+                ) => $condition->getSQL(),
+                $this->conditions
+            )
+        );
     }
 
     /**
@@ -149,11 +138,22 @@ abstract class BaseQueryBuilder implements QueryBuilderContract
     {
         return array_merge(
             ...array_map(
-                static fn(
+                static fn (
                     ConditionContract $condition
                 ) => $condition->getParams(),
                 $this->conditions
             )
         );
+    }
+
+    private function whereCondition(
+        ConditionContract $condition,
+        bool $and = true
+    ): static {
+        $item = $and ?
+            new AndCondition($condition, count($this->conditions))
+            : new OrCondition($condition);
+        $this->conditions[] = $item;
+        return $this;
     }
 }

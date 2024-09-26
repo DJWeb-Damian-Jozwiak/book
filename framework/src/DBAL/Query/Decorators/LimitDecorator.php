@@ -28,16 +28,27 @@ class LimitDecorator implements LimitDecoratorContract
 
     public function getSql(): string
     {
+        $sql = $this->getLimitSql();
+        return $sql . $this->getOffsetSql();
+    }
+
+    private function getLimitSql(): string
+    {
         $sql = '';
         if ($this->limit !== null) {
             $sql = trim($sql);
             $sql .= "LIMIT {$this->limit}";
         }
+        return trim($sql);
+    }
 
+    private function getOffsetSql(): string
+    {
+        $sql = ' ';
         if ($this->offset !== null) {
             $sql = trim($sql);
             $sql .= " OFFSET {$this->offset}";
         }
-        return trim($sql);
+        return $sql;
     }
 }

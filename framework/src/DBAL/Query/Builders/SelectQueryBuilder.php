@@ -64,9 +64,9 @@ class SelectQueryBuilder extends BaseQueryBuilder
     public function getSQL(): string
     {
         $sql = 'SELECT ' . implode(
-                ', ',
-                $this->columns
-            ) . " FROM {$this->table} ";
+            ', ',
+            $this->columns
+        ) . " FROM {$this->table} ";
 
         foreach ($this->joins as $join) {
             $sql .= $join->getSQL() . ' ';
