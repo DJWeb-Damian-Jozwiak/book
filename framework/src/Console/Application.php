@@ -18,7 +18,7 @@ class Application extends \DJWeb\Framework\Base\Application
         $this->registerServiceProvider(new ConsoleServiceProvider());
         $this->kernel = new Kernel($this, $this->get(CommandResolver::class));
         $dir = __DIR__ . DIRECTORY_SEPARATOR . 'Commands';
-        $namespace = 'DJWeb\\Framework\\Console\\Commands\\';
+        $namespace = 'DJWeb\\Framework\\Console\\Commands';
         $this->registerCommands(new CommandNamespace($namespace, $dir));
     }
 
