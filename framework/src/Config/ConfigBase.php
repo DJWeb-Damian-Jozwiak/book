@@ -28,10 +28,12 @@ class ConfigBase extends DotContainer
         $configPath = $this->app->getBasePath(
             ) . DIRECTORY_SEPARATOR . 'config';
 
-        $files = @scandir($configPath);
-        if ($files === false) {
-            throw new \RuntimeException('Could not scan config directory');
+        if (! is_dir($configPath)) {
+            throw new \RuntimeException('Config directory not found');
         }
+
+        $files = scandir($configPath);
+        $files = $files ? $files : [];
         $files = array_filter(
             $files,
             static fn($file) => pathinfo($file, PATHINFO_EXTENSION) === 'php'
