@@ -40,7 +40,7 @@ class RequestTest extends TestCase
     public function testGetRequestTarget(): void
     {
         $this->assertEquals(
-            '/test?query=value',
+            '/test/?query=value',
             $this->request->getRequestTarget()
         );
 
