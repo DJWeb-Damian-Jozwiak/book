@@ -3,7 +3,7 @@
 require_once '../vendor/autoload.php';
 require_once '../helpers/functions.php';
 
-use DJWeb\Framework\Application;
+use DJWeb\Framework\Web\Application;
 
 
 $app = Application::getInstance();

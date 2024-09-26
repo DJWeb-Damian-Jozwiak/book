@@ -92,7 +92,7 @@ class BaseRequest implements RequestInterface
     {
         $target = $this->uri->getPath() . '/';
 
-        $target = $target . '?' . $this->uri->getQuery();
+        $target .= '?' . $this->uri->getQuery();
         return rtrim($target, '?');
     }
 

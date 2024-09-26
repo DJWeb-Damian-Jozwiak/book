@@ -12,6 +12,7 @@ class ApplicationTest extends TestCase
     {
         Application::withInstance(null);
     }
+
     public function testCreate()
     {
         $path = dirname(__DIR__) . '/' . 'Helpers';
@@ -25,7 +26,7 @@ class ApplicationTest extends TestCase
         $_SERVER['argv'] = [
             'input.php',
             'test',
-            'argument=test',
+            'test',
             '--required_option=1'
         ];
         $result = $app->handle();

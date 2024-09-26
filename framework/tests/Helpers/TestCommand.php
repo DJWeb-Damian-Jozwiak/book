@@ -10,11 +10,11 @@ use DJWeb\Framework\Console\Command;
 #[AsCommand(name: 'test')]
 class TestCommand extends Command
 {
-    #[CommandArgument(name: 'argument')]
+    #[CommandArgument(name: 'testArgument')]
     private $testArgument;
 
-    #[CommandOption(name: 'option', default: 'default_value')]
-    private $testOption;
+    #[CommandOption(name: 'option', value: 'default_value')]
+    private $option;
 
     #[CommandOption(name: 'required_option', required: true)]
     private $requiredOption;
@@ -26,7 +26,7 @@ class TestCommand extends Command
 
     public function getTestOption()
     {
-        return $this->testOption;
+        return $this->option;
     }
 
     public function getRequiredOption()

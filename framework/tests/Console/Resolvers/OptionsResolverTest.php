@@ -28,7 +28,7 @@ class OptionsResolverTest extends TestCase
             ->with('Enter value for option required_option: ')
             ->willReturn('user_input');
 
-        $this->command->resolveOptions();
+        $this->command->resolveOptions(['option' => 'default_value']);
 
         $this->assertEquals('default_value', $this->command->getTestOption());
     }

@@ -13,11 +13,20 @@ class ConfigTest extends TestCase
     {
         Application::withInstance(null);
     }
+
+    public function testInvalidDirectory()
+    {
+        $app = Application::getInstance();
+        $app->addBasePath('invalid_directory');
+        $this->expectException(\RuntimeException::class);
+        $app->loadConfig();
+    }
+
     public function testLoadConfig()
     {
         $app = Application::getInstance();
         $app->addBasePath(dirname(__DIR__));
-        if (!file_exists($app->getBasePath() . '/.env')) {
+        if (! file_exists($app->getBasePath() . '/.env')) {
             file_put_contents($app->getBasePath() . '/.env', '');
         }
         $app->loadConfig();
@@ -28,7 +37,7 @@ class ConfigTest extends TestCase
     {
         $app = Application::getInstance();
         $app->addBasePath(__DIR__);
-        if (!file_exists($app->getBasePath() . '/.env')) {
+        if (! file_exists($app->getBasePath() . '/.env')) {
             file_put_contents($app->getBasePath() . '/.env', '');
         }
         $app->loadConfig();

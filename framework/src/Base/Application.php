@@ -11,12 +11,10 @@ use DJWeb\Framework\Exceptions\Container\ContainerError;
 
 class Application extends Container
 {
-
     protected static ?self $instance = null;
-    private string $base_path = '';
     private ConfigBase $config;
 
-    private function __construct()
+    protected function __construct()
     {
         parent::__construct();
         $this->set(Container::class, $this);
@@ -29,9 +27,7 @@ class Application extends Container
 
     public function __serialize(): array
     {
-        return [
-            'base_path' => $this->base_path,
-        ];
+        return [];
     }
 
     /**
@@ -66,12 +62,14 @@ class Application extends Container
 
     public function addBasePath(string $base_path): void
     {
-        $this->base_path = $base_path;
+        $this->bind('base_path', $base_path);
     }
 
     public function getBasePath(): string
     {
-        return $this->base_path;
+        /** @var string $path */
+        $path = $this->getBinding('base_path');
+        return $path;
     }
 
     public function loadConfig(): void

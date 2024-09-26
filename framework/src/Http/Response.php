@@ -119,11 +119,9 @@ class Response implements ResponseInterface
      */
     public function withJson(
         array $data,
-        int $status = 200,
-        int $options = JSON_THROW_ON_ERROR
+        int $status = 200
     ): ResponseInterface {
-        $options |= JSON_THROW_ON_ERROR;
-        $json = json_encode($data, $options);
+        $json = json_encode($data, JSON_THROW_ON_ERROR);
 
         return $this
             ->withHeader('Content-Type', 'application/json')

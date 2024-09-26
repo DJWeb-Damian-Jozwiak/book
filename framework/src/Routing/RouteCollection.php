@@ -28,7 +28,6 @@ class RouteCollection implements \IteratorAggregate, \Countable
      *
      * @param Route $route The route to add
      *
-     * @throws DuplicateRouteError If a route with the same name already exists
      */
     public function addRoute(Route $route): void
     {
@@ -44,14 +43,14 @@ class RouteCollection implements \IteratorAggregate, \Countable
      *
      * @param RequestInterface $request The request to match against
      *
-     * @return Route|null The matching route, or null if no match is found
+     * @return Route The matching route, or null if no match is found
      */
     public function findRoute(RequestInterface $request): Route
     {
         $matcher = new RouteMatcher();
         $matchingRoutes = array_filter(
             $this->routes,
-            static fn (Route $route) => $matcher->matches($request, $route)
+            static fn(Route $route) => $matcher->matches($request, $route)
         );
         return array_values($matchingRoutes)[0] ?? throw new RouteNotFoundError(
             'No route found for ' . $request->getMethod(
@@ -74,11 +73,11 @@ class RouteCollection implements \IteratorAggregate, \Countable
     /**
      * Get all routes in the collection.
      *
-     * @return array<Route>
+     * @return array<int, Route>
      */
     public function getRoutes(): array
     {
-        return array_values($this->routes);
+        return $this->routes;
     }
 
     /**

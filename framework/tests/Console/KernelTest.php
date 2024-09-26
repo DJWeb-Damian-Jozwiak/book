@@ -40,7 +40,7 @@ class KernelTest extends TestCase
             ->willReturn($mockCommand);
 
         $exitCode = $this->kernel->handle(
-            ['script.php', 'test', '--option=value']
+            ['test', '--option=value']
         );
 
         $this->assertEquals(0, $exitCode);
