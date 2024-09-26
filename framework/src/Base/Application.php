@@ -42,7 +42,7 @@ class Application extends Container
         throw new ContainerError('Cannot unserialize Application');
     }
 
-    public static function getInstance(): Application
+    public static function getInstance(): static
     {
         if (self::$instance === null) {
             /** @phpstan-ignore-next-line instance */
