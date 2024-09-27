@@ -11,7 +11,6 @@ use DJWeb\Framework\Exceptions\Container\NotFoundError;
 
 class Container implements ContainerContract
 {
-    /** @var array<string, mixed> */
     private DotContainer $entries;
     private Autowire $autowire;
 
