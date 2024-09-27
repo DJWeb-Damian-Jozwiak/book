@@ -6,13 +6,14 @@ namespace DJWeb\Framework\DBAL\Query\Builders;
 
 use DJWeb\Framework\DBAL\Contracts\ConnectionContract;
 use DJWeb\Framework\DBAL\Contracts\Query\LimitDecoratorContract;
+use DJWeb\Framework\DBAL\Contracts\Query\SelectQueryBuilderContract;
 use DJWeb\Framework\DBAL\Query\Decorators\InnerJoinDecorator;
 use DJWeb\Framework\DBAL\Query\Decorators\JoinDecorator;
 use DJWeb\Framework\DBAL\Query\Decorators\LeftJoinDecorator;
 use DJWeb\Framework\DBAL\Query\Decorators\LimitDecorator;
 use DJWeb\Framework\DBAL\Query\Decorators\RightJoinDecorator;
 
-class SelectQueryBuilder extends BaseQueryBuilder
+class SelectQueryBuilder extends BaseQueryBuilder implements SelectQueryBuilderContract
 {
     /**
      * @var array<int, string>

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\DBAL\Query\Builders;
 
-class UpdateQueryBuilder extends BaseQueryBuilder
+use DJWeb\Framework\DBAL\Contracts\Query\UpdateQueryBuilderContract;
+
+class UpdateQueryBuilder extends BaseQueryBuilder implements UpdateQueryBuilderContract
 {
     /**
      * @var array<string, int|float|string>
