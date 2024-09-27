@@ -69,7 +69,7 @@ class Autowire
             return match (true) {
                 // 1. return given value if exists
                 $this->container->has($parameterName) => $this->container->get($parameterName),
-                $this->container->has($parameterType) => $this->container->get($parameterType),
+                $parameterType && $this->container->has($parameterType) => $this->container->get($parameterType),
                 // 2. return default value if exist
                 $this->resolver->hasDefaultValue($parameter) => $this->resolver->getDefaultValue($parameter),
 

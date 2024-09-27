@@ -3,6 +3,7 @@
 namespace Tests\Console\Resolvers;
 
 use DJWeb\Framework\Console\Application;
+use DJWeb\Framework\Console\Output\Contacts\OutputContract;
 use DJWeb\Framework\Console\Output\Implementation\ConsoleOutput;
 use PHPUnit\Framework\TestCase;
 use Tests\Helpers\TestCommand;
@@ -23,6 +24,7 @@ class AttributeResolverTest extends TestCase
         $this->app = Application::getInstance();
         $this->command = new TestCommand($this->app);
         $this->mockOutput = $this->createMock(ConsoleOutput::class);
+        $this->app->set(OutputContract::class, $this->mockOutput);
         $this->command->withOutput($this->mockOutput);
     }
 
