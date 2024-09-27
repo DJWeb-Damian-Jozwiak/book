@@ -21,10 +21,13 @@ abstract class Command
     ) {
         $this->registerInContainer();
         $this->output = new ConsoleOutput($this->container);
+        $this->container->set(OutputContract::class, $this->output);
     }
 
     public function getOutput(): OutputContract
     {
+        $output = $this->container->get(OutputContract::class);
+        $this->output = $output;
         return $this->output;
     }
 
@@ -51,6 +54,7 @@ abstract class Command
     public function withOutput(ConsoleOutput $output): void
     {
         $this->output = $output;
+        $this->container->set(OutputContract::class, $this->output);
     }
 
     abstract public function run(): int;

@@ -5,15 +5,10 @@ declare(strict_types=1);
 namespace DJWeb\Framework\DBAL\Query\Builders;
 
 use DJWeb\Framework\Base\Application;
-use DJWeb\Framework\DBAL\Contracts\ConnectionContract;
 use DJWeb\Framework\DBAL\Contracts\Query\QueryBuilderFacadeContract;
 
 class QueryBuilder implements QueryBuilderFacadeContract
 {
-    public function __construct(private ConnectionContract $connection)
-    {
-    }
-
     public function insert(string $table): InsertQueryBuilder
     {
         /** @var InsertQueryBuilder $item */
