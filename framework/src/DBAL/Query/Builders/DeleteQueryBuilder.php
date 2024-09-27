@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\DBAL\Query\Builders;
 
-class DeleteQueryBuilder extends BaseQueryBuilder
+use DJWeb\Framework\DBAL\Contracts\Query\DeleteQueryBuilderContract;
+
+class DeleteQueryBuilder extends BaseQueryBuilder implements DeleteQueryBuilderContract
 {
     public function delete(): bool
     {

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\DBAL\Query\Builders;
 
-class InsertQueryBuilder extends BaseQueryBuilder
+use DJWeb\Framework\DBAL\Contracts\Query\InsertQueryBuilderContract;
+
+class InsertQueryBuilder extends BaseQueryBuilder implements InsertQueryBuilderContract
 {
     /**
      * @var array<int|string, int|string|float>
