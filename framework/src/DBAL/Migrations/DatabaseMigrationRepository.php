@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DJWeb\Framework\DBAL\Migrations;
 
 use DJWeb\Framework\Base\Application;
-use DJWeb\Framework\DBAL\Contracts\ConnectionContract;
 use DJWeb\Framework\DBAL\Contracts\Migrations\MigrationRepositoryContract;
 use DJWeb\Framework\DBAL\Contracts\Query\QueryBuilderFacadeContract;
 use DJWeb\Framework\DBAL\Query\Builders\QueryBuilder;
@@ -18,9 +17,9 @@ class DatabaseMigrationRepository implements MigrationRepositoryContract
     private const MIGRATIONS_TABLE = 'migrations';
     private QueryBuilderFacadeContract $queryBuilder;
 
-    public function __construct(private ConnectionContract $connection)
+    public function __construct()
     {
-        $this->queryBuilder = new QueryBuilder($this->connection);
+        $this->queryBuilder = new QueryBuilder();
     }
 
     public function createMigrationsTable(): void
@@ -45,15 +44,6 @@ class DatabaseMigrationRepository implements MigrationRepositoryContract
             ]);
     }
 
-    private function getNextBatchNumber(): int
-    {
-        $current = $this->queryBuilder->select(self::MIGRATIONS_TABLE)
-            ->select([
-                'max(batch) as batch',
-            ])->first()['batch'] ?? 0;
-        return $current + 1;
-    }
-
     public function delete(string $migration): void
     {
         $this->queryBuilder->delete(self::MIGRATIONS_TABLE)
@@ -73,5 +63,14 @@ class DatabaseMigrationRepository implements MigrationRepositoryContract
     {
         $data = $this->queryBuilder->select(self::MIGRATIONS_TABLE)->get();
         return array_column($data, 'migration');
+    }
+
+    private function getNextBatchNumber(): int
+    {
+        $current = $this->queryBuilder->select(self::MIGRATIONS_TABLE)
+            ->select([
+                'max(batch) as batch',
+            ])->first()['batch'] ?? 0;
+        return $current + 1;
     }
 }

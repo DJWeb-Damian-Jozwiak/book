@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\DBAL\Migrations;
 
+use DJWeb\Framework\DBAL\Contracts\Migrations\MigrationExecutorContract;
 use DJWeb\Framework\DBAL\Contracts\Migrations\MigrationRepositoryContract;
 use DJWeb\Framework\DBAL\Contracts\Schema\SchemaContract;
 
-class MigrationExecutor
+class MigrationExecutor implements MigrationExecutorContract
 {
     public function __construct(
         private SchemaContract $schema,
@@ -24,38 +25,32 @@ class MigrationExecutor
     public function executeMigrations(
         array $migrations,
         string $direction,
-        bool $pretend
     ): array {
         $method = $direction === 'up' ? 'runUp' : 'runDown';
         $executed = [];
 
         foreach ($migrations as $migration) {
-            $this->$method($migration, $pretend);
+            $this->$method($migration);
             $executed[] = $migration;
         }
 
         return $executed;
     }
 
-    private function runUp(string $file, bool $pretend): void
+    private function runUp(string $file): void
     {
         $migration = $this->resolver->resolve($file);
-
-        if (! $pretend) {
-            $migration->withSchema($this->schema);
-            $migration->up();
-            $this->repository->log($migration->getName());
-        }
+        $migration->withSchema($this->schema);
+        $migration->up();
+        $this->repository->log($migration->getName());
     }
 
-    private function runDown(string $file, bool $pretend): void
+    private function runDown(string $file): void
     {
         $migration = $this->resolver->resolve($file);
 
-        if (! $pretend) {
-            $migration->withSchema($this->schema);
-            $migration->down();
-            $this->repository->delete($file);
-        }
+        $migration->withSchema($this->schema);
+        $migration->down();
+        $this->repository->delete($file);
     }
 }

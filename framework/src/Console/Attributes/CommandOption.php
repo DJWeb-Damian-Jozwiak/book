@@ -14,6 +14,7 @@ class CommandOption
         public bool|string|int|float|null|\Closure $value = null,
         public bool $default = true,
         public bool $required = false,
+        public string $description = '',
     ) {
     }
 }

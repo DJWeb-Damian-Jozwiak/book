@@ -13,7 +13,6 @@ interface MigrationExecutorContract
      */
     public function executeMigrations(
         array $migrations,
-        string $direction,
-        bool $pretend
+        string $direction
     ): array;
 }

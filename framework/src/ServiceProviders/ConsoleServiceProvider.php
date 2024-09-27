@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\ServiceProviders;
 
+use DJWeb\Framework\Console\Output\Contacts\OutputContract;
+use DJWeb\Framework\Console\Output\Implementation\ConsoleOutput;
 use DJWeb\Framework\Console\Resolvers\CommandResolver;
 use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\Container\ServiceProvider;
@@ -24,6 +26,10 @@ class ConsoleServiceProvider extends ServiceProvider
         $container->set(
             key: CommandResolver::class,
             value: new CommandResolver($container),
+        );
+        $container->set(
+            OutputContract::class,
+            new ConsoleOutput($container)
         );
     }
 }

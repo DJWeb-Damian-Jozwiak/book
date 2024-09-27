@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DJWeb\Framework\DBAL\Migrations;
 
 use DJWeb\Framework\DBAL\Contracts\Migrations\MigrationResolverContract;
-use DJWeb\Framework\Exceptions\DBAL\MigrationsNotFound;
 use RuntimeException;
 
 class MigrationResolver implements MigrationResolverContract
@@ -19,22 +18,21 @@ class MigrationResolver implements MigrationResolverContract
      */
     public function getMigrationFiles(): array
     {
+        if (! is_dir($this->migrationPath)) {
+            throw new RuntimeException('Migration path does not exist');
+        }
         $files = scandir($this->migrationPath);
         $files = array_filter(
+            /** @phpstan-ignore-next-line */
             $files,
             static fn (string $file) => $file !== '.' && $file !== '..'
         );
         $files = array_filter($files, $this->isMigrationFile(...));
-        if (! $files) {
-            throw new MigrationsNotFound($this->migrationPath);
-        }
         /** @var array<int, string> $migrations */
         $migrations = [];
-
         foreach ($files as $file) {
             $migrations[] = pathinfo($file, PATHINFO_FILENAME);
         }
-
         \sort($migrations);
         return $migrations;
     }

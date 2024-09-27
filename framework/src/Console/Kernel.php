@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Console;
 
-use DJWeb\Framework\Console\Output\Implementation\ConsoleOutput;
 use DJWeb\Framework\Console\Resolvers\CommandResolver;
-use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\Exceptions\Console\NoCommandSpecified;
 
 readonly class Kernel
 {
     public function __construct(
-        private ContainerContract $container,
         private CommandResolver $commandResolver
     ) {
     }
@@ -32,7 +29,6 @@ readonly class Kernel
         $arguments = $this->parseArguments($inputValues);
         $options = $this->parseOptions($inputValues);
 
-        $command->withOutput(new ConsoleOutput($this->container));
         $command->resolveAttributes($arguments);
         $command->resolveOptions($options);
 

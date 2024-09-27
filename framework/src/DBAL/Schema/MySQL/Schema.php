@@ -17,11 +17,11 @@ use DJWeb\Framework\DBAL\Schema\Column;
 readonly class Schema implements SchemaContract
 {
     public function __construct(
-        private TableManagerContract $tableManager,
-        private ColumnManagerContract $columnManager,
-        private IndexManagerContract $indexManager,
-        private DatabaseInfoContract $databaseInfo,
-        private ColumnFactoryContract $columnFactory,
+        public private(set) TableManagerContract $tableManager,
+        public private(set) ColumnManagerContract $columnManager,
+        public private(set) IndexManagerContract $indexManager,
+        public private(set) DatabaseInfoContract $databaseInfo,
+        public private(set) ColumnFactoryContract $columnFactory,
         private Transaction $transaction,
         private ConnectionContract $connection,
     ) {

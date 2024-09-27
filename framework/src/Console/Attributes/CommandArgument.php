@@ -12,6 +12,7 @@ class CommandArgument
     public function __construct(
         public string $name,
         public string|int|float|null $value = null,
+        public string $description = '',
     ) {
     }
 }

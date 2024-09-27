@@ -14,5 +14,6 @@ $app->registerCommands(
         path: dirname(__DIR__) . '/app/Console/Commands'
     )
 );
+$app->bind('app.migrations_path', dirname(__DIR__) . '/app/Database/Migrations');
 $app->loadConfig();
 $app->handle();

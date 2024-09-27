@@ -6,7 +6,6 @@ namespace DJWeb\Framework\Console;
 
 use DJWeb\Framework\Console\Attributes\AsCommand;
 use DJWeb\Framework\Console\Output\Contacts\OutputContract;
-use DJWeb\Framework\Console\Output\Implementation\ConsoleOutput;
 use DJWeb\Framework\Console\Resolvers\AttributeResolver;
 use DJWeb\Framework\Console\Resolvers\OptionsResolver;
 use DJWeb\Framework\Container\Contracts\ContainerContract;
@@ -20,8 +19,8 @@ abstract class Command
         public readonly ContainerContract $container
     ) {
         $this->registerInContainer();
-        $this->output = new ConsoleOutput($this->container);
-        $this->container->set(OutputContract::class, $this->output);
+        $output = $this->container->get(OutputContract::class);
+        $this->output = $output;
     }
 
     public function getOutput(): OutputContract
@@ -51,7 +50,7 @@ abstract class Command
         OptionsResolver::resolve($this, $inputValues);
     }
 
-    public function withOutput(ConsoleOutput $output): void
+    public function withOutput(OutputContract $output): void
     {
         $this->output = $output;
         $this->container->set(OutputContract::class, $this->output);

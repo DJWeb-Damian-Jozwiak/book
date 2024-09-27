@@ -76,6 +76,13 @@ MSG
         );
     }
 
+    public function testNotExistingDirectory()
+    {
+        $this->resolver = new MigrationResolver('NonExistingDirectory');
+        $this->expectException(\RuntimeException::class);
+        $this->resolver->getMigrationFiles();
+    }
+
     protected function setUp(): void
     {
         $this->tempDir = sys_get_temp_dir() . '/migrations_' . uniqid();
