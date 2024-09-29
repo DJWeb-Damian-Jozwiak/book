@@ -11,6 +11,7 @@ use DJWeb\Framework\DBAL\Query\Decorators\InnerJoinDecorator;
 use DJWeb\Framework\DBAL\Query\Decorators\JoinDecorator;
 use DJWeb\Framework\DBAL\Query\Decorators\LeftJoinDecorator;
 use DJWeb\Framework\DBAL\Query\Decorators\LimitDecorator;
+use DJWeb\Framework\DBAL\Query\Decorators\OrderByDecorator;
 use DJWeb\Framework\DBAL\Query\Decorators\RightJoinDecorator;
 
 class SelectQueryBuilder extends BaseQueryBuilder implements SelectQueryBuilderContract
@@ -23,11 +24,13 @@ class SelectQueryBuilder extends BaseQueryBuilder implements SelectQueryBuilderC
     protected array $joins = [];
     protected LimitDecoratorContract $limitDecorator;
     protected ?int $offset = null;
+    protected OrderByDecorator $orderByDecorator;
 
     public function __construct(ConnectionContract $connection)
     {
         parent::__construct($connection);
         $this->limitDecorator = new LimitDecorator();
+        $this->orderByDecorator = new OrderByDecorator();
     }
 
     /**
@@ -62,6 +65,18 @@ class SelectQueryBuilder extends BaseQueryBuilder implements SelectQueryBuilderC
         return $this;
     }
 
+    public function orderBy(string $column): static
+    {
+        $this->orderByDecorator->orderByAsc($column);
+        return $this;
+    }
+
+    public function orderByDesc(string $column): static
+    {
+        $this->orderByDecorator->orderByDesc($column);
+        return $this;
+    }
+
     public function getSQL(): string
     {
         $sql = 'SELECT ' . implode(
@@ -74,6 +89,7 @@ class SelectQueryBuilder extends BaseQueryBuilder implements SelectQueryBuilderC
         }
 
         $sql .= $this->buildWhereClause();
+        $sql .= $this->orderByDecorator->getSQL();
         $sql .= $this->limitDecorator->getSQL();
 
         return trim($sql);
