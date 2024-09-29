@@ -5,6 +5,8 @@ namespace Tests;
 use DJWeb\Framework\Config\Config;
 use DJWeb\Framework\Config\ConfigBase;
 use DJWeb\Framework\Web\Application;
+use Dotenv\Exception\InvalidPathException;
+use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends BaseTestCase
 {
@@ -17,7 +19,7 @@ class ConfigTest extends BaseTestCase
     {
         $app = Application::getInstance();
         $app->addBasePath('invalid_directory');
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(InvalidPathException::class);
         $app->loadConfig();
     }
 
