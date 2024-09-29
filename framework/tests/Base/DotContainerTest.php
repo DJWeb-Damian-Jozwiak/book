@@ -19,6 +19,14 @@ class DotContainerTest extends TestCase
         $this->assertEquals(123, $container->get('foo.bar.qux'));
     }
 
+    public function testSetArray()
+    {
+        $container = new DotContainer();
+        $container->set('test', ['foo' => 'bar', 'baz' => 'qux']);
+        $this->assertEquals('bar', $container->get('test.foo'));
+        $this->assertEquals('qux', $container->get('test.baz'));
+    }
+
     public function testGetWithDefaultValue()
     {
         $container = new DotContainer();
