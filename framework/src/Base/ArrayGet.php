@@ -21,7 +21,9 @@ final readonly class ArrayGet
 
         foreach ($keys as $segment) {
             if ($data->offsetExists($segment)) {
-                $data = $data[$segment];
+                $value = $data[$segment];
+                $value = is_array($value) ? new ArrayObject($value) : $value;
+                $data = $value;
             } else {
                 return $default;
             }

@@ -33,6 +33,17 @@ class QueryBuilderTest extends BaseTestCase
         );
     }
 
+    public function testOrderBy()
+    {
+        $query = $this->queryBuilder->select('users')
+            ->orderBy('email')->orderByDesc('name');
+
+        $this->assertEquals(
+            'SELECT * FROM users ORDER BY `email` ASC, `name` DESC',
+            $query->getSQL()
+        );
+    }
+
     public function testSelectColumns()
     {
         $query = $this->queryBuilder->select('users')
