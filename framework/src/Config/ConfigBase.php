@@ -14,8 +14,8 @@ class ConfigBase extends DotContainer implements ConfigContract
     public function __construct(private readonly Application $app)
     {
         parent::__construct();
-        $this->loadConfigFiles();
         $this->loadEnvironmentVariables();
+        $this->loadConfigFiles();
     }
 
     private function loadEnvironmentVariables(): void
