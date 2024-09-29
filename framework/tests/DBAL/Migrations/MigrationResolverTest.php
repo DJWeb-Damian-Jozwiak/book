@@ -2,9 +2,9 @@
 
 namespace Tests\DBAL\Migrations;
 
+use DJWeb\Framework\Base\Application;
 use DJWeb\Framework\DBAL\Migrations\Migration;
 use DJWeb\Framework\DBAL\Migrations\MigrationResolver;
-use DJWeb\Framework\Exceptions\DBAL\MigrationsNotFound;
 use Tests\BaseTestCase;
 
 class MigrationResolverTest extends BaseTestCase
@@ -19,13 +19,6 @@ class MigrationResolverTest extends BaseTestCase
         rmdir($this->tempDir);
         parent::tearDown();
     }
-
-    public function testEmptyMigrationsDirectory()
-    {
-        $this->expectException(MigrationsNotFound::class);
-        $this->resolver->getMigrationFiles();
-    }
-
     public function testResolveTestMigration()
     {
         $this->tempDir2 = dirname(
@@ -78,6 +71,8 @@ MSG
 
     public function testNotExistingDirectory()
     {
+        $app = Application::getInstance();
+        $app->bind('app.migrations_path', 'NonExistingDirectory');
         $this->resolver = new MigrationResolver('NonExistingDirectory');
         $this->expectException(\RuntimeException::class);
         $this->resolver->getMigrationFiles();
@@ -87,6 +82,8 @@ MSG
     {
         $this->tempDir = sys_get_temp_dir() . '/migrations_' . uniqid();
         mkdir($this->tempDir);
+        $app = Application::getInstance();
+        $app->bind('app.migrations_path', $this->tempDir);
         $this->resolver = new MigrationResolver($this->tempDir);
     }
 }

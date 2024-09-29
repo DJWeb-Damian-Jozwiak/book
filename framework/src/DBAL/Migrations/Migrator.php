@@ -19,7 +19,7 @@ class Migrator
     /**
      * @return array<int, string>
      */
-    public function run(bool $pretend = false): array
+    public function run(): array
     {
         $this->repository->createMigrationsTable();
 
@@ -27,13 +27,13 @@ class Migrator
         $ran = $this->repository->getRan();
         $migrations = array_diff($files, $ran);
 
-        return $this->executor->executeMigrations($migrations, 'up', $pretend);
+        return $this->executor->executeMigrations($migrations, 'up');
     }
 
     /**
      * @return array<int, string>
      */
-    public function rollback(bool $pretend = false): array
+    public function rollback(): array
     {
         $ran = $this->repository->getRan();
         $files = $this->resolver->getMigrationFiles();
@@ -42,7 +42,6 @@ class Migrator
         return $this->executor->executeMigrations(
             array_reverse($migrations),
             'down',
-            $pretend
         );
     }
 }

@@ -93,7 +93,6 @@ class Migrate extends Command
         $migrations = $this->executor->executeMigrations(
             $batch,
             'up',
-            false
         );
 
         foreach ($migrations as $migration) {

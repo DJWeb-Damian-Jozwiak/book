@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\DBAL\Migrations;
 
+use DJWeb\Framework\Base\Application;
 use DJWeb\Framework\DBAL\Contracts\Migrations\MigrationResolverContract;
 use RuntimeException;
 
 class MigrationResolver implements MigrationResolverContract
 {
-    public function __construct(private string $migrationPath)
+    public function __construct(private ?string $migrationPath)
     {
     }
 
@@ -18,6 +19,10 @@ class MigrationResolver implements MigrationResolverContract
      */
     public function getMigrationFiles(): array
     {
+        $app = Application::getInstance();
+        /** @var string $path */
+        $path = $app->getBinding('app.migrations_path');
+        $this->migrationPath = $path;
         if (! is_dir($this->migrationPath)) {
             throw new RuntimeException('Migration path does not exist');
         }

@@ -20,7 +20,7 @@ class KernelTest extends TestCase
     {
         $this->container = new Container();
         $this->resolver = $this->createMock(CommandResolver::class);
-        $this->kernel = new Kernel($this->container, $this->resolver);
+        $this->kernel = new Kernel($this->resolver);
         $inputStream = $this->createMock(StreamInterface::class);
         $outputStream = $this->createMock(StreamInterface::class);
         $this->container->set('input_stream', $inputStream);

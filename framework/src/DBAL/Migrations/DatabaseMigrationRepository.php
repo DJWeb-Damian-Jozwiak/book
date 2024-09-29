@@ -9,6 +9,7 @@ use DJWeb\Framework\DBAL\Contracts\Migrations\MigrationRepositoryContract;
 use DJWeb\Framework\DBAL\Contracts\Query\QueryBuilderFacadeContract;
 use DJWeb\Framework\DBAL\Query\Builders\QueryBuilder;
 use DJWeb\Framework\DBAL\Schema\MySQL\Columns\IntColumn;
+use DJWeb\Framework\DBAL\Schema\MySQL\Columns\PrimaryColumn;
 use DJWeb\Framework\DBAL\Schema\MySQL\Columns\VarcharColumn;
 use DJWeb\Framework\DBAL\Schema\MySQL\Schema;
 
@@ -28,9 +29,10 @@ class DatabaseMigrationRepository implements MigrationRepositoryContract
 
         if (! in_array(self::MIGRATIONS_TABLE, $schema->getTables())) {
             $schema->createTable(self::MIGRATIONS_TABLE, [
-                new IntColumn('id', autoIncrement: true),
+                new IntColumn('id', nullable: false, autoIncrement: true),
                 new VarcharColumn('migration', true, length: 255),
                 new IntColumn('batch'),
+                new PrimaryColumn('id'),
             ]);
         }
     }

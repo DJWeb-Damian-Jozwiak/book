@@ -29,11 +29,7 @@ class ConfigBase extends DotContainer implements ConfigContract
         $configPath = $this->app->getBasePath(
         ) . DIRECTORY_SEPARATOR . 'config';
 
-        if (! is_dir($configPath)) {
-            throw new \RuntimeException('Config directory not found');
-        }
-
-        $files = scandir($configPath);
+        $files = is_dir($configPath) ? scandir($configPath) : [];
         $files = $files ? $files : [];
         $files = array_filter(
             $files,

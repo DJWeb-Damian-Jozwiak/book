@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\DBAL\Query\Decorators;
 
 use DJWeb\Framework\DBAL\Contracts\Query\OrderByDecoratorContract;
@@ -42,18 +44,19 @@ class OrderByDecorator implements OrderByDecoratorContract
         return $this->orderBy($columns, OrderByDirection::ASC);
     }
 
+    public function getSql(): string
+    {
+        $data = 'ORDER BY ' . implode(', ', $this->columns);
+        return $this->columns ? $data : '';
+    }
+
     /**
      * @param array<int, string>|string $columns
+     *
      * @return array<int, string>
      */
     private function wrapColumns(array|string $columns): array
     {
         return is_array($columns) ? $columns : [$columns];
-    }
-
-    public function getSql(): string
-    {
-        $data =  'ORDER BY ' . implode(', ', $this->columns);
-        return $this->columns ? $data : '';
     }
 }

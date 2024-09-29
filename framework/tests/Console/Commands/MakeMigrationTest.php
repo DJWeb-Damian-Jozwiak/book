@@ -26,6 +26,20 @@ class MakeMigrationTest extends BaseTestCase
         $result = $this->app->handle();
         $this->assertEquals(0, $result);
     }
+
+    public function testMakeMigrationAddPrefix()
+    {
+        Carbon::setTestNow('2024-09-26 17:00:00');
+        $file = '2024_09_26_170000_create_users_table.php';
+        $migrationName = 'create_users';
+        $_SERVER['argv'] = ['console/bin', 'make:migration', $migrationName];
+        $this->app->set(OutputContract::class, $this->output);
+        $this->output->expects($this->once())
+            ->method('info')
+            ->with("Utworzono {$file}");
+        $result = $this->app->handle();
+        $this->assertEquals(0, $result);
+    }
     public function tearDown(): void
     {
         $_SERVER = [];
