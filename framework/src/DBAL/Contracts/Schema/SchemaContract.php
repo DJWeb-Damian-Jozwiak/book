@@ -42,6 +42,20 @@ interface SchemaContract
     public function dropIndex(string $tableName, string $indexName): void;
 
     /**
+     * @param string|array<int, string> $columns
+     */
+    public function primaryIndex(string $tableName, string|array $columns): void;
+
+    /**
+     * @param string|array<int, string> $columns
+     */
+    public function uniqueIndex(
+        string $tableName,
+        string $indexName,
+        array|string $columns
+    ): void;
+
+    /**
      * @return array<int, string>
      */
     public function getTables(): array;

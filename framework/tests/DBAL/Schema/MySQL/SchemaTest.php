@@ -110,6 +110,22 @@ class SchemaTest extends TestCase
         $this->schema->createIndex('users', 'idx_name', ['name']);
     }
 
+    public function testCreatePrimaryIndex()
+    {
+        $this->indexManagerMock->expects($this->once())->method(
+            'primary'
+        )->with('users', ['id']);
+        $this->schema->primaryIndex('users', ['id']);
+    }
+
+    public function testCreateUniqueIndex()
+    {
+        $this->indexManagerMock->expects($this->once())->method(
+            'unique'
+        )->with('users', 'idx_name', ['name']);
+        $this->schema->uniqueIndex('users', 'idx_name', ['name']);
+    }
+
     public function testDropIndex()
     {
         $this->indexManagerMock->expects($this->once())->method(

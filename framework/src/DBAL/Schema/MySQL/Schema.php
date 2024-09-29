@@ -75,6 +75,16 @@ readonly class Schema implements SchemaContract
         $this->indexManager->createIndex($tableName, $indexName, $columns);
     }
 
+    public function primaryIndex(string $tableName, string|array $columns): void
+    {
+        $this->indexManager->primary($tableName, $columns);
+    }
+
+    public function uniqueIndex(string $tableName, string $indexName, array|string $columns): void
+    {
+        $this->indexManager->unique($tableName, $indexName, $columns);
+    }
+
     public function dropIndex(string $tableName, string $indexName): void
     {
         $this->indexManager->dropIndex($tableName, $indexName);

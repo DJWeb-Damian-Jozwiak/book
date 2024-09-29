@@ -34,23 +34,25 @@ readonly class IndexManager implements IndexManagerContract
     }
 
     /**
-     * @param array<int, string> $columns
+     * @param string|array<int, string> $columns
      */
-    public function primary(string $tableName, array $columns): void
+    public function primary(string $tableName, string|array $columns): void
     {
+        $columns = is_array($columns) ? $columns : [$columns];
         $columnList = implode(', ', $columns);
         $sql = "ALTER TABLE {$tableName} ADD PRIMARY KEY ({$columnList})";
         $this->executeSql($sql, 'Failed to create primary key: ');
     }
 
     /**
-     * @param array<int, string> $columns
+     * @param string|array<int, string> $columns
      */
     public function unique(
         string $tableName,
         string $indexName,
-        array $columns
+        array|string $columns
     ): void {
+        $columns = is_array($columns) ? $columns : [$columns];
         $columnList = implode(', ', $columns);
         $sql = "CREATE UNIQUE INDEX {$indexName} ON {$tableName} ({$columnList})";
         $this->executeSql($sql, 'Failed to create unique index: ');
