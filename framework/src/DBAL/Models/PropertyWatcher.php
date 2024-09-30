@@ -29,12 +29,7 @@ class PropertyWatcher implements NotifyPropertyChangesContract
         return $this->changedProperties;
     }
 
-    public function resetChangedProperties(): void
-    {
-        $this->changedProperties = [];
-    }
-
     public bool $is_new {
-        get => isset($this->changedProperties[$this->model->primary_key_name]);
+        get => !isset($this->changedProperties[$this->model->primary_key_name]);
     }
 }

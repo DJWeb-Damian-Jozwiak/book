@@ -14,9 +14,15 @@ class User extends Model
     final public string $password {
         get => $this->password;
         set  {
-            $this->password = password_hash($value, $this->algo);
+            $this->password = $this->isHashed($value)
+                ? $value : password_hash($value, $this->algo);
             $this->markPropertyAsChanged('password');
         }
+    }
+
+    private function isHashed(string $password): bool
+    {
+        return str_contains($password, '$' . $this->algo);
     }
 
     public Carbon $created_at {

@@ -10,13 +10,25 @@ use DJWeb\Framework\DBAL\Models\QueryBuilders\ModelQueryBuilder;
 
 abstract class Model implements PropertyChangesContract
 {
-    abstract public string $table {get; }
+    abstract public string $table { get; }
 
     public protected(set) string $primary_key_name = 'id';
     public protected(set) ModelQueryBuilder $query_builder;
     public private(set) PropertyWatcher $watcher;
     private readonly EntityUpdater $updater;
     private readonly EntityInserter $inserter;
+
+    public int|string $id {
+        get => $this->id;
+        set {
+            $this->id = $value;
+            $this->markPropertyAsChanged('id');
+        }
+    }
+    /**
+     * @var array<string, string>
+     */
+    protected array $casts = [];
 
     public function __construct()
     {
@@ -50,9 +62,11 @@ abstract class Model implements PropertyChangesContract
 
     public function save(): void
     {
-        //to add insert id
-        $this->watcher->is_new ?
-            $this->inserter->insert() : $this->updater->update();
+        if ($this->watcher->is_new) {
+            $this->id = $this->inserter->insert();
+        } else {
+            $this->updater->update();
+        }
     }
 
     public bool $is_new {

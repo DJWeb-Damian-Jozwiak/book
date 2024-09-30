@@ -14,5 +14,4 @@ interface NotifyPropertyChangesContract
      */
     public function getChangedProperties(): array;
 
-    public function resetChangedProperties(): void;
 }

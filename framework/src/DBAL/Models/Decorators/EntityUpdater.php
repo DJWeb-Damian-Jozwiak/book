@@ -14,7 +14,7 @@ class EntityUpdater
 
         private Model $model
     ) {
-        $this->query_builder = $this->model->query_builder->builder;
+        $this->query_builder = $this->model->query_builder->facade;
         $this->property_watcher = $this->model->watcher;
     }
 

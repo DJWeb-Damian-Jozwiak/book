@@ -16,13 +16,16 @@ class EntityInserter
         private Model $model
     ) {
         $this->query_builder =
-            $this->model->query_builder->builder;
+            $this->model->query_builder->facade;
         $this->property_watcher = $this->model->watcher;
     }
 
-    public function insert(): void
+    public function insert(): ?string
     {
-        $this->query_builder->insert($this->model->table)
-            ->values($this->property_watcher->getChangedProperties());
+        $builder = $this->query_builder->insert($this->model->table);
+        $builder->values($this->property_watcher->getChangedProperties())
+            ->execute();
+
+        return $builder->getInsertId();
     }
 }
