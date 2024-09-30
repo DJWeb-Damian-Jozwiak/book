@@ -6,7 +6,8 @@ namespace DJWeb\Framework\DBAL\Query\Builders;
 
 use DJWeb\Framework\DBAL\Contracts\Query\InsertQueryBuilderContract;
 
-class InsertQueryBuilder extends BaseQueryBuilder implements InsertQueryBuilderContract
+class InsertQueryBuilder extends BaseQueryBuilder implements
+    InsertQueryBuilderContract
 {
     /**
      * @var array<int|string, int|string|float>
@@ -29,5 +30,19 @@ class InsertQueryBuilder extends BaseQueryBuilder implements InsertQueryBuilderC
         $this->params = array_values($this->values);
 
         return "INSERT INTO {$this->table} ({$columns}) VALUES ({$placeholders})";
+    }
+
+    public function execute(): bool
+    {
+        /** @phpstan-ignore-next-line */
+        return $this->connection->query(
+            $this->getSQL(),
+            $this->values
+        )->execute();
+    }
+
+    public function getInsertId(): ?string
+    {
+        return $this->connection->getLastInsertId();
     }
 }

@@ -10,4 +10,6 @@ interface UpdateQueryBuilderContract extends QueryBuilderContract
      * @return $this
      */
     public function set(array $updates): self;
+
+    public function execute(): bool;
 }
