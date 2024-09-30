@@ -4,19 +4,24 @@ namespace DJWeb\Framework\DBAL\Models;
 
 use Carbon\Carbon;
 use DJWeb\Framework\DBAL\Models\Contracts\PropertyChangesContract;
-use DJWeb\Framework\DBAL\Models\Decorators\EntityInserter;
-use DJWeb\Framework\DBAL\Models\Decorators\EntityUpdater;
+use DJWeb\Framework\DBAL\Models\Decorators\EntityManager;
 use DJWeb\Framework\DBAL\Models\QueryBuilders\ModelQueryBuilder;
+use DJWeb\Framework\DBAL\Models\Relations\RelationDecorator;
+use DJWeb\Framework\DBAL\Models\Relations\RelationFactory;
 
 abstract class Model implements PropertyChangesContract
 {
     abstract public string $table { get; }
 
-    public protected(set) string $primary_key_name = 'id';
-    public protected(set) ModelQueryBuilder $query_builder;
-    public private(set) PropertyWatcher $watcher;
-    private readonly EntityUpdater $updater;
-    private readonly EntityInserter $inserter;
+    protected(set) string $primary_key_name = 'id';
+    protected(set) ModelQueryBuilder $query_builder;
+    private(set) PropertyWatcher $watcher;
+    private RelationFactory $relation_factory;
+
+    private EntityManager $entity_manager;
+
+    protected RelationDecorator $relations;
+
 
     public int|string $id {
         get => $this->id;
@@ -34,8 +39,9 @@ abstract class Model implements PropertyChangesContract
     {
         $this->query_builder = new ModelQueryBuilder($this);
         $this->watcher = new PropertyWatcher($this);
-        $this->updater = new EntityUpdater($this);
-        $this->inserter = new EntityInserter($this);
+        $this->entity_manager = new EntityManager($this);
+        $this->relation_factory = new RelationFactory();
+        $this->relations = new RelationDecorator($this);
     }
 
     public function fill(array $attributes): static
@@ -62,11 +68,7 @@ abstract class Model implements PropertyChangesContract
 
     public function save(): void
     {
-        if ($this->watcher->is_new) {
-            $this->id = $this->inserter->insert();
-        } else {
-            $this->updater->update();
-        }
+        $this->entity_manager->save();
     }
 
     public bool $is_new {
@@ -83,5 +85,10 @@ abstract class Model implements PropertyChangesContract
         return match(true) {
             $type === 'datetime' => $value instanceof Carbon ? $value : Carbon::parse($value),
         };
+    }
+
+    public static function getTable(): string
+    {
+        return new static()->table;
     }
 }

@@ -10,7 +10,7 @@ class PropertyWatcher implements NotifyPropertyChangesContract
     {
     }
     /**
-     * @var array<string, int|string|float>
+     * @var array<string, int|string|float|null>
      */
     private array $changedProperties = [];
 
@@ -22,7 +22,7 @@ class PropertyWatcher implements NotifyPropertyChangesContract
     }
 
     /**
-     * @return array<int, int|string|float|null>
+     * @return array<string, int|string|float|null>
      */
     public function getChangedProperties(): array
     {

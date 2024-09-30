@@ -11,6 +11,8 @@ use DJWeb\Framework\DBAL\Query\Builders\QueryBuilder;
 use DJWeb\Framework\DBAL\Query\Builders\SelectQueryBuilder;
 use DJWeb\Framework\DBAL\Query\Builders\UpdateQueryBuilder;
 use PHPUnit\Framework\TestCase;
+use Tests\Helpers\Models\Company;
+use Tests\Helpers\Models\Post;
 
 class UserTest extends TestCase
 {
@@ -105,6 +107,48 @@ class UserTest extends TestCase
         $user = $query->select()->where('id', '=', '1')->first();
         $user->password = 'password';
         $user->save();
+    }
+
+    public function testHasMany()
+    {
+        $mockPDOStatement = $this->createMock(\PDOStatement::class);
+        $mockPDOStatement->expects($this->once())
+            ->method('fetchAll')
+            ->with(\PDO::FETCH_ASSOC)
+            ->willReturn([
+                [
+                    'id' => 1,
+                    'created_at' => '2024-01-01 00:00:00',
+                ]
+            ]);
+        $this->mockConnection->expects($this->once())
+            ->method('query')
+            ->willReturn($mockPDOStatement);
+        $company = new Company();
+        $company->id = 1;
+        $this->assertIsArray($company->users);
+        //company users is cached, no second call!
+        $this->assertInstanceOf(User::class, $company->users[0]);
+    }
+
+    public function testBelongsTo()
+    {
+        $mockPDOStatement = $this->createMock(\PDOStatement::class);
+        $mockPDOStatement->expects($this->once())
+            ->method('fetchAll')
+            ->with(\PDO::FETCH_ASSOC)
+            ->willReturn([
+                [
+                    'id' => 1,
+                    'created_at' => '2024-01-01 00:00:00',
+                ]
+            ]);
+        $this->mockConnection->expects($this->once())
+            ->method('query')
+            ->willReturn($mockPDOStatement);
+        $post = new Post();
+        $post->user_id = 1;
+        $this->assertInstanceOf(User::class, $post->user);
     }
 
     public function testGet()
