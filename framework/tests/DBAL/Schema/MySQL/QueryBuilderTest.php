@@ -199,6 +199,13 @@ class QueryBuilderTest extends BaseTestCase
 
     public function testInsert()
     {
+        $mockPDOStatement = $this->createMock(\PDOStatement::class);
+        $this->mockConnection->expects($this->once())
+            ->method('query')
+            ->willReturn($mockPDOStatement);
+        $mockPDOStatement->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
         $query = $this->queryBuilder->insert('users')
             ->values(['name' => 'John Doe', 'age' => 30]);
 
@@ -206,10 +213,34 @@ class QueryBuilderTest extends BaseTestCase
             'INSERT INTO users (name, age) VALUES (?, ?)',
             $query->getSQL()
         );
+
+        $this->assertTrue($query->execute());
+    }
+
+    public function testGetInsertIdReturnsCorrectId()
+    {
+        $expectedId = '12345';
+        $this->mockConnection
+            ->expects($this->once())
+            ->method('getLastInsertId')
+            ->willReturn($expectedId);
+
+        $result = $this->queryBuilder->insert('users')
+            ->values(['name' => 'John Doe', 'age' => 30])
+            ->getInsertId();
+
+        $this->assertEquals($expectedId, $result);
     }
 
     public function testUpdate()
     {
+        $mockPDOStatement = $this->createMock(\PDOStatement::class);
+        $this->mockConnection->expects($this->once())
+            ->method('query')
+            ->willReturn($mockPDOStatement);
+        $mockPDOStatement->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
         $query = $this->queryBuilder->update('users')
             ->set(['name' => 'John Doe', 'age' => 30]);
 
@@ -218,6 +249,7 @@ class QueryBuilderTest extends BaseTestCase
             $query->getSQL()
         );
         $this->assertEquals(['John Doe', '30'], $query->getParams());
+        $this->assertTrue($query->execute());
     }
 
     public function testDeleteSql()

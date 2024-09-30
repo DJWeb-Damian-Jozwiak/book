@@ -92,4 +92,10 @@ class MySqlConnection implements ConnectionContract
             $this->getConnectionOptions()
         );
     }
+
+    public function getLastInsertId(): ?string
+    {
+        $id = $this->connection?->lastInsertId();
+        return $id === false ? null : $id;
+    }
 }

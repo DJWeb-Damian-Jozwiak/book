@@ -103,7 +103,7 @@ class MigrateTest extends BaseTestCase
 
         $this->executor->expects($this->once())
             ->method('executeMigrations')
-            ->with(['migration2.php'], 'up', false)
+            ->with(['migration2.php'], 'up')
             ->willReturn(['migration2.php']);
 
         $this->repository->expects($this->once())

@@ -39,6 +39,42 @@ class MySqlConnectionTest extends BaseTestCase
         $this->assertSame($pdo, $pdo2);
     }
 
+    public function testGetLastInsertIdReturnsId(): void
+    {
+        $this->mockConfig();
+        $pdoMock = $this->createMock(PDO::class);
+
+        $this->connection = $this->getMockBuilder(MySqlConnection::class)
+            ->onlyMethods(['connectMysql'])
+            ->getMock();
+        $this->connection->method('connectMysql')
+            ->willReturn($pdoMock);
+
+        $pdoMock->method('lastInsertId')
+            ->willReturn('12345');
+
+        $this->connection->connect();
+        $this->assertSame('12345', $this->connection->getLastInsertId());
+    }
+
+    public function testGetLastInsertIdReturnsNull(): void
+    {
+        $this->mockConfig();
+        $pdoMock = $this->createMock(PDO::class);
+
+        $this->connection = $this->getMockBuilder(MySqlConnection::class)
+            ->onlyMethods(['connectMysql'])
+            ->getMock();
+        $this->connection->method('connectMysql')
+            ->willReturn($pdoMock);
+
+        $pdoMock->method('lastInsertId')
+            ->willReturn(false);
+
+        $this->connection->connect();
+        $this->assertNull($this->connection->getLastInsertId());
+    }
+
     private function mockConfig(): void
     {
         $this->configMock->method('get')

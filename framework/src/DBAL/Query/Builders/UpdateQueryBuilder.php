@@ -46,4 +46,11 @@ class UpdateQueryBuilder extends BaseQueryBuilder implements UpdateQueryBuilderC
 
         return $sql;
     }
+
+    public function execute(): bool
+    {
+        /** @phpstan-ignore-next-line */
+        return $this->connection->query($this->getSQL(), $this->getParams())
+            ->execute();
+    }
 }

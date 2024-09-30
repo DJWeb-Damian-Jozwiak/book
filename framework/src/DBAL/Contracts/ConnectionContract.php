@@ -22,4 +22,6 @@ interface ConnectionContract
      * @return array<int, int|false>
      */
     public function getConnectionOptions(): array;
+
+    public function getLastInsertId(): ?string;
 }
