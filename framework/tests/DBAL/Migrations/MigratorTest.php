@@ -36,7 +36,7 @@ class MigratorTest extends TestCase
             ->willReturn(['migration1', 'migration2', 'migration3']);
         $this->executor->expects($this->once())
             ->method('executeMigrations')
-            ->with(['migration2', 'migration1'], 'down', false)
+            ->with(['migration2', 'migration1'], 'down')
             ->willReturn(['migration2', 'migration1']);
 
         $result = $this->migrator->rollback();
