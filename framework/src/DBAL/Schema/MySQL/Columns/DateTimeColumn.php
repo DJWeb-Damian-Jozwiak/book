@@ -50,4 +50,14 @@ class DateTimeColumn extends Column
     {
         return $this->currentOnUpdate ? 'ON UPDATE CURRENT_TIMESTAMP' : '';
     }
+
+    public function getSqlColumn():string
+    {
+        return 'Carbon';
+    }
+
+    public function shouldBeCasted(): bool
+    {
+        return true;
+    }
 }

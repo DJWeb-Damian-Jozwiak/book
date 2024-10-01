@@ -47,4 +47,9 @@ class IntColumn extends Column
     {
         return $this->autoIncrement ? ' AUTO_INCREMENT' : '';
     }
+
+    public function getSqlColumn(): string
+    {
+        return 'int';
+    }
 }

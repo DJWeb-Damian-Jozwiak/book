@@ -15,5 +15,6 @@ $app->registerCommands(
     )
 );
 $app->bind('app.migrations_path', dirname(__DIR__) . '/app/Database/Migrations');
+$app->bind('app.models_path', dirname(__DIR__) . '/app/Database/Models');
 $app->loadConfig();
 $app->handle();

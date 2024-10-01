@@ -15,4 +15,14 @@ abstract class Column
     }
 
     abstract public function getSqlDefinition(): string;
+
+    public function getSqlColumn(): string
+    {
+        return 'mixed';
+    }
+
+    public function shouldBeCasted(): bool
+    {
+        return false;
+    }
 }

@@ -22,10 +22,13 @@ class MakeMigration extends MakeCommand
         return $this->rootNamespace() . 'Database\\Migrations';
     }
 
-    protected function rootNamespace(): string
+    protected function getPath(string $name): string
     {
-        /** @phpstan-ignore-next-line */
-        return $this->container->getBinding('app.root_namespace');
+        $name = str_replace('\\', '/', $name);
+
+        return $this->container->getBinding(
+                'app.migrations_path'
+            ) . '/' . $name;
     }
 
     protected function qualifyName(string $name): string

@@ -21,4 +21,9 @@ class TextColumn extends Column
         $sql .= $this->nullable ? ' NULL' : ' NOT NULL';
         return $sql;
     }
+
+    public function getSqlType(): string
+    {
+        return 'string';
+    }
 }

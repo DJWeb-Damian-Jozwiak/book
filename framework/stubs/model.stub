@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyRootNamespace;
+
+use Carbon\Carbon;
+use DJWeb\Framework\DBAL\Models\Model;
+
+class DummyClass extends Model
+{
+    public string $table {
+        get => 'DummyTable';
+    }
+
+// DummyColumnProperties
+
+// DummyCasts
+};

@@ -44,4 +44,9 @@ class EnumColumn extends Column
     {
         return $this->default !== null ? "DEFAULT '{$this->default}' " : '';
     }
+
+    public function getSqlColumn(): string
+    {
+        return 'mixed';
+    }
 }

@@ -7,14 +7,6 @@ use DJWeb\Framework\DBAL\Models\Model;
 
 class User extends Model
 {
-    #[BelongsTo(Profile::class, 'profile_id', 'id')]
-    public Profile $profile;
-
-    /**
-     * @var array<int, Post>
-     */
-    #[HasMany(Post::class, 'user_id', 'id')]
-    public array $posts;
     public protected(set) string $algo = PASSWORD_ARGON2ID;
     protected array $casts = [
         'created_at' => 'datetime',

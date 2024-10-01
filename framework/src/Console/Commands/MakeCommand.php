@@ -38,15 +38,9 @@ abstract class MakeCommand extends Command
     }
 
     abstract protected function getDefaultNamespace(): string;
+    abstract protected function getPath(string $name): string;
 
-    protected function getPath(string $name): string
-    {
-        $name = str_replace('\\', '/', $name);
 
-        return $this->container->getBinding(
-            'app.migrations_path'
-        ) . '/' . $name;
-    }
 
     protected function buildClass(string $name): string
     {
@@ -65,6 +59,7 @@ abstract class MakeCommand extends Command
     protected function replaceClass(string $stub, string $name): string
     {
         $class = str_replace($this->getNamespace($name) . '\\', '', $name);
+        $class = str_replace('.php', '', $class);
 
         return str_replace('DummyClass', $class, $stub);
     }
@@ -88,5 +83,9 @@ abstract class MakeCommand extends Command
         return $this;
     }
 
-    protected abstract function rootNamespace(): string;
+    protected function rootNamespace(): string
+    {
+        /** @phpstan-ignore-next-line */
+        return $this->container->getBinding('app.root_namespace');
+    }
 }
