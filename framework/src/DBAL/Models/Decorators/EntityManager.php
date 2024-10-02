@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\DBAL\Models\Decorators;
 
 use DJWeb\Framework\DBAL\Models\Model;
@@ -16,7 +18,7 @@ class EntityManager
 
     public function save(): void
     {
-        if ($this->model->watcher->is_new) {
+        if ($this->model->observer->is_new) {
             $this->model->id = $this->inserter->insert();
         } else {
             $this->updater->update();

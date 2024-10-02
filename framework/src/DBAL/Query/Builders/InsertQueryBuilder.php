@@ -32,13 +32,13 @@ class InsertQueryBuilder extends BaseQueryBuilder implements
         return "INSERT INTO {$this->table} ({$columns}) VALUES ({$placeholders})";
     }
 
-    public function execute(): bool
+    public function execute(): bool|\PDOStatement
     {
         /** @phpstan-ignore-next-line */
         return $this->connection->query(
             $this->getSQL(),
             $this->values
-        )->execute();
+        );
     }
 
     public function getInsertId(): ?string

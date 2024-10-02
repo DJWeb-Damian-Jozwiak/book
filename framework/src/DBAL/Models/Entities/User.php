@@ -3,7 +3,9 @@
 namespace DJWeb\Framework\DBAL\Models\Entities;
 
 use Carbon\Carbon;
+use DJWeb\Framework\DBAL\Models\Attributes\FakeAs;
 use DJWeb\Framework\DBAL\Models\Model;
+use DJWeb\Framework\Enums\FakerMethod;
 
 class User extends Model
 {
@@ -11,6 +13,7 @@ class User extends Model
     protected array $casts = [
         'created_at' => 'datetime',
     ];
+    #[FakeAs(FakerMethod::PASSWORD)]
     final public string $password {
         get => $this->password;
         set  {
@@ -25,11 +28,20 @@ class User extends Model
         return str_contains($password, '$' . $this->algo);
     }
 
+    #[FakeAs(FakerMethod::DATE)]
     public Carbon $created_at {
         get => $this->created_at;
         set {
             $this->created_at = $value;
             $this->markPropertyAsChanged('created_at');
+        }
+    }
+    #[FakeAs(FakerMethod::DATE)]
+    public Carbon $updated_at {
+        get => $this->updated_at;
+        set {
+            $this->updated_at = $value;
+            $this->markPropertyAsChanged('updated_at');
         }
     }
 

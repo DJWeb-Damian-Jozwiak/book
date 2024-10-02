@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace App\Database\Models;
 
-use Carbon\Carbon;
-use DJWeb\Framework\DBAL\Models\Model;
+use DJWeb\Framework\DBAL\Models\Attributes\FakeAs;
+use DJWeb\Framework\DBAL\Models\Entities\User as BaseUser;
+use DJWeb\Framework\Enums\FakerMethod;
 
-class User extends Model
+class User extends BaseUser
 {
     public string $table {
         get => 'users';
     }
 
+    #[FakeAs(FakerMethod::NAME)]
     public string $name {
         get => $this->name;
         set {
@@ -20,6 +22,7 @@ class User extends Model
             $this->markPropertyAsChanged('name');
         }
     }
+    #[FakeAs(FakerMethod::EMAIL)]
     public string $email {
         get => $this->email;
         set {
@@ -27,27 +30,7 @@ class User extends Model
             $this->markPropertyAsChanged('email');
         }
     }
-    public string $password {
-        get => $this->password;
-        set {
-            $this->password = $value;
-            $this->markPropertyAsChanged('password');
-        }
-    }
-    public Carbon $created_at {
-        get => $this->created_at;
-        set {
-            $this->created_at = $value;
-            $this->markPropertyAsChanged('created_at');
-        }
-    }
-    public Carbon $updated_at {
-        get => $this->updated_at;
-        set {
-            $this->updated_at = $value;
-            $this->markPropertyAsChanged('updated_at');
-        }
-    }
+
 
     protected array $casts = [
         'created_at' => 'datetime',

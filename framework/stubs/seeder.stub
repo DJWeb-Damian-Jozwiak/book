@@ -1,0 +1,15 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyRootNamespace;
+
+use DJWeb\Framework\DBAL\Models\Seeder;
+
+class DummyClass extends Seeder
+{
+    public function run(): void
+    {
+        // Seed logic here
+    }
+};

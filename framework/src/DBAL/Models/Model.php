@@ -3,6 +3,7 @@
 namespace DJWeb\Framework\DBAL\Models;
 
 use Carbon\Carbon;
+use DJWeb\Framework\DBAL\Models\Contracts\Castable;
 use DJWeb\Framework\DBAL\Models\Contracts\PropertyChangesContract;
 use DJWeb\Framework\DBAL\Models\Decorators\EntityManager;
 use DJWeb\Framework\DBAL\Models\QueryBuilders\ModelQueryBuilder;
@@ -15,12 +16,12 @@ abstract class Model implements PropertyChangesContract
 
     protected(set) string $primary_key_name = 'id';
     protected(set) ModelQueryBuilder $query_builder;
-    private(set) PropertyWatcher $watcher;
+    private(set) PropertyObserver $observer;
     private RelationFactory $relation_factory;
 
     private EntityManager $entity_manager;
 
-    protected RelationDecorator $relations;
+    protected private(set) RelationDecorator $relations;
 
 
     public int|string $id {
@@ -38,7 +39,7 @@ abstract class Model implements PropertyChangesContract
     public function __construct()
     {
         $this->query_builder = new ModelQueryBuilder($this);
-        $this->watcher = new PropertyWatcher($this);
+        $this->observer = new PropertyObserver($this);
         $this->entity_manager = new EntityManager($this);
         $this->relation_factory = new RelationFactory();
         $this->relations = new RelationDecorator($this);
@@ -60,7 +61,7 @@ abstract class Model implements PropertyChangesContract
 
     public function markPropertyAsChanged(string $property_name): void
     {
-        $this->watcher->markPropertyAsChanged(
+        $this->observer->markPropertyAsChanged(
             $property_name,
             $this->$property_name
         );
@@ -72,7 +73,7 @@ abstract class Model implements PropertyChangesContract
     }
 
     public bool $is_new {
-        get => $this->watcher->is_new;
+        get => $this->observer->is_new;
     }
 
     public static function query(): ModelQueryBuilder
@@ -80,10 +81,12 @@ abstract class Model implements PropertyChangesContract
         return new static()->query_builder;
     }
 
-    protected function castAttribute($value, string $type): mixed
+    protected function castAttribute(mixed $value, string $type): mixed
     {
         return match(true) {
             $type === 'datetime' => $value instanceof Carbon ? $value : Carbon::parse($value),
+            is_subclass_of($type, Castable::class) => $type::from($value),
+            default => $value,
         };
     }
 

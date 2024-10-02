@@ -3,7 +3,6 @@
 namespace Tests\Helpers\Models;
 
 use DJWeb\Framework\DBAL\Models\Attributes\HasMany;
-use DJWeb\Framework\DBAL\Models\Entities\User;
 use DJWeb\Framework\DBAL\Models\Model;
 
 class Company extends Model
@@ -12,8 +11,8 @@ class Company extends Model
         get => 'companies';
     }
 
-    #[HasMany(User::class, 'company_id', 'id')]
-    public array $users {
-        get => $this->relations->getRelation('users');
+    #[HasMany(Post::class, foreign_key: 'company_id', local_key: 'id')]
+    public array $posts {
+        get => $this->relations->getRelation('posts');
     }
 }

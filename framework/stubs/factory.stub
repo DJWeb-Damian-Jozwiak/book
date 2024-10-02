@@ -1,0 +1,22 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyRootNamespace;
+
+use DJWeb\Framework\DBAL\Models\Factory;
+
+class DummyClass extends Factory
+{
+    protected function getModelClass(): string
+    {
+        return DummyModel::class;
+    }
+
+    public function definition(): array
+    {
+        return [
+// DummyDefinition
+        ];
+    }
+};

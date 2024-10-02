@@ -24,6 +24,10 @@ class HasMany extends Relation
         );
     }
 
+    /**
+     * @param string $property
+     * @return array<int, Model>|Model
+     */
     public function getRelated(string $property): array|Model
     {
         $results = $this->getResults();

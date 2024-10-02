@@ -36,7 +36,7 @@ class MySqlConnection implements ConnectionContract
 
         $statement = $this->connection?->prepare($sql);
         /** @phpstan-ignore-next-line */
-        $statement->execute($params);
+        $statement->execute(array_values($params));
 
         return $statement;
     }

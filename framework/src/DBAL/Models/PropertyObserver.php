@@ -4,7 +4,7 @@ namespace DJWeb\Framework\DBAL\Models;
 
 use DJWeb\Framework\DBAL\Models\Contracts\NotifyPropertyChangesContract;
 
-class PropertyWatcher implements NotifyPropertyChangesContract
+class PropertyObserver implements NotifyPropertyChangesContract
 {
     public function __construct(private Model $model)
     {

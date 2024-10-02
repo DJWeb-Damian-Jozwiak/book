@@ -11,7 +11,7 @@ interface InsertQueryBuilderContract extends QueryBuilderContract
      */
     public function values(array $values): self;
 
-    public function execute(): bool;
+    public function execute(): bool|\PDOStatement;
 
     public function getInsertId(): ?string;
 }

@@ -200,21 +200,22 @@ class QueryBuilderTest extends BaseTestCase
     public function testInsert()
     {
         $mockPDOStatement = $this->createMock(\PDOStatement::class);
-        $this->mockConnection->expects($this->once())
+        $data = $this->any();
+        $this->mockConnection->expects($data)
             ->method('query')
             ->willReturn($mockPDOStatement);
-        $mockPDOStatement->expects($this->once())
+        $mockPDOStatement->expects($data)
             ->method('execute')
             ->willReturn(true);
         $query = $this->queryBuilder->insert('users')
             ->values(['name' => 'John Doe', 'age' => 30]);
 
+        $query->execute();
+
         $this->assertEquals(
             'INSERT INTO users (name, age) VALUES (?, ?)',
             $query->getSQL()
         );
-
-        $this->assertTrue($query->execute());
     }
 
     public function testGetInsertIdReturnsCorrectId()

@@ -3,7 +3,6 @@
 namespace Tests\Helpers\Models;
 
 use DJWeb\Framework\DBAL\Models\Attributes\BelongsTo;
-use DJWeb\Framework\DBAL\Models\Entities\User;
 use DJWeb\Framework\DBAL\Models\Model;
 
 class Post extends Model
@@ -12,19 +11,19 @@ class Post extends Model
         get => 'posts';
     }
 
-    public int $user_id {
-        get => $this->user_id;
+    public int $company_id {
+        get => $this->company_id;
         set {
-            $this->user_id = $value;
-            $this->markPropertyAsChanged('user_id');
+            $this->company_id = $value;
+            $this->markPropertyAsChanged('company_id');
         }
     }
 
-    #[BelongsTo(User::class, 'user_id', 'id')]
-    public User $user {
+    #[BelongsTo(Company::class, foreign_key: 'company_id', local_key: 'id')]
+    public Company $company {
         get {
-            /** @var User $model */
-            $model = $this->relations->getRelation('user');
+            /** @var Company $model */
+            $model = $this->relations->getRelation('company');
             return $model;
         }
     }

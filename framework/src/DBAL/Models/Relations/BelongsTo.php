@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\DBAL\Models\Relations;
 
 use DJWeb\Framework\DBAL\Contracts\Query\QueryBuilderContract;
@@ -24,6 +26,10 @@ class BelongsTo extends Relation
         );
     }
 
+    /**
+     * @param string $property
+     * @return array<int, Model>|Model
+     */
     public function getRelated(string $property): array|Model
     {
         $result = $this->getResults();

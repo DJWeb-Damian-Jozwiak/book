@@ -126,9 +126,9 @@ class UserTest extends TestCase
             ->willReturn($mockPDOStatement);
         $company = new Company();
         $company->id = 1;
-        $this->assertIsArray($company->users);
+        $this->assertIsArray($company->posts);
         //company users is cached, no second call!
-        $this->assertInstanceOf(User::class, $company->users[0]);
+        $this->assertInstanceOf(Post::class, $company->posts[0]);
     }
 
     public function testBelongsTo()
@@ -147,8 +147,8 @@ class UserTest extends TestCase
             ->method('query')
             ->willReturn($mockPDOStatement);
         $post = new Post();
-        $post->user_id = 1;
-        $this->assertInstanceOf(User::class, $post->user);
+        $post->company_id = 1;
+        $this->assertInstanceOf(Company::class, $post->company);
     }
 
     public function testGet()

@@ -8,7 +8,8 @@
     "psr/container": "^2.0",
     "vlucas/phpdotenv": "^5.6",
     "ext-pdo": "*",
-    "nesbot/carbon": "^3.8"
+    "nesbot/carbon": "^3.8",
+    "fakerphp/faker": "^1.23"
   },
   "scripts": {
     "insights": "php8.4 ./vendor/bin/phpinsights -vvv",
