@@ -10,6 +10,7 @@ use DJWeb\Framework\DBAL\Query\JoinClause;
 
 abstract class JoinDecorator implements JoinClauseContract
 {
+    abstract public string $joinType { get; }
     protected BaseQueryBuilder $queryBuilder;
     /**
      * @var array<int, JoinClause>
@@ -29,7 +30,7 @@ abstract class JoinDecorator implements JoinClauseContract
         string $second
     ): self {
         $this->joins[] = new JoinClause(
-            $this->joinType(),
+            $this->joinType,
             $table,
             $first,
             $operator,
@@ -46,6 +47,4 @@ abstract class JoinDecorator implements JoinClauseContract
         }
         return $sql;
     }
-
-    abstract protected function joinType(): string;
 }
