@@ -6,8 +6,7 @@ namespace DJWeb\Framework\DBAL\Query\Decorators;
 
 class LeftJoinDecorator extends JoinDecorator
 {
-    protected function joinType(): string
-    {
-        return 'LEFT JOIN';
+    public string $joinType {
+        get => 'LEFT JOIN';
     }
 }
