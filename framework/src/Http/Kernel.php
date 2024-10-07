@@ -11,6 +11,6 @@ class Kernel
 {
     public function handle(RequestInterface $request): ResponseInterface
     {
-        return (new Response())->withContent('Hello world from kernel');
+        return new Response()->withContent('Hello world from kernel');
     }
 }
