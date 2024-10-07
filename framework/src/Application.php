@@ -27,7 +27,7 @@ class Application extends Container
     public function handle(): ResponseInterface
     {
         $request = $this->get(ServerRequestInterface::class);
-        return (new Kernel($this))
+        return new Kernel($this)
             ->withRoutes(static function (Router $router): void {
                 $router->addRoute('GET', '/', static function () {
                     return (new Response())->withContent('Hello, World!');
