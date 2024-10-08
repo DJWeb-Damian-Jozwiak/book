@@ -19,7 +19,6 @@ return [
     'add' => [],
 
     'remove' => [
-        //@TODO remove next 3 after insights is compatible with php8.4
         PhpCsFixer\Fixer\Basic\BracesFixer::class,
         PhpCsFixer\Fixer\ArrayNotation\NormalizeIndexBraceFixer::class,
         PropertyDeclarationSniff::class,

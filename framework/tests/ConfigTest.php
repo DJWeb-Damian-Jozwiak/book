@@ -18,9 +18,9 @@ class ConfigTest extends TestCase
     public function testInvalidDirectory()
     {
         $app = Application::getInstance();
-        $app->addBasePath('invalid_directory');
+        $app->bind('base_path', 'invalid_directory');
         $this->expectException(InvalidPathException::class);
-        $app->loadConfig();
+        $config = $app->config;
     }
 
     public function testLoadConfig()
@@ -47,6 +47,11 @@ class ConfigTest extends TestCase
 
     public function testSetArray()
     {
+        $app = Application::getInstance();
+        $app->bind('base_path', dirname(__DIR__));
+        if (!file_exists($app->base_path . '/.env')) {
+            file_put_contents($app->base_path . '/.env', '');
+        }
         Config::set('app', ['name' => 'My App', 'version' => '1.0.0']);
         $this->assertEquals('My App', Config::get('app.name'));
         $this->assertEquals('1.0.0', Config::get('app.version'));

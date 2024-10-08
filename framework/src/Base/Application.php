@@ -56,6 +56,7 @@ class Application extends Container
             /** @phpstan-ignore-next-line instance */
             self::$instance = new static();
         }
+        /** @phpstan-ignore-next-line instance */
         return self::$instance;
     }
 
