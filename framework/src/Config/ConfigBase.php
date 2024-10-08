@@ -27,11 +27,11 @@ class ConfigBase extends DotContainer
     {
         $configPath = $this->app->getBasePath(
             ) . DIRECTORY_SEPARATOR . 'config';
-        /** @var array $files */
+        /** @var list<string> $files */
         $files = scandir($configPath);
         $files = array_filter(
             $files,
-            fn($file) => pathinfo($file, PATHINFO_EXTENSION) === 'php'
+            static fn($file) => pathinfo($file, PATHINFO_EXTENSION) === 'php'
         );
         foreach ($files as $file) {
             $key = pathinfo($file, PATHINFO_FILENAME);
