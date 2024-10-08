@@ -12,22 +12,20 @@ class ConfigTest extends TestCase
     public function testLoadConfig()
     {
         $app = Application::getInstance();
-        $app->addBasePath(dirname(__DIR__));
-        if (!file_exists($app->getBasePath() . '/.env')) {
-            file_put_contents($app->getBasePath() . '/.env', '');
+        $app->bind('base_path', dirname(__DIR__));
+        if (!file_exists($app->base_path . '/.env')) {
+            file_put_contents($app->base_path . '/.env', '');
         }
-        $app->loadConfig();
-        $this->assertInstanceOf(ConfigBase::class, $app->getConfig());
+        $this->assertInstanceOf(ConfigBase::class, $app->config);
     }
 
     public function testGetAndSet()
     {
         $app = Application::getInstance();
-        $app->addBasePath(__DIR__);
-        if (!file_exists($app->getBasePath() . '/.env')) {
-            file_put_contents($app->getBasePath() . '/.env', '');
+        $app->bind('base_path', __DIR__);
+        if (!file_exists($app->base_path . '/.env')) {
+            file_put_contents($app->base_path . '/.env', '');
         }
-        $app->loadConfig();
         Config::set('app.value.name', 'Aplikacja');
         $this->assertEquals('Aplikacja', Config::get('app.value.name'));
         $this->assertNull(Config::get('sample.entry2'));

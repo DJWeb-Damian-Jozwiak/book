@@ -10,11 +10,11 @@ class Config
 {
     public static function get(string $key, mixed $default = null): mixed
     {
-        return Application::getInstance()->getConfig()->get($key, $default);
+        return Application::getInstance()->config?->get($key, $default);
     }
 
     public static function set(string $key, mixed $value): void
     {
-        Application::getInstance()->getConfig()->set($key, $value);
+        Application::getInstance()->config?->set($key, $value);
     }
 }

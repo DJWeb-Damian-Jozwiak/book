@@ -19,14 +19,13 @@ class ConfigBase extends DotContainer
 
     private function loadEnvironmentVariables(): void
     {
-        $dotenv = Dotenv::createImmutable($this->app->getBasePath());
+        $dotenv = Dotenv::createImmutable($this->app->base_path);
         $dotenv->load();
     }
 
     private function loadConfigFiles(): void
     {
-        $configPath = $this->app->getBasePath(
-        ) . DIRECTORY_SEPARATOR . 'config';
+        $configPath = $this->app->base_path . DIRECTORY_SEPARATOR . 'config';
         /** @var list<string> $files */
         $files = scandir($configPath);
         $files = array_filter(

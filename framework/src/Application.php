@@ -16,10 +16,17 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class Application extends Container
 {
-    private string $base_path = '';
+    public string $base_path{
+        get => $this->getBinding('base_path') ?? '';
+    }
 
+    public ?ConfigBase $config{
+        get {
+            $this->config ??= new ConfigBase($this);
+            return $this->config;
+        }
+    }
     private static ?Application $instance = null;
-    private ConfigBase $config;
     private Kernel $kernel;
 
     private function __construct()
@@ -54,32 +61,12 @@ class Application extends Container
         throw new ContainerError('Cannot unserialize Application');
     }
 
-    public function addBasePath(string $base_path): void
-    {
-        $this->base_path = $base_path;
-    }
-
-    public function getBasePath(): string
-    {
-        return $this->base_path;
-    }
-
     public static function getInstance(): self
     {
         if (self::$instance === null) {
             self::$instance = new self();
         }
         return self::$instance;
-    }
-
-    public function getConfig(): ConfigBase
-    {
-        return $this->config;
-    }
-
-    public function loadConfig(): void
-    {
-        $this->config = new ConfigBase($this);
     }
 
     public function handle(): ResponseInterface
