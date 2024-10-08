@@ -11,8 +11,17 @@ use DJWeb\Framework\Exceptions\Container\ContainerError;
 
 class Application extends Container
 {
+    public string $base_path{
+        get => $this->getBinding('base_path') ?? '';
+    }
+
+    public ?ConfigBase $config{
+        get {
+            $this->config ??= new ConfigBase($this);
+            return $this->config;
+        }
+    }
     protected static ?self $instance = null;
-    private ConfigBase $config;
 
     protected function __construct()
     {
@@ -53,27 +62,6 @@ class Application extends Container
     public static function withInstance(?self $instance): void
     {
         self::$instance = $instance;
-    }
-
-    public function getConfig(): ConfigBase
-    {
-        return $this->config;
-    }
-
-    public function addBasePath(string $base_path): void
-    {
-        $this->bind('base_path', $base_path);
-    }
-
-    public function getBasePath(): string
-    {
-        /** @phpstan-ignore-next-line */
-        return $this->getBinding('base_path');
-    }
-
-    public function loadConfig(): void
-    {
-        $this->config = new ConfigBase($this);
     }
 
     protected function registerServiceProvider(

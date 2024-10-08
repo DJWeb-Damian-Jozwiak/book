@@ -6,6 +6,6 @@ use Psr\Http\Message\RequestInterface;
 
 return function (Router $router) {
     $router->addRoute('GET', '/', function (RequestInterface $request) {
-        return (new Response())->setContent('Hello, World from routes!');
+        return new Response()->withContent('Hello, World from routes!');
     }, 'home');
 };
