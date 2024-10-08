@@ -30,4 +30,11 @@ class ConfigTest extends TestCase
         $this->assertEquals('Aplikacja', Config::get('app.value.name'));
         $this->assertNull(Config::get('sample.entry2'));
     }
+
+    public function testSetArray()
+    {
+        Config::set('app', ['name' => 'My App', 'version' => '1.0.0']);
+        $this->assertEquals('My App', Config::get('app.name'));
+        $this->assertEquals('1.0.0', Config::get('app.version'));
+    }
 }

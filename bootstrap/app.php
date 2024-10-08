@@ -8,4 +8,4 @@ use DJWeb\Framework\Application;
 
 $app = Application::getInstance();
 $app->bind('base_path', dirname(__DIR__));
-$app->loadConfig();
+
