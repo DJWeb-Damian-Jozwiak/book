@@ -64,6 +64,7 @@ class Autowire
     {
         return array_map(function (\ReflectionParameter $parameter) {
             $parameterName = $parameter->getName();
+            /** @var string $parameterType */
             $parameterType = $this->resolver->getParameterType($parameter);
 
             return match (true) {
