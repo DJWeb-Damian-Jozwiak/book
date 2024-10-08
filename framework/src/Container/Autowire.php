@@ -69,32 +69,19 @@ class Autowire
 
             return match (true) {
                 // 1. return given value if exists
-                $this->container->has($parameterName) => $this->container->get(
-                    $parameterName
-                ),
-                $this->container->has($parameterType) => $this->container->get(
-                    $parameterType
-                ),
+                $this->container->has($parameterName) => $this->container->get($parameterName),
+                $this->container->has($parameterType) => $this->container->get($parameterType),
                 // 2. return default value if exist
-                $this->resolver->hasDefaultValue(
-                    $parameter
-                ) => $this->resolver->getDefaultValue(
-                    $parameter
-                ),
+                $this->resolver->hasDefaultValue($parameter) => $this->resolver->getDefaultValue($parameter),
 
                 // 3. return null if allowed
                 $this->resolver->allowsNull($parameter) => null,
 
                 // 4. for builtin types return default value
-                $parameterType && $this->isBuiltInType(
-                    $parameterType
-                ) => $this->resolver
-                    ->getDefaultValueForBuiltInType($parameterType),
+                $parameterType && $this->isBuiltInType($parameterType) => $this->resolver->getDefaultValueForBuiltInType($parameterType),
 
                 // 5. for object check recursively
-                $parameterType && class_exists(
-                    $parameterType
-                ) => $this->instantiate($parameterType),
+                $parameterType && class_exists($parameterType) => $this->instantiate($parameterType),
                 // otherwise throw not found exception
                 default => throw new NotFoundError(
                     "Unable to resolve parameter {$parameterName} of type {$parameterType}"
