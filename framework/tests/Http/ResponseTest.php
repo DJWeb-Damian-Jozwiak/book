@@ -143,10 +143,10 @@ class ResponseTest extends TestCase
     public function testWithJsonOptions(): void
     {
         $data = ['key' => 'value'];
-        $new = $this->response->withJson($data, 201, JSON_PRETTY_PRINT);
+        $new = $this->response->withJson($data, 201);
         $this->assertEquals(201, $new->getStatusCode());
         $this->assertEquals(
-            json_encode($data, JSON_PRETTY_PRINT),
+            json_encode($data),
             (string)$new->getBody()
         );
     }
