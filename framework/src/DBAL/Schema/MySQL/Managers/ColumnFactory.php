@@ -105,7 +105,7 @@ class ColumnFactory implements ColumnFactoryContract
     private function createEnumColumn(array $description): EnumColumn
     {
         preg_match('/enum\((.*)\)/i', $description['Type'], $matches);
-        $values = str_getcsv($matches[1] ?? '');
+        $values = str_getcsv($matches[1] ?? '', escape: '\\');
         $values = array_filter(
             $values,
             static fn (string|null $value) => (bool) $value

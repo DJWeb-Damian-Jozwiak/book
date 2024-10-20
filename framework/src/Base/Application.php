@@ -71,22 +71,6 @@ class Application extends Container
         return $this->config;
     }
 
-    public function addBasePath(string $base_path): void
-    {
-        $this->bind('base_path', $base_path);
-    }
-
-    public function getBasePath(): string
-    {
-        /** @phpstan-ignore-next-line */
-        return $this->getBinding('base_path');
-    }
-
-    public function loadConfig(): void
-    {
-        $this->config = new ConfigBase($this);
-    }
-
     protected function registerServiceProvider(
         ServiceProviderContract $provider
     ): void {
