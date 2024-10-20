@@ -66,7 +66,7 @@ class Application extends Container
         self::$instance = $instance;
     }
 
-    public function getConfig(): ConfigContract
+    public function getConfig(): ?ConfigContract
     {
         return $this->config;
     }
