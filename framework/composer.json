@@ -10,16 +10,17 @@
   },
   "scripts": {
     "insights": "./vendor/bin/phpinsights -vvv",
+    "insights-json": "./vendor/bin/phpinsights  --format=DJWeb\\\\Helpers\\\\Formatters\\\\FullJsonFormatter -n > insights.json",
     "insights-fix": "./vendor/bin/phpinsights --fix",
     "phpstan": "vendor/bin/phpstan -l8 analyse",
     "test": "vendor/bin/phpunit",
-    "test-coverage-html": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-html coverage",
-    "test-coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text",
-    "test-coverage-html2": "vendor/bin/phpunit --coverage-filter ./src --coverage-html ./coverage"
+    "test-coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit --extension=DJWeb\\\\Helpers\\\\PhpunitExtensions\\\\CodeCoverageExtension",
+    "test-coverage-html": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-html coverage"
   },
   "autoload": {
     "psr-4": {
-      "DJWeb\\Framework\\": "src/"
+      "DJWeb\\Framework\\": "src/",
+      "DJWeb\\Helpers\\": "helpers/"
     }
   },
   "autoload-dev": {
