@@ -6,7 +6,7 @@ namespace DJWeb\Framework\DBAL\Query\Decorators;
 
 class InnerJoinDecorator extends JoinDecorator
 {
-    public string $joinType {
+    public string $joinType{
         get => 'INNER JOIN';
     }
 }

@@ -15,7 +15,6 @@ interface OrderByDecoratorContract
         string|array $columns,
         OrderByDirection $direction = OrderByDirection::ASC
     ): self;
-
     /**
      * @param string|array<int, string> $columns
      */
@@ -24,6 +23,6 @@ interface OrderByDecoratorContract
      * @param string|array<int, string> $columns
      */
     public function orderByAsc(string|array $columns): self;
+public function getSql(): string;
 
-    public function getSql(): string;
 }

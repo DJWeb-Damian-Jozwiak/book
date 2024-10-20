@@ -23,10 +23,11 @@ interface SelectQueryBuilderContract extends QueryBuilderContract
      * {
      */
     public function select(array $columns = ['*']): self;
-    public function limit(int $limit): self;
-    public function offset(int $offset): self;
+public function limit(int $limit): self;
+public function offset(int $offset): self;
     /**
      * @return array<string, mixed>|null
      */
     public function first(): ?array;
+
 }

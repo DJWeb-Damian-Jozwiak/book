@@ -15,7 +15,7 @@ class HttpServiceProvider extends ServiceProvider
     {
         $container->set(
             key: ServerRequestInterface::class,
-            value: (new RequestFactory())->createRequest('GET', '/'),
+            value: new RequestFactory()->createRequest('GET', '/'),
         );
     }
 }

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 declare(strict_types=1);
 
@@ -17,4 +16,5 @@ class PrimaryColumn extends Column
     {
         return $this->type. ' (`' . $this->name . '`)';
     }
+
 }

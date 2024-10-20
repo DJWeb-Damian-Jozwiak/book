@@ -24,11 +24,10 @@ class MigrateTest extends BaseTestCase
         $this->app = Application::getInstance();
         $this->app->bind('base_path', sys_get_temp_dir());
         $this->app->set('PDO', $this->createMock(\PDO::class));
-        $this->app->addBasePath(dirname(__DIR__, 3));
-        if (! file_exists($this->app->getBasePath() . '/.env')) {
-            file_put_contents($this->app->getBasePath() . '/.env', '');
+        $this->app->bind('base_path', dirname(__DIR__, 3));
+        if (! file_exists($this->app->base_path . '/.env')) {
+            file_put_contents($this->app->base_path . '/.env', '');
         }
-        $this->app->loadConfig();
         $this->app->bind('app.migrations_path', sys_get_temp_dir());
 
         $this->output = $this->createMock(OutputContract::class);
