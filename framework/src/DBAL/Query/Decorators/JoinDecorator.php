@@ -10,7 +10,7 @@ use DJWeb\Framework\DBAL\Query\JoinClause;
 
 abstract class JoinDecorator implements JoinClauseContract
 {
-    abstract public string $joinType { get; }
+    abstract public string $joinType{get;}
     protected BaseQueryBuilder $queryBuilder;
     /**
      * @var array<int, JoinClause>

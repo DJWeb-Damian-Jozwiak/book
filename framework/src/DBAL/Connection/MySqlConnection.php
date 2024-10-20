@@ -49,7 +49,7 @@ class MySqlConnection implements ConnectionContract
 
         $this->connection = $this->connectMysql(
             Config::get('database.mysql.host'),
-            (int)Config::get('database.mysql.port'),
+            (int) Config::get('database.mysql.port'),
             Config::get('database.mysql.database'),
             Config::get('database.mysql.username'),
             Config::get('database.mysql.password'),
@@ -67,6 +67,12 @@ class MySqlConnection implements ConnectionContract
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES => false,
         ];
+    }
+
+    public function getLastInsertId(): ?string
+    {
+        $id = $this->connection?->lastInsertId();
+        return $id === false ? null : $id;
     }
 
     protected function connectMysql(
@@ -91,11 +97,5 @@ class MySqlConnection implements ConnectionContract
             $password,
             $this->getConnectionOptions()
         );
-    }
-
-    public function getLastInsertId(): ?string
-    {
-        $id = $this->connection?->lastInsertId();
-        return $id === false ? null : $id;
     }
 }
