@@ -33,13 +33,14 @@ abstract class Factory
     /**
      * @param int $count
      * @param array<int, Model> $attributes
+     *
      * @return array
      */
     public function createMany(int $count, array $attributes = []): array
     {
         $models = [];
         foreach (range(1, $count) as $i) {
-            $models []= $this->create($attributes);
+            $models[] = $this->create($attributes);
         }
         return $models;
     }

@@ -24,6 +24,11 @@ class VarcharColumn extends Column
         return trim($sql . $this->getDefaultValueDefinition());
     }
 
+    public function getSqlColumn(): string
+    {
+        return 'string';
+    }
+
     private function getNullableDefinition(): string
     {
         return $this->nullable ? 'NULL ' : 'NOT NULL ';
@@ -32,10 +37,5 @@ class VarcharColumn extends Column
     private function getDefaultValueDefinition(): string
     {
         return $this->default !== null ? "DEFAULT '{$this->default}' " : '';
-    }
-
-    public function getSqlColumn(): string
-    {
-        return 'string';
     }
 }

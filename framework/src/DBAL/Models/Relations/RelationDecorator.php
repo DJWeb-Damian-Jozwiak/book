@@ -18,7 +18,14 @@ class RelationDecorator
      */
     private array $relations = [];
 
+    /**
+     * @var array<string, Model|array<int|string, mixed>>
+     */
     private array $relationsCache = [];
+
+    public function __construct(private readonly Model $model)
+    {
+    }
 
     public function getRelation(string $name): Model|array
     {
@@ -26,15 +33,10 @@ class RelationDecorator
             $property = new ReflectionProperty($this->model, $name);
             $this->initializeRelation($property);
         }
-        $exception =  new \RuntimeException("Relation {$name} not found");
+        $exception = new \RuntimeException("Relation {$name} not found");
         $this->relationsCache[$name]
-            ??= $this->relations[$name]
-            ?->getRelated($name) ?? throw $exception;
+            ??= $this->relations[$name]?->getRelated($name) ?? throw $exception;
         return $this->relationsCache[$name];
-    }
-
-    public function __construct(private readonly Model $model)
-    {
     }
 
     private function initializeRelation(ReflectionProperty $property): void
@@ -59,11 +61,11 @@ class RelationDecorator
         $attributes = $property->getAttributes();
         $attributes = array_filter(
             $attributes,
-            fn($attribute) => $attribute->getName() === $type
+            static fn ($attribute) => $attribute->getName() === $type
         );
         array_walk(
             $attributes,
-            fn(ReflectionAttribute $attribute) => $callback(
+            static fn (ReflectionAttribute $attribute) => $callback(
                 $property,
                 $attribute->newInstance()
             )

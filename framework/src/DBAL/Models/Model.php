@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\DBAL\Models;
 
 use Carbon\Carbon;
@@ -14,15 +16,14 @@ abstract class Model implements PropertyChangesContract
 {
     abstract public string $table { get; }
 
-    protected(set) string $primary_key_name = 'id';
-    protected(set) ModelQueryBuilder $query_builder;
-    private(set) PropertyObserver $observer;
+    public protected(set) string $primary_key_name = 'id';
+    public protected(set) ModelQueryBuilder $query_builder;
+    public private(set) PropertyObserver $observer;
     private RelationFactory $relation_factory;
 
     private EntityManager $entity_manager;
 
     protected private(set) RelationDecorator $relations;
-
 
     public int|string $id {
         get => $this->id;

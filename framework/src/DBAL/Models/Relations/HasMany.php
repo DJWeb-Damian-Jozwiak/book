@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\DBAL\Models\Relations;
 
 use DJWeb\Framework\DBAL\Contracts\Query\QueryBuilderContract;
@@ -8,13 +10,6 @@ use DJWeb\Framework\DBAL\Models\Relation;
 
 class HasMany extends Relation
 {
-
-    protected function createQueryBuilder(): QueryBuilderContract
-    {
-        return $this->parent->query_builder->facade
-            ->select($this->related::getTable());
-    }
-
     public function addConstraints(): void
     {
         $this->query->where(
@@ -25,10 +20,9 @@ class HasMany extends Relation
     }
 
     /**
-     * @param string $property
      * @return array<int, Model>|Model
      */
-    public function getRelated(string $property): array|Model
+    public function getRelated(): array|Model
     {
         $results = $this->getResults();
         return array_map(
@@ -36,4 +30,10 @@ class HasMany extends Relation
             $results
         );
     }
+    protected function createQueryBuilder(): QueryBuilderContract
+    {
+        return $this->parent->query_builder->facade
+            ->select($this->related::getTable());
+    }
+
 }

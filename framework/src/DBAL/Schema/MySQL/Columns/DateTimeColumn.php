@@ -36,6 +36,16 @@ class DateTimeColumn extends Column
         return trim($sql . $this->getOnUpdateDefinition());
     }
 
+    public function getSqlColumn(): string
+    {
+        return 'Carbon';
+    }
+
+    public function shouldBeCasted(): bool
+    {
+        return true;
+    }
+
     private function getNullableDefinition(): string
     {
         return $this->nullable ? 'NULL ' : 'NOT NULL ';
@@ -49,15 +59,5 @@ class DateTimeColumn extends Column
     private function getOnUpdateDefinition(): string
     {
         return $this->currentOnUpdate ? 'ON UPDATE CURRENT_TIMESTAMP' : '';
-    }
-
-    public function getSqlColumn():string
-    {
-        return 'Carbon';
-    }
-
-    public function shouldBeCasted(): bool
-    {
-        return true;
     }
 }

@@ -18,7 +18,7 @@ class DatabaseSeed extends Command
     {
         $seederClass = $this->rootNamespace() . 'Database\\Seeders\\' . $this->seeder;
 
-        if (!class_exists($seederClass)) {
+        if (! class_exists($seederClass)) {
             $this->getOutput()->error("Seeder class {$seederClass} does not exist.");
             return 1;
         }

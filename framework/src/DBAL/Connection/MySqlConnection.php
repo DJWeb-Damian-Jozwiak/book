@@ -69,6 +69,12 @@ class MySqlConnection implements ConnectionContract
         ];
     }
 
+    public function getLastInsertId(): ?string
+    {
+        $id = $this->connection?->lastInsertId();
+        return $id === false ? null : $id;
+    }
+
     protected function connectMysql(
         ?string $host,
         ?int $port,
@@ -91,11 +97,5 @@ class MySqlConnection implements ConnectionContract
             $password,
             $this->getConnectionOptions()
         );
-    }
-
-    public function getLastInsertId(): ?string
-    {
-        $id = $this->connection?->lastInsertId();
-        return $id === false ? null : $id;
     }
 }

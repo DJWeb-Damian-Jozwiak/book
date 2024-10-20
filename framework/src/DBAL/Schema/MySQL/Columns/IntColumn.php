@@ -28,6 +28,11 @@ class IntColumn extends Column
         return $sql . $this->getAutoIncrementSqlDefinition();
     }
 
+    public function getSqlColumn(): string
+    {
+        return 'int';
+    }
+
     private function getUnsignedSqlDefinition(): string
     {
         return $this->unsigned ? ' UNSIGNED' : '';
@@ -46,10 +51,5 @@ class IntColumn extends Column
     private function getAutoIncrementSqlDefinition(): string
     {
         return $this->autoIncrement ? ' AUTO_INCREMENT' : '';
-    }
-
-    public function getSqlColumn(): string
-    {
-        return 'int';
     }
 }

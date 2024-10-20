@@ -14,7 +14,6 @@ class EntityInserter
     private PropertyObserver $property_watcher;
 
     public function __construct(
-
         private Model $model
     ) {
         $this->query_builder =

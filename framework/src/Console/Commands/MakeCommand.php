@@ -40,8 +40,6 @@ abstract class MakeCommand extends Command
     abstract protected function getDefaultNamespace(): string;
     abstract protected function getPath(string $name): string;
 
-
-
     protected function buildClass(string $name): string
     {
         $stub = file_get_contents($this->getStub());

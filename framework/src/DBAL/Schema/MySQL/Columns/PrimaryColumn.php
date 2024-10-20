@@ -16,4 +16,5 @@ class PrimaryColumn extends Column
     {
         return $this->type. ' (`' . $this->name . '`)';
     }
+
 }

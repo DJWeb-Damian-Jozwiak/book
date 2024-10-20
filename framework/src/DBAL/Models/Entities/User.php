@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\DBAL\Models\Entities;
 
 use Carbon\Carbon;
@@ -10,9 +12,7 @@ use DJWeb\Framework\Enums\FakerMethod;
 class User extends Model
 {
     public protected(set) string $algo = PASSWORD_ARGON2ID;
-    protected array $casts = [
-        'created_at' => 'datetime',
-    ];
+
     #[FakeAs(FakerMethod::PASSWORD)]
     final public string $password {
         get => $this->password;
@@ -23,10 +23,12 @@ class User extends Model
         }
     }
 
-    private function isHashed(string $password): bool
-    {
-        return str_contains($password, '$' . $this->algo);
-    }
+    /**
+     * @var array<string, string>
+     */
+    protected array $casts = [
+        'created_at' => 'datetime',
+    ];
 
     #[FakeAs(FakerMethod::DATE)]
     public Carbon $created_at {
@@ -51,5 +53,9 @@ class User extends Model
     public function verifyPassword(string $password): bool
     {
         return password_verify($password, $this->password);
+    }
+    private function isHashed(string $password): bool
+    {
+        return str_contains($password, '$' . $this->algo);
     }
 }

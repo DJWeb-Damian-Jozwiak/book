@@ -10,13 +10,6 @@ use DJWeb\Framework\DBAL\Models\Relation;
 
 class BelongsTo extends Relation
 {
-    protected function createQueryBuilder(): QueryBuilderContract
-    {
-        return $this->parent->query_builder->facade->select(
-            $this->related::getTable()
-        );
-    }
-
     public function addConstraints(): void
     {
         $this->query->where(
@@ -27,12 +20,17 @@ class BelongsTo extends Relation
     }
 
     /**
-     * @param string $property
      * @return array<int, Model>|Model
      */
-    public function getRelated(string $property): array|Model
+    public function getRelated(): array|Model
     {
         $result = $this->getResults();
         return new $this->related()->fill($result);
+    }
+    protected function createQueryBuilder(): QueryBuilderContract
+    {
+        return $this->parent->query_builder->facade->select(
+            $this->related::getTable()
+        );
     }
 }

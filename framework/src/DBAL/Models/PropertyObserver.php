@@ -1,18 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\DBAL\Models;
 
 use DJWeb\Framework\DBAL\Models\Contracts\NotifyPropertyChangesContract;
 
 class PropertyObserver implements NotifyPropertyChangesContract
 {
-    public function __construct(private Model $model)
-    {
+    public bool $is_new {
+        get => ! isset($this->changedProperties[$this->model->primary_key_name]);
     }
     /**
      * @var array<string, int|string|float|null>
      */
     private array $changedProperties = [];
+
+    public function __construct(private Model $model)
+    {
+    }
 
     public function markPropertyAsChanged(
         string $propertyName,
@@ -27,9 +33,5 @@ class PropertyObserver implements NotifyPropertyChangesContract
     public function getChangedProperties(): array
     {
         return $this->changedProperties;
-    }
-
-    public bool $is_new {
-        get => !isset($this->changedProperties[$this->model->primary_key_name]);
     }
 }

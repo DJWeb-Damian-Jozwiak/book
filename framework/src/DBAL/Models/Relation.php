@@ -25,7 +25,6 @@ abstract class Relation implements RelationContract
     ) {
         $this->query = $this->createQueryBuilder();
     }
-    abstract protected function createQueryBuilder(): QueryBuilderContract;
     abstract public function addConstraints(): void;
 
     /**
@@ -35,5 +34,6 @@ abstract class Relation implements RelationContract
         return $this->query->select()->get();
     }
 
-    abstract public function getRelated(string $property): array|Model;
+    abstract public function getRelated(): array|Model;
+    abstract protected function createQueryBuilder(): QueryBuilderContract;
 }

@@ -27,8 +27,8 @@ class MakeMigration extends MakeCommand
         $name = str_replace('\\', '/', $name);
 
         return $this->container->getBinding(
-                'app.migrations_path'
-            ) . '/' . $name;
+            'app.migrations_path'
+        ) . '/' . $name;
     }
 
     protected function qualifyName(string $name): string

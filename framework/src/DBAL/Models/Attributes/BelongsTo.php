@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\DBAL\Models\Attributes;
 
 use Attribute;
@@ -11,5 +13,7 @@ readonly class BelongsTo
         public string $related,
         public string $foreign_key,
         public string $local_key
-    ) {}
+    ) {
+    }
+
 }

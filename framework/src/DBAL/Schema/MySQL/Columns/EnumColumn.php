@@ -35,6 +35,11 @@ class EnumColumn extends Column
         return trim($sql . $this->getDefaultDefinition());
     }
 
+    public function getSqlColumn(): string
+    {
+        return 'mixed';
+    }
+
     private function getNullableDefinition(): string
     {
         return $this->nullable ? 'NULL ' : 'NOT NULL ';
@@ -43,10 +48,5 @@ class EnumColumn extends Column
     private function getDefaultDefinition(): string
     {
         return $this->default !== null ? "DEFAULT '{$this->default}' " : '';
-    }
-
-    public function getSqlColumn(): string
-    {
-        return 'mixed';
     }
 }

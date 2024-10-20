@@ -13,7 +13,6 @@ class EntityUpdater
     private QueryBuilderFacadeContract $query_builder;
     private PropertyObserver $property_watcher;
     public function __construct(
-
         private Model $model
     ) {
         $this->query_builder = $this->model->query_builder->facade;

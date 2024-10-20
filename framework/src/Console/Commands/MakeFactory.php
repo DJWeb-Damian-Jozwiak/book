@@ -13,13 +13,20 @@ use ReflectionProperty;
 #[AsCommand(name: 'make:factory')]
 class MakeFactory extends MakeCommand
 {
-    protected $fakerClass;
+    protected string $fakerClass;
 
     public function __construct(ContainerContract $container)
     {
         parent::__construct($container);
         $class = $container->getBinding('app.faker_class') ?? FakeAs::class;
         $this->fakerClass = $class;
+    }
+
+    public function getModelClass(string $name): string
+    {
+        $modelClass = str_replace('Factory', '', $name);
+        $modelClass = str_replace('.php', '', $modelClass);
+        return '\\' . $this->rootNamespace() . 'Database\\Models\\' . $modelClass;
     }
     protected function getStub(): string
     {
@@ -45,7 +52,7 @@ class MakeFactory extends MakeCommand
         $properties = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
         $properties = array_filter(
             $properties,
-            fn (ReflectionProperty $property) => !!$property->getAttributes($this->fakerClass)
+            fn (ReflectionProperty $property) => (bool) $property->getAttributes($this->fakerClass)
         );
 
         $definitionContent = '';
@@ -58,11 +65,13 @@ class MakeFactory extends MakeCommand
         return str_replace('// DummyDefinition', $definitionContent, $stub);
     }
 
-    public function getModelClass(string $name)
+    protected function getPath(string $name): string
     {
-        $modelClass = str_replace('Factory', '', $name);
-        $modelClass = str_replace('.php', '', $modelClass);
-        return '\\' . $this->rootNamespace() . 'Database\\Models\\' . $modelClass;
+        $name = str_replace('\\', '/', $name);
+
+        return $this->container->getBinding(
+            'app.factories_path'
+        ) . '/' . $name;
     }
 
     private function guessFakerMethod(ReflectionProperty $property): string
@@ -72,14 +81,5 @@ class MakeFactory extends MakeCommand
         /** @var FakeAs $fake */
         $fake = $attribute->newInstance();
         return $fake->method->value;
-    }
-
-    protected function getPath(string $name): string
-    {
-        $name = str_replace('\\', '/', $name);
-
-        return $this->container->getBinding(
-                'app.factories_path'
-            ) . '/' . $name;
     }
 }

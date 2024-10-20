@@ -26,7 +26,7 @@ class MakeSeeder extends MakeCommand
         $name = str_replace('\\', '/', $name);
 
         return $this->container->getBinding(
-                'app.seeders_path'
-            ) . '/' . $name;
+            'app.seeders_path'
+        ) . '/' . $name;
     }
 }

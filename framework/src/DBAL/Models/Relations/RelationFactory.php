@@ -11,24 +11,6 @@ use DJWeb\Framework\DBAL\Models\Model;
 
 class RelationFactory
 {
-    private function create(
-        string $type,
-        Model $parent,
-        string $related,
-        string $foreignKey,
-        string $localKey
-    ): RelationContract {
-        return match ($type) {
-            'hasMany' => new HasMany($parent, $related, $foreignKey, $localKey),
-            'belongsTo' => new BelongsTo(
-                $parent,
-                $related,
-                $foreignKey,
-                $localKey
-            ),
-        };
-    }
-
     public static function belongsTo(
         Model $parent,
         BelongsToAttribute $attribute,
@@ -57,5 +39,22 @@ class RelationFactory
         );
         $relation->addConstraints();
         return $relation;
+    }
+    private function create(
+        string $type,
+        Model $parent,
+        string $related,
+        string $foreignKey,
+        string $localKey
+    ): RelationContract {
+        return match ($type) {
+            'hasMany' => new HasMany($parent, $related, $foreignKey, $localKey),
+            'belongsTo' => new BelongsTo(
+                $parent,
+                $related,
+                $foreignKey,
+                $localKey
+            ),
+        };
     }
 }
