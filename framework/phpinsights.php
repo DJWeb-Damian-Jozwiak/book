@@ -14,6 +14,7 @@ return [
         'vendor',
         'node_modules',
         'tests',
+        'helpers',
     ],
 
     'add' => [],
