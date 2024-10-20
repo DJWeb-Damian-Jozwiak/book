@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\DBAL\Schema\MySQL\Columns;
 
 use DJWeb\Framework\DBAL\Schema\Column;
@@ -14,4 +16,5 @@ class PrimaryColumn extends Column
     {
         return $this->type. ' (`' . $this->name . '`)';
     }
+
 }

@@ -49,7 +49,7 @@ class MySqlConnection implements ConnectionContract
 
         $this->connection = $this->connectMysql(
             Config::get('database.mysql.host'),
-            (int)Config::get('database.mysql.port'),
+            (int) Config::get('database.mysql.port'),
             Config::get('database.mysql.database'),
             Config::get('database.mysql.username'),
             Config::get('database.mysql.password'),
