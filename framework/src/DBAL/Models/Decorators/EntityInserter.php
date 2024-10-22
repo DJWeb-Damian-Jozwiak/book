@@ -21,12 +21,12 @@ class EntityInserter
         $this->property_watcher = $this->model->observer;
     }
 
-    public function insert(): ?string
+    public function insert(): string
     {
         $builder = $this->query_builder->insert($this->model->table);
         $builder->values($this->property_watcher->getChangedProperties())
             ->execute();
 
-        return $builder->getInsertId();
+        return $builder->getInsertId() ?? throw new \Exception('Insert failed');
     }
 }

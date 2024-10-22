@@ -8,6 +8,9 @@ abstract class Seeder
 {
     abstract public function run(): void;
 
+    /**
+     * @param class-string<Seeder> $seeder
+     */
     protected function call(string $seeder): void
     {
         $instance = new $seeder();

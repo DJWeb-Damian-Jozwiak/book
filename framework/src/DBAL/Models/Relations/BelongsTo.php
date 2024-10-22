@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\DBAL\Models\Relations;
 
-use DJWeb\Framework\DBAL\Contracts\Query\QueryBuilderContract;
+use DJWeb\Framework\DBAL\Contracts\Query\SelectQueryBuilderContract;
 use DJWeb\Framework\DBAL\Models\Model;
 use DJWeb\Framework\DBAL\Models\Relation;
 
@@ -27,7 +27,7 @@ class BelongsTo extends Relation
         $result = $this->getResults();
         return new $this->related()->fill($result[0]);
     }
-    protected function createQueryBuilder(): QueryBuilderContract
+    public function createQueryBuilder(): SelectQueryBuilderContract
     {
         return $this->parent->query_builder->facade->select(
             $this->related::getTable()

@@ -14,6 +14,11 @@ abstract class Factory
         $this->faker ??= FakerFactory::create();
     }
 
+    /**
+     * @param array<string, mixed> $attributes
+     *
+     * @return Model
+     */
     public function make(array $attributes = []): Model
     {
         $modelClass = $this->getModelClass();
@@ -23,6 +28,11 @@ abstract class Factory
         return $model;
     }
 
+    /**
+     * @param array<string, mixed> $attributes
+     *
+     * @return Model
+     */
     public function create(array $attributes = []): Model
     {
         $model = $this->make($attributes);
@@ -32,9 +42,9 @@ abstract class Factory
 
     /**
      * @param int $count
-     * @param array<int, Model> $attributes
+     * @param array<string, mixed> $attributes
      *
-     * @return array
+     * @return array<int, Model>
      */
     public function createMany(int $count, array $attributes = []): array
     {
@@ -45,6 +55,9 @@ abstract class Factory
         return $models;
     }
 
+    /**
+     * @return array<string, string>
+     */
     abstract public function definition(): array;
     /**
      * @return class-string<Model>

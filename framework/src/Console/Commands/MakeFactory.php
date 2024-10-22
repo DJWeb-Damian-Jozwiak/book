@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace DJWeb\Framework\Console\Commands;
 
 use DJWeb\Framework\Console\Attributes\AsCommand;
-use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\DBAL\Models\Attributes\FakeAs;
+use DJWeb\Framework\DBAL\Models\Model;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -16,15 +16,13 @@ class MakeFactory extends MakeCommand
     protected string $fakerClass;
     protected string $namespace = '';
 
-    public function __construct(ContainerContract $container)
-    {
-        parent::__construct($container);
-    }
-
     public function getModelClass(string $name): string
     {
+        /** @var string $class */
         $class = $this->container->getBinding('app.faker_class') ?? FakeAs::class;
-        $this->namespace = $this->container->getBinding('app.factories_namespace') ?? 'Database\\Models\\';
+        /** @var string $namespace */
+        $namespace = $this->container->getBinding('app.factories_namespace') ?? 'Database\\Models\\';
+        $this->namespace = $namespace;
         $this->fakerClass = $class;
         $modelClass = str_replace('Factory', '', $name);
         $modelClass = str_replace('.php', '', $modelClass);
@@ -44,6 +42,7 @@ class MakeFactory extends MakeCommand
 
     protected function buildClass(string $name): string
     {
+        /** @var class-string<Model> $modelClass */
         $modelClass = $this->getModelClass($name);
 
         $stub = parent::buildClass($name);

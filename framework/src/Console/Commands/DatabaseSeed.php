@@ -7,6 +7,7 @@ namespace DJWeb\Framework\Console\Commands;
 use DJWeb\Framework\Console\Attributes\AsCommand;
 use DJWeb\Framework\Console\Attributes\CommandArgument;
 use DJWeb\Framework\Console\Command;
+use DJWeb\Framework\DBAL\Models\Seeder;
 
 #[AsCommand(name: 'database:seed')]
 class DatabaseSeed extends Command
@@ -17,6 +18,7 @@ class DatabaseSeed extends Command
     public function run(): int
     {
         $seederNamespace = $this->container->getBinding('app.seeder_namespace') ?? 'Database\\Seeders\\';
+        /** @var class-string<Seeder> $seederClass */
         $seederClass = $this->rootNamespace() . $seederNamespace . $this->seeder;
 
         if (! class_exists($seederClass)) {
@@ -33,6 +35,7 @@ class DatabaseSeed extends Command
 
     protected function rootNamespace(): string
     {
+        /** @phpstan-ignore-next-line */
         return $this->container->getBinding('app.root_namespace');
     }
 }

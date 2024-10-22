@@ -4,19 +4,22 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\DBAL\Models\QueryBuilders;
 
+use DJWeb\Framework\DBAL\Contracts\Query\DeleteQueryBuilderContract;
+use DJWeb\Framework\DBAL\Contracts\Query\InsertQueryBuilderContract;
 use DJWeb\Framework\DBAL\Contracts\Query\QueryBuilderFacadeContract;
+use DJWeb\Framework\DBAL\Contracts\Query\SelectQueryBuilderContract;
+use DJWeb\Framework\DBAL\Contracts\Query\UpdateQueryBuilderContract;
 use DJWeb\Framework\DBAL\Models\Model;
-use DJWeb\Framework\DBAL\Query\Builders\DeleteQueryBuilder;
-use DJWeb\Framework\DBAL\Query\Builders\InsertQueryBuilder;
 use DJWeb\Framework\DBAL\Query\Builders\QueryBuilder;
-use DJWeb\Framework\DBAL\Query\Builders\SelectQueryBuilder;
-use DJWeb\Framework\DBAL\Query\Builders\UpdateQueryBuilder;
 
 class ModelQueryBuilder
 {
     public readonly QueryBuilderFacadeContract $facade;
-    private SelectQueryBuilder|UpdateQueryBuilder|InsertQueryBuilder|DeleteQueryBuilder $builder;
-    public function __construct(protected(set) Model $model)
+    private SelectQueryBuilderContract
+            |UpdateQueryBuilderContract
+            |InsertQueryBuilderContract
+            |DeleteQueryBuilderContract $builder;
+    public function __construct(public readonly Model $model)
     {
         $this->facade = new QueryBuilder();
     }
@@ -33,25 +36,42 @@ class ModelQueryBuilder
         return $this;
     }
 
-    public function select($columns = ['*']): static
+    /**
+     * @param array<int, string> $columns
+     *
+     * @return $this
+     */
+
+    public function select(array $columns = ['*']): static
     {
-        $this->builder = $this->facade->select($this->model->table);
-        $this->builder->select($columns);
+        $builder = $this->facade->select($this->model->table);
+        $builder->select($columns);
+        $this->builder = $builder;
         return $this;
     }
 
     public function first(): ?Model
     {
-        $result = $this->builder->first();
+        $builder = $this->facade->select($this->model->table);
+        $result = $builder->first();
+        $this->builder = $builder;
         return $result ? $this->hydrate($result) : null;
     }
 
+    /**
+     * @return array<int, Model>
+     */
     public function get(): array
     {
         $results = $this->builder->get();
         return $this->hydrateMany($results);
     }
 
+    /**
+     * @param array<string, mixed> $attributes
+     *
+     * @return Model
+     */
     protected function hydrate(array $attributes): Model
     {
         return $this->model->fill($attributes);

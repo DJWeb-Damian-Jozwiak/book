@@ -36,7 +36,7 @@ abstract class Model implements PropertyChangesContract
      */
     protected array $casts = [];
 
-    public function __construct()
+    public final function __construct()
     {
         $this->query_builder = new ModelQueryBuilder($this);
         $this->observer = new PropertyObserver($this);
@@ -45,6 +45,11 @@ abstract class Model implements PropertyChangesContract
         $this->relations = new RelationDecorator($this);
     }
 
+    /**
+     * @param array<string, mixed> $attributes
+     *
+     * @return $this
+     */
     public function fill(array $attributes): static
     {
         foreach ($attributes as $key => $value) {

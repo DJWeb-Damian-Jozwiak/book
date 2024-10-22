@@ -23,7 +23,7 @@ abstract class BaseQueryBuilder implements QueryBuilderContract
     protected array $conditions = [];
     protected string $table;
     /**
-     * @var array<int, int|string|float>
+     * @var array<int, int|string|float|null>
      */
     protected array $params = [];
 

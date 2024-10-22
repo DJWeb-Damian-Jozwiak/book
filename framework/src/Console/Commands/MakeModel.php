@@ -6,7 +6,6 @@ namespace DJWeb\Framework\Console\Commands;
 
 use DJWeb\Framework\Console\Attributes\AsCommand;
 use DJWeb\Framework\Console\Attributes\CommandOption;
-use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\DBAL\Contracts\Schema\DatabaseInfoContract;
 use DJWeb\Framework\DBAL\Schema\Column;
 
@@ -16,13 +15,6 @@ class MakeModel extends MakeCommand
     #[CommandOption('table', required: true)]
     protected string $table = '';
     private DatabaseInfoContract $databaseInfo;
-
-    public function __construct(
-        ContainerContract $container,
-    )
-    {
-        parent::__construct($container);
-    }
 
     protected function getDefaultNamespace(): string
     {
@@ -53,6 +45,12 @@ class MakeModel extends MakeCommand
         return $dir . '/stubs/model.stub';
     }
 
+    /**
+     * @param string $stub
+     * @param array<int, Column> $columns
+     *
+     * @return string
+     */
     private function addColumnProperties(string $stub, array $columns): string
     {
         $properties = '';
@@ -86,6 +84,12 @@ DEFINITION;
         return str_replace('DummyTable', $this->table, $stub);
     }
 
+    /**
+     * @param string $stub
+     * @param array<int, Column> $columns
+     *
+     * @return string
+     */
     private function addCasts(string $stub, array $columns): string
     {
         $casts = [];
@@ -110,7 +114,7 @@ CASTS;
         return $stub;
     }
 
-    private function getCastType(Column $column)
+    private function getCastType(Column $column): string
     {
         $casts = [
             'DATETIME' => 'datetime',

@@ -9,12 +9,12 @@ use DJWeb\Framework\DBAL\Contracts\Query\UpdateQueryBuilderContract;
 class UpdateQueryBuilder extends BaseQueryBuilder implements UpdateQueryBuilderContract
 {
     /**
-     * @var array<string, int|float|string>
+     * @var array<string, int|float|string|null>
      */
     protected array $updates = [];
 
     /**
-     * @param array<string, int|float|string> $updates
+     * @param array<string, int|float|string|null> $updates
      *
      * @return $this
      */
@@ -25,7 +25,7 @@ class UpdateQueryBuilder extends BaseQueryBuilder implements UpdateQueryBuilderC
     }
 
     /**
-     * @return array<int, float|int|string>
+     * @return array<int, float|int|string|null>
      */
     public function getParams(): array
     {

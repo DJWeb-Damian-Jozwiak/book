@@ -6,15 +6,15 @@ namespace DJWeb\Framework\DBAL\Models\Relations;
 
 use DJWeb\Framework\DBAL\Models\Attributes\BelongsTo as BelongsToAttribute;
 use DJWeb\Framework\DBAL\Models\Attributes\HasMany as HasManyAttribute;
+use DJWeb\Framework\DBAL\Models\Contracts\RelationContract;
 use DJWeb\Framework\DBAL\Models\Model;
-use DJWeb\Framework\DBAL\Models\Relation;
 use ReflectionAttribute;
 use ReflectionProperty;
 
 class RelationDecorator
 {
     /**
-     * @var array<string, Relation>
+     * @var array<string, RelationContract|null>
      */
     private array $relations = [];
 
@@ -27,7 +27,14 @@ class RelationDecorator
     {
     }
 
-    public function getRelation(string $name): Model|array
+    /**
+     * @param string $name
+     *
+     * @return Model|array<int|string, Model>|null
+     *
+     * @throws \ReflectionException
+     */
+    public function getRelation(string $name): Model|array|null
     {
         if (! isset($this->relations[$name])) {
             $property = new ReflectionProperty($this->model, $name);
@@ -35,7 +42,7 @@ class RelationDecorator
         }
         $exception = new \RuntimeException("Relation {$name} not found");
         $this->relationsCache[$name]
-            ??= $this->relations[$name]?->getRelated($name) ?? throw $exception;
+            ??= $this->relations[$name]?->getRelated() ?? throw $exception;
         return $this->relationsCache[$name];
     }
 

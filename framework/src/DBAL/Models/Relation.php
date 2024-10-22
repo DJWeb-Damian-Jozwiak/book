@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\DBAL\Models;
 
-use DJWeb\Framework\DBAL\Contracts\Query\QueryBuilderContract;
+use DJWeb\Framework\DBAL\Contracts\Query\SelectQueryBuilderContract;
 use DJWeb\Framework\DBAL\Models\Contracts\RelationContract;
 
 abstract class Relation implements RelationContract
 {
-    protected QueryBuilderContract $query;
+    protected SelectQueryBuilderContract $query;
 
     /**
      * @param Model $parent
@@ -28,12 +28,9 @@ abstract class Relation implements RelationContract
     abstract public function addConstraints(): void;
 
     /**
-     * @return array<int, Model>|Model
+     * @return array<int, mixed>
      */
-    public function getResults(): array|Model {
+    public function getResults(): array {
         return $this->query->select()->get();
     }
-
-    abstract public function getRelated(): array|Model;
-    abstract protected function createQueryBuilder(): QueryBuilderContract;
 }

@@ -7,7 +7,7 @@ namespace DJWeb\Framework\DBAL\Contracts\Query;
 interface InsertQueryBuilderContract extends QueryBuilderContract
 {
     /**
-     * @param array<int|string, int|string|float> $values
+     * @param array<int|string, int|string|float|null> $values
      */
     public function values(array $values): self;
 

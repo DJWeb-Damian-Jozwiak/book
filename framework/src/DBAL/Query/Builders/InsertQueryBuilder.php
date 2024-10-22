@@ -10,12 +10,12 @@ class InsertQueryBuilder extends BaseQueryBuilder implements
     InsertQueryBuilderContract
 {
     /**
-     * @var array<int|string, int|string|float>
+     * @var array<int|string, int|string|float|null>
      */
     protected array $values = [];
 
     /**
-     * @param array<int|string, int|string|float> $values
+     * @param array<int|string, int|string|float|null> $values
      */
     public function values(array $values): self
     {
