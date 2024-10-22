@@ -25,7 +25,7 @@ class BelongsTo extends Relation
     public function getRelated(): array|Model
     {
         $result = $this->getResults();
-        return new $this->related()->fill($result);
+        return new $this->related()->fill($result[0]);
     }
     protected function createQueryBuilder(): QueryBuilderContract
     {

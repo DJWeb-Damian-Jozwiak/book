@@ -16,7 +16,8 @@ class DatabaseSeed extends Command
 
     public function run(): int
     {
-        $seederClass = $this->rootNamespace() . 'Database\\Seeders\\' . $this->seeder;
+        $seederNamespace = $this->container->getBinding('app.seeder_namespace') ?? 'Database\\Seeders\\';
+        $seederClass = $this->rootNamespace() . $seederNamespace . $this->seeder;
 
         if (! class_exists($seederClass)) {
             $this->getOutput()->error("Seeder class {$seederClass} does not exist.");

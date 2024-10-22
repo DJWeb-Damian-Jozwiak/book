@@ -22,7 +22,7 @@ class TextColumn extends Column
         return $sql;
     }
 
-    public function getSqlType(): string
+    public function getSqlColumn(): string
     {
         return 'string';
     }

@@ -14,19 +14,22 @@ use ReflectionProperty;
 class MakeFactory extends MakeCommand
 {
     protected string $fakerClass;
+    protected string $namespace = '';
 
     public function __construct(ContainerContract $container)
     {
         parent::__construct($container);
-        $class = $container->getBinding('app.faker_class') ?? FakeAs::class;
-        $this->fakerClass = $class;
+
     }
 
     public function getModelClass(string $name): string
     {
+        $class = $this->container->getBinding('app.faker_class') ?? FakeAs::class;
+        $this->namespace = $this->container->getBinding('app.factories_namespace') ?? 'Database\\Models\\';
+        $this->fakerClass = $class;
         $modelClass = str_replace('Factory', '', $name);
         $modelClass = str_replace('.php', '', $modelClass);
-        return '\\' . $this->rootNamespace() . 'Database\\Models\\' . $modelClass;
+        return '\\' . $this->rootNamespace() . $this->namespace.  $modelClass;
     }
     protected function getStub(): string
     {

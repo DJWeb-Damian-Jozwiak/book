@@ -22,7 +22,7 @@ class PropertyObserver implements NotifyPropertyChangesContract
 
     public function markPropertyAsChanged(
         string $propertyName,
-        float|int|string|null $value,
+        mixed $value,
     ): void {
        $this->changedProperties[$propertyName] = $value;
     }

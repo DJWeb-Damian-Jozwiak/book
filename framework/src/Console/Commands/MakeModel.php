@@ -22,7 +22,6 @@ class MakeModel extends MakeCommand
     )
     {
         parent::__construct($container);
-        $this->databaseInfo = $container->get(DatabaseInfoContract::class);
     }
 
     protected function getDefaultNamespace(): string
@@ -41,6 +40,7 @@ class MakeModel extends MakeCommand
     protected function buildClass(string $name): string
     {
         $stub = parent::buildClass($name);
+        $this->databaseInfo = $this->container->get(DatabaseInfoContract::class);
         $columns = $this->databaseInfo->getColumns($this->table);
         $stub = $this->addColumnProperties($stub, $columns);
         $stub = $this->addCasts($stub, $columns);

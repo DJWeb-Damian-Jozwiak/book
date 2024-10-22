@@ -86,7 +86,7 @@ abstract class Model implements PropertyChangesContract
     {
         return match(true) {
             $type === 'datetime' => $value instanceof Carbon ? $value : Carbon::parse($value),
-            is_subclass_of($type, Castable::class) => $type::from($value),
+            is_subclass_of($type, \BackedEnum::class) => $type::from($value),
             default => $value,
         };
     }
