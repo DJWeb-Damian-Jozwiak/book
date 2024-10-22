@@ -19,7 +19,6 @@ class MakeFactory extends MakeCommand
     public function __construct(ContainerContract $container)
     {
         parent::__construct($container);
-
     }
 
     public function getModelClass(string $name): string

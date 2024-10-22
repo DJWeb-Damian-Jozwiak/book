@@ -89,10 +89,9 @@ DEFINITION;
     private function addCasts(string $stub, array $columns): string
     {
         $casts = [];
+        $columns = array_filter($columns, static fn (Column $column) => $column->shouldBeCasted());
         foreach ($columns as $column) {
-            if ($column->shouldBeCasted()) {
-                $casts[$column->name] = $this->getCastType($column);
-            }
+            $casts[$column->name] = $this->getCastType($column);
         }
 
         if ($casts) {
