@@ -8,4 +8,5 @@ interface ConfigContract
 {
     public function get(string $key, mixed $default = null): mixed;
     public function set(string $key, mixed $default = null): void;
+    public function loadConfig(): void;
 }
