@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Log\Formatters;
 
+use Carbon\Carbon;
 use DJWeb\Framework\Log\Message;
 
 final readonly class TextFormatter extends Formatter
@@ -16,7 +17,7 @@ final readonly class TextFormatter extends Formatter
     public function toArray(Message $message): array
     {
         return [
-            'datetime' => date('Y-m-d H:i:s'),
+            'datetime' => Carbon::now()->format('Y-m-d H:i:s'),
             'level' => $message->level->name,
             'message' => $message->message,
             'context' => json_encode($message->context->all(), JSON_PRETTY_PRINT),

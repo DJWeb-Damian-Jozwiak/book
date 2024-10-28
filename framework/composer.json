@@ -9,6 +9,7 @@
     "vlucas/phpdotenv": "^5.6",
     "ext-pdo": "*",
     "ext-simplexml": "*",
+    "ext-dom": "*",
     "nesbot/carbon": "^3.8",
     "fakerphp/faker": "^1.23",
     "psr/log": "^3.0"

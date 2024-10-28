@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Log\Formatters;
 
+use Carbon\Carbon;
 use DJWeb\Framework\Log\Message;
 use SimpleXMLElement;
 
@@ -17,7 +18,7 @@ final readonly class XmlFormatter extends Formatter
     public function toArray(Message $message): array
     {
         return [
-            'datetime' => date('Y-m-d H:i:s'),
+            'datetime' => Carbon::now()->format('Y-m-d H:i:s'),
             'level' => $message->level->name,
             'message' => $message->message,
             'context' => $message->context->all(),
@@ -29,7 +30,9 @@ final readonly class XmlFormatter extends Formatter
     {
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><log/>');
         $this->arrayToXml($this->toArray($message), $xml);
-        $data = $xml->asXML();
+        $dom = dom_import_simplexml($xml)->ownerDocument;
+        $dom->formatOutput = true;
+        $data = $dom->saveXML();
         return $data ? $data : '';
     }
 

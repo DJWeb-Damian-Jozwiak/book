@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DJWeb\Framework\DBAL\Models;
 
 use Carbon\Carbon;
-use DJWeb\Framework\DBAL\Models\Contracts\Castable;
 use DJWeb\Framework\DBAL\Models\Contracts\PropertyChangesContract;
 use DJWeb\Framework\DBAL\Models\Decorators\EntityManager;
 use DJWeb\Framework\DBAL\Models\QueryBuilders\ModelQueryBuilder;
@@ -14,9 +13,7 @@ use DJWeb\Framework\DBAL\Models\Relations\RelationFactory;
 
 abstract class Model implements PropertyChangesContract
 {
-    abstract public string $table {
-        get;
-    }
+    abstract public string $table { get; }
 
     public protected(set) string $primary_key_name = 'id';
     public protected(set) ModelQueryBuilder $query_builder;
@@ -42,7 +39,7 @@ abstract class Model implements PropertyChangesContract
     public final function __construct()
     {
         $this->query_builder = new ModelQueryBuilder($this);
-        $this->observer = new PropertyObserver();
+        $this->observer = new PropertyObserver($this);
         $this->entity_manager = new EntityManager($this);
         $this->relation_factory = new RelationFactory();
         $this->relations = new RelationDecorator($this);
@@ -91,10 +88,9 @@ abstract class Model implements PropertyChangesContract
 
     protected function castAttribute(mixed $value, string $type): mixed
     {
-        return match (true) {
+        return match(true) {
             $type === 'datetime' => $value instanceof Carbon ? $value : Carbon::parse($value),
-            is_subclass_of($type, \BackedEnum::class),
-            is_subclass_of($type, Castable::class) => $type::from($value),
+            is_subclass_of($type, \BackedEnum::class) => $type::from($value),
             default => $value,
         };
     }
