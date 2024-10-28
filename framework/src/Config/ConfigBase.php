@@ -11,9 +11,18 @@ use Dotenv\Dotenv;
 
 class ConfigBase extends DotContainer implements ConfigContract
 {
+    private bool $loaded = false;
     public function __construct(private readonly Application $app)
     {
         parent::__construct();
+    }
+
+    public function loadConfig(): void
+    {
+        if($this->loaded) {
+            return;
+        }
+        $this->loaded = true;
         $this->loadEnvironmentVariables();
         $this->loadConfigFiles();
     }
