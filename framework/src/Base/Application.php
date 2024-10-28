@@ -7,6 +7,7 @@ namespace DJWeb\Framework\Base;
 use DJWeb\Framework\Config\ConfigBase;
 use DJWeb\Framework\Config\Contracts\ConfigContract;
 use DJWeb\Framework\Container\Container;
+use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\Container\Contracts\ServiceProviderContract;
 use DJWeb\Framework\Exceptions\Container\ContainerError;
 
@@ -16,9 +17,10 @@ class Application extends Container
         get => $this->getBinding('base_path') ?? '';
     }
 
-    public ?ConfigBase $config{
+    public ?ConfigContract $config{
         get {
-            $this->config ??= new ConfigBase($this);
+            $this->config ??= $this->get(ConfigContract::class);
+            $this->config->loadConfig();
             return $this->config;
         }
     }
@@ -28,6 +30,7 @@ class Application extends Container
     {
         parent::__construct();
         $this->set(Container::class, $this);
+        $this->set(ConfigContract::class, new ConfigBase($this));
     }
 
     public function __clone()
