@@ -1,0 +1,28 @@
+{
+    "summary": {
+        "date": "2024-10-20 13:25:58",
+        "quality": 100,
+        "complexity": 91.8,
+        "structure": 100,
+        "style": 100
+    },
+    "complexity": "1.25",
+    "code": {
+        "lines": "2674",
+        "details": {
+            "Comments": 33,
+            "Classes": 42,
+            "Functions": 0,
+            "Globally": 25
+        }
+    },
+    "architecture": {
+        "files": "157",
+        "details": {
+            "Classes": 78,
+            "Interfaces": 18,
+            "Globally": 4,
+            "Traits": 0
+        }
+    }
+}

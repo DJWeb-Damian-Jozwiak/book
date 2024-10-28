@@ -16,10 +16,6 @@ class PropertyObserver implements NotifyPropertyChangesContract
      */
     private array $changedProperties = [];
 
-    public function __construct(private Model $model)
-    {
-    }
-
     public function markPropertyAsChanged(
         string $propertyName,
         mixed $value,

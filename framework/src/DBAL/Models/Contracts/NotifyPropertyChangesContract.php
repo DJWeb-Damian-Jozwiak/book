@@ -11,7 +11,7 @@ interface NotifyPropertyChangesContract
         int|string|float|null $value
     ): void;
     /**
-     * @return array<int, int|string|float|null>
+     * @return array<string, int|string|float|null>
      */
     public function getChangedProperties(): array;
 

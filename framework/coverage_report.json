@@ -1,0 +1,30 @@
+{
+    "execution_time": 0.45,
+    "code_coverage": {
+        "classes": {
+            "total": 104,
+            "tested": 104
+        },
+        "methods": {
+            "total": 456,
+            "tested": 456
+        },
+        "lines": {
+            "total": 1412,
+            "tested": 1412
+        }
+    },
+    "tests": {
+        "tests": 277,
+        "failed": 0,
+        "assertions": 485,
+        "errors": 0,
+        "warnings": 0,
+        "deprecations": 0,
+        "notices": 0,
+        "success": 277,
+        "incomplete": 0,
+        "risky": 0,
+        "skipped": 0
+    }
+}
