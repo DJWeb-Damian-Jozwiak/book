@@ -20,9 +20,9 @@ class ConfigBase extends DotContainer implements ConfigContract
     public function loadConfig(): void
     {
         if($this->loaded) {
-            $this->loaded = true;
             return;
         }
+        $this->loaded = true;
         $this->loadEnvironmentVariables();
         $this->loadConfigFiles();
     }
