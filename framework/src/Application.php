@@ -6,6 +6,7 @@ namespace DJWeb\Framework;
 
 use DJWeb\Framework\Config\ConfigBase;
 use DJWeb\Framework\Container\Container;
+use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\Container\Contracts\ServiceProviderContract;
 use DJWeb\Framework\Exceptions\Container\ContainerError;
 use DJWeb\Framework\Http\Kernel;
@@ -22,7 +23,8 @@ class Application extends Container
 
     public ?ConfigBase $config{
         get {
-            $this->config ??= new ConfigBase($this);
+            $this->config ??= $this->get(ContainerContract::class);
+            $this->config->loadConfig();
             return $this->config;
         }
     }
@@ -35,6 +37,7 @@ class Application extends Container
         $this->set(Container::class, $this);
         $this->registerServiceProvider(new HttpServiceProvider());
         $this->registerServiceProvider(new RouterServiceProvider());
+        $this->set(ContainerContract::class, new ConfigBase($this));
         $this->kernel = new Kernel($this);
     }
 
