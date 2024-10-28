@@ -16,7 +16,7 @@ class Application extends Container
         get => $this->getBinding('base_path') ?? '';
     }
 
-    public ?ConfigBase $config{
+    public ?ContainerContract $config{
         get {
             $this->config ??= $this->get(ContainerContract::class);
             $this->config->loadConfig();
