@@ -7,7 +7,7 @@ namespace DJWeb\Framework\Log\Formatters;
 use Carbon\Carbon;
 use DJWeb\Framework\Log\Message;
 
-final readonly class TextFormatter extends Formatter
+final readonly class TextFormatter
 {
     /**
      * @param Message $message

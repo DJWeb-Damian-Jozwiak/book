@@ -11,11 +11,6 @@ final class Log
 {
     private static LoggerInterface $logger;
 
-    private static function logger(): LoggerInterface
-    {
-        return self::$logger ??= Application::getInstance()->get(LoggerInterface::class);
-    }
-
     public static function emergency(string $message, array $context = []): void
     {
         self::logger()->emergency($message, $context);
@@ -54,5 +49,10 @@ final class Log
     public static function debug(string $message, array $context = []): void
     {
         self::logger()->debug($message, $context);
+    }
+
+    private static function logger(): LoggerInterface
+    {
+        return self::$logger ??= Application::getInstance()->get(LoggerInterface::class);
     }
 }

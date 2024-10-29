@@ -31,19 +31,13 @@ readonly class DailyRotator implements RotatorContract
     public function rotate(string $logPath): string
     {
         $info = pathinfo($logPath);
-        $rotated = sprintf(
+        return sprintf(
             '%s/%s-%s.%s',
             $info['dirname'] ?? '',
             $info['filename'],
             date('Y-m-d'),
             $info['extension'] ?? ''
         );
-
-        if (! rename($logPath, $rotated)) {
-            throw new LoggerError("Could not rotate log file: {$logPath}");
-        }
-
-        return $rotated;
     }
 
     public function cleanup(string $logPath): void

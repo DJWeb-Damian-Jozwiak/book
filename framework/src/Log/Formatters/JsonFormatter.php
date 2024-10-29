@@ -6,7 +6,7 @@ namespace DJWeb\Framework\Log\Formatters;
 
 use DJWeb\Framework\Log\Message;
 
-final readonly class JsonFormatter extends Formatter
+final readonly class JsonFormatter
 {
     public function format(Message $message): string
     {
@@ -23,9 +23,10 @@ final readonly class JsonFormatter extends Formatter
      */
     public function toArray(Message $message): array
     {
+        $level = $message->level->name ?? $message->level;
         return array_filter(
             [
-                'level' => $message->level->name,
+                'level' => $level,
                 'message' => $message->message,
                 'context' => $message->context->all(),
                 'metadata' => $message->metadata?->toArray(),

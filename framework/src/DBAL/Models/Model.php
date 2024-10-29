@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DJWeb\Framework\DBAL\Models;
 
 use Carbon\Carbon;
+use DJWeb\Framework\DBAL\Models\Casts\ArrayCaster;
 use DJWeb\Framework\DBAL\Models\Contracts\PropertyChangesContract;
 use DJWeb\Framework\DBAL\Models\Decorators\EntityManager;
 use DJWeb\Framework\DBAL\Models\QueryBuilders\ModelQueryBuilder;
@@ -89,6 +90,7 @@ abstract class Model implements PropertyChangesContract
     protected function castAttribute(mixed $value, string $type): mixed
     {
         return match(true) {
+            in_array($type, ['array', 'json']) => ArrayCaster::cast($value),
             $type === 'datetime' => $value instanceof Carbon ? $value : Carbon::parse($value),
             is_subclass_of($type, \BackedEnum::class) => $type::from($value),
             default => $value,

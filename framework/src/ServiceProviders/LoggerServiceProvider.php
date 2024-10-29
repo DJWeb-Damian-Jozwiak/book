@@ -13,6 +13,6 @@ class LoggerServiceProvider extends ServiceProvider
 {
     public function register(ContainerContract $container): void
     {
-        $container->set(LoggerInterface::class, LoggerFactory::create($container) );
+        $container->set(LoggerInterface::class, LoggerFactory::create($container));
     }
 }

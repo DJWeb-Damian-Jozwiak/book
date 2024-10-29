@@ -15,7 +15,15 @@ class DatabaseLog extends Model
         get => 'database_logs';
     }
 
-    public Message $message {
+    public string $level {
+        get => $this->level;
+        set {
+            $this->level = $value;
+            $this->markPropertyAsChanged('level');
+        }
+    }
+
+    public string $message {
         get => $this->message;
         set {
             $this->message = $value;
@@ -23,7 +31,7 @@ class DatabaseLog extends Model
         }
     }
 
-    public Context $context {
+    public array $context {
         get => $this->context;
         set {
             $this->context = $value;
@@ -31,7 +39,7 @@ class DatabaseLog extends Model
         }
     }
 
-    public ?Metadata $metadata {
+    public ?array $metadata {
         get => $this->metadata;
         set {
             $this->metadata = $value;
@@ -43,8 +51,7 @@ class DatabaseLog extends Model
      * @var array<string, string>
      */
     public array $casts = [
-        'message' => Message::class,
-        'context' => Context::class,
-        'metadata' => Metadata::class,
+        'metadata' => 'array',
+        'context' => 'array'
     ];
 }

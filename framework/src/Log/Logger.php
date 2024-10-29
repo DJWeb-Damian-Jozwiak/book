@@ -6,7 +6,6 @@ namespace DJWeb\Framework\Log;
 
 use DJWeb\Framework\Enums\Log\LogLevel;
 use DJWeb\Framework\Log\Contracts\HandlerContract;
-use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
 use Stringable;
@@ -27,15 +26,6 @@ final class Logger implements LoggerInterface
         /** @phpstan-ignore-next-line */
         $this->handlers = array_filter($this->handlers, static fn ($handler) => $handler instanceof HandlerContract);
         $this->placeholderProcessor ??= new PlaceholderProcessor();
-        if(! $this->handlers) {
-            throw new InvalidArgumentException('At least one handler must be provided');
-        }
-    }
-
-    public function addHandler(HandlerContract $handler): self
-    {
-        $this->handlers[] = $handler;
-        return $this;
     }
 
     /**

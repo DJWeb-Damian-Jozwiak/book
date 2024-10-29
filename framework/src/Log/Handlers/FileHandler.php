@@ -31,15 +31,11 @@ class FileHandler implements HandlerContract
             $this->rotator->cleanup($this->logPath);
         }
 
-        $result = file_put_contents(
+        file_put_contents(
             $this->logPath,
             $this->formatter->format($message),
             FILE_APPEND | LOCK_EX
         );
-
-        if ($result === false) {
-            throw new LoggerError("Could not write to log file: {$this->logPath}");
-        }
 
         chmod($this->logPath, 0644);
     }
@@ -48,8 +44,8 @@ class FileHandler implements HandlerContract
     {
         $directory = dirname($this->logPath);
 
-        if (! is_dir($directory) && ! mkdir($directory, 0755, true)) {
-            throw new LoggerError("Could not create directory: {$directory}");
+        if (! is_dir($directory)) {
+            mkdir($directory, 0755, true);
         }
     }
 }

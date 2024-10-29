@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use DJWeb\Framework\Log\Message;
 use SimpleXMLElement;
 
-final readonly class XmlFormatter extends Formatter
+final readonly class XmlFormatter
 {
     /**
      * @param Message $message
