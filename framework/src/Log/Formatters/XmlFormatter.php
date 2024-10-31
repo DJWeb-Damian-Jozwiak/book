@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace DJWeb\Framework\Log\Formatters;
 
 use Carbon\Carbon;
+use DJWeb\Framework\Log\Contracts\FormatterContract;
 use DJWeb\Framework\Log\Message;
 use SimpleXMLElement;
 
-final readonly class XmlFormatter
+final readonly class XmlFormatter implements FormatterContract
 {
     /**
      * @param Message $message
@@ -17,9 +18,10 @@ final readonly class XmlFormatter
      */
     public function toArray(Message $message): array
     {
+        $level = $message->level->name ?? $message->level;
         return [
             'datetime' => Carbon::now()->format('Y-m-d H:i:s'),
-            'level' => $message->level->name,
+            'level' => $level,
             'message' => $message->message,
             'context' => $message->context->all(),
             'metadata' => $message->metadata?->toArray(),

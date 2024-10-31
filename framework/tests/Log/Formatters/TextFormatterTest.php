@@ -22,9 +22,7 @@ class TextFormatterTest extends TestCase
         $formatter = new TextFormatter($container);
         $result = $formatter->format($message);
         $expected = <<<TEXT
-[2024-10-28 12:00:00] ALERT: Test message Context: {
-    "test": "test"
-} Metadata: []
+[2024-10-28 12:00:00] ALERT: Test message Context: {"test":"test"} Metadata: []
 
 TEXT;
 

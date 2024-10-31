@@ -14,9 +14,9 @@ final class DatabaseHandler implements HandlerContract
 {
     private readonly JsonFormatter $formatter;
 
-    public function __construct(ContainerContract $container)
+    public function __construct()
     {
-        $this->formatter = new JsonFormatter($container);
+        $this->formatter = new JsonFormatter();
     }
 
     public function handle(Message $message): void

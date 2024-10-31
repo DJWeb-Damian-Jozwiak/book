@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace DJWeb\Framework\Log\Formatters;
 
 use Carbon\Carbon;
+use DJWeb\Framework\Log\Contracts\FormatterContract;
 use DJWeb\Framework\Log\Message;
 
-final readonly class TextFormatter
+final readonly class TextFormatter implements FormatterContract
 {
     /**
      * @param Message $message
@@ -16,12 +17,13 @@ final readonly class TextFormatter
      */
     public function toArray(Message $message): array
     {
+        $level = $message->level->name ?? $message->level;
         return [
             'datetime' => Carbon::now()->format('Y-m-d H:i:s'),
-            'level' => $message->level->name,
+            'level' => $level,
             'message' => $message->message,
-            'context' => json_encode($message->context->all(), JSON_PRETTY_PRINT),
-            'metadata' => json_encode($message->metadata?->toArray() ?? [], JSON_PRETTY_PRINT),
+            'context' => json_encode($message->context->all()),
+            'metadata' => json_encode($message->metadata?->toArray() ?? []),
         ];
     }
 

@@ -17,19 +17,19 @@ use Psr\Log\LoggerInterface;
 
 class LoggerFactory
 {
-    public static function create(ContainerContract $container): LoggerInterface
+    public static function create(): LoggerInterface
     {
         $config = Config::get('logging');
-$handlers = [];
-foreach ($config['channels'] as $channel => $settings) {
-            $handlers[] = match($settings['handler']) {
-                'database' => new DatabaseHandler($container),
+        $handlers = [];
+        foreach ($config['channels'] as $channel => $settings) {
+            $handlers[] = match ($settings['handler']) {
+                'database' => new DatabaseHandler(),
                 'file' => new FileHandler(
                     logPath: $settings['path'],
-                    formatter: match($settings['formatter']) {
-                        'json' => new JsonFormatter($container),
-                        'xml' => new XmlFormatter($container),
-                        default => new TextFormatter($container)
+                    formatter: match ($settings['formatter']) {
+                        'json' => new JsonFormatter(),
+                        'xml' => new XmlFormatter(),
+                        default => new TextFormatter()
 
                     },
                     rotator: new DailyRotator(
@@ -40,9 +40,8 @@ foreach ($config['channels'] as $channel => $settings) {
 
             };
 
-}
+        }
 
         return new Logger($handlers);
     }
-
 }

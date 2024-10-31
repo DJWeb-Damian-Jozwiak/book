@@ -55,9 +55,6 @@ class LogFacadeTest extends BaseTestCase
             "message" => "test true [\"test\"] test, {missing}",
             'metadata' => [
                 "timestamp" => "2024-10-28 12:00:00",
-                "ip" => null,
-                "userAgent" => null,
-                "sessionId" => null,
             ],
             'context' => [
                 'user' => 'test',
@@ -74,7 +71,7 @@ class LogFacadeTest extends BaseTestCase
 
 
         $config = $this->createMock(ConfigContract::class);
-        $config->expects($this->once())->method('get')->willReturn($returnedConfig);
+        $config->expects($this->any())->method('get')->willReturn($returnedConfig);
         $app->set(ConfigContract::class, $config);
         $connection = $this->createMock(ConnectionContract::class);
         $connection->expects($this->once())->method('query')
@@ -88,8 +85,5 @@ class LogFacadeTest extends BaseTestCase
         $app->bind('base_path', dirname(__DIR__));
         $app->set(LoggerInterface::class, LoggerFactory::create($app));
         $logMethod('{user} {exists} {data} {stringable}, {missing}', ['user' => 'test', 'exists' => true, 'data' => ['test'], 'stringable' => $item]);
-//        Log::
-//        $logger = LoggerFactory::create($app);
-//        $logger->log($level, 'test');
     }
 }

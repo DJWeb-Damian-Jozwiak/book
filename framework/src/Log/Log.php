@@ -53,6 +53,6 @@ final class Log
 
     private static function logger(): LoggerInterface
     {
-        return self::$logger ??= Application::getInstance()->get(LoggerInterface::class);
+        return self::$logger ??= Application::getInstance()->logger;
     }
 }

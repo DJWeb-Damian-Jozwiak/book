@@ -9,7 +9,9 @@ use DJWeb\Framework\Config\Contracts\ConfigContract;
 use DJWeb\Framework\Container\Container;
 use DJWeb\Framework\Container\Contracts\ServiceProviderContract;
 use DJWeb\Framework\Exceptions\Container\ContainerError;
+use DJWeb\Framework\Log\LoggerFactory;
 use DJWeb\Framework\ServiceProviders\LoggerServiceProvider;
+use Psr\Log\LoggerInterface;
 
 class Application extends Container
 {
@@ -22,6 +24,13 @@ class Application extends Container
             $this->config ??= $this->get(ConfigContract::class);
             $this->config->loadConfig();
             return $this->config;
+        }
+    }
+
+    public ?LoggerInterface $logger{
+        get {
+            $this->logger ??= LoggerFactory::create($this);
+            return $this->logger;
         }
     }
     protected static ?self $instance = null;

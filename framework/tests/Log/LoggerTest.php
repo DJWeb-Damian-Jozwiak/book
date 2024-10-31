@@ -40,9 +40,6 @@ class LoggerTest extends TestCase
                     "message" => "test",
                     'metadata' => [
                         "timestamp" => "2024-10-28 12:00:00",
-                        "ip" => null,
-                        "userAgent" => null,
-                        "sessionId" => null,
                     ]
                 ]
             )

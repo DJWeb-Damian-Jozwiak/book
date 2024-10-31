@@ -5,7 +5,7 @@
   "prefer-stable": true,
   "repositories": [
     {
-      "PHP": "^8.3",
+      "PHP": "^8.4",
       "type": "path",
       "url": "/var/www/own_framework/framework"
     }

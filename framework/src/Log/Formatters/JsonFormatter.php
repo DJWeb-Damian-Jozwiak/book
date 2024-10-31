@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Log\Formatters;
 
+use DJWeb\Framework\Log\Contracts\FormatterContract;
 use DJWeb\Framework\Log\Message;
 
-final readonly class JsonFormatter
+final readonly class JsonFormatter implements FormatterContract
 {
     public function format(Message $message): string
     {
