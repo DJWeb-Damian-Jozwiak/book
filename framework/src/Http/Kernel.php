@@ -6,8 +6,8 @@ namespace DJWeb\Framework\Http;
 
 use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\Routing\Router;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class Kernel
 {
@@ -18,7 +18,7 @@ class Kernel
         $this->router = $container->get(Router::class);
     }
 
-    public function handle(RequestInterface $request): ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         return $this->router->dispatch($request);
     }

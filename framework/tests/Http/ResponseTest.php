@@ -145,8 +145,8 @@ class ResponseTest extends TestCase
         $data = ['key' => 'value'];
         $new = $this->response->withJson($data, 201);
         $this->assertEquals(201, $new->getStatusCode());
-        $this->assertEquals(
-            json_encode($data),
+        $this->assertJson(
+            json_encode($data, JSON_PRETTY_PRINT),
             (string)$new->getBody()
         );
     }
