@@ -7,7 +7,6 @@ namespace DJWeb\Framework\Base;
 use DJWeb\Framework\Config\ConfigBase;
 use DJWeb\Framework\Config\Contracts\ConfigContract;
 use DJWeb\Framework\Container\Container;
-use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\Container\Contracts\ServiceProviderContract;
 use DJWeb\Framework\Exceptions\Container\ContainerError;
 
