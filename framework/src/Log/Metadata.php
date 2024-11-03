@@ -8,9 +8,6 @@ use Carbon\CarbonImmutable;
 
 final readonly class Metadata
 {
-    /**
-     * @param CarbonImmutable $timestamp
-     */
     public function __construct(
         private CarbonImmutable $timestamp,
     ) {

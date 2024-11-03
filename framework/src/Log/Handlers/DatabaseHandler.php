@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Log\Handlers;
 
-use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\DBAL\Models\Entities\DatabaseLog;
 use DJWeb\Framework\Log\Contracts\HandlerContract;
 use DJWeb\Framework\Log\Formatters\JsonFormatter;

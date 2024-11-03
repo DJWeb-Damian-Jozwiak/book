@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace DJWeb\Framework\DBAL\Models\Entities;
 
 use DJWeb\Framework\DBAL\Models\Model;
-use DJWeb\Framework\Log\Context;
-use DJWeb\Framework\Log\Message;
-use DJWeb\Framework\Log\Metadata;
 
 class DatabaseLog extends Model
 {
@@ -31,6 +28,10 @@ class DatabaseLog extends Model
         }
     }
 
+    /**
+     * @var array<int|string, mixed>
+     */
+
     public array $context {
         get => $this->context;
         set {
@@ -39,6 +40,9 @@ class DatabaseLog extends Model
         }
     }
 
+    /**
+     * @var ?array<int|string, mixed>
+     */
     public ?array $metadata {
         get => $this->metadata;
         set {
@@ -52,6 +56,6 @@ class DatabaseLog extends Model
      */
     public array $casts = [
         'metadata' => 'array',
-        'context' => 'array'
+        'context' => 'array',
     ];
 }

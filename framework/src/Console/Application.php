@@ -7,7 +7,6 @@ namespace DJWeb\Framework\Console;
 use DJWeb\Framework\Console\Resolvers\CommandResolver;
 use DJWeb\Framework\Console\Utils\CommandNamespace;
 use DJWeb\Framework\ServiceProviders\ConsoleServiceProvider;
-use DJWeb\Framework\ServiceProviders\LoggerServiceProvider;
 use DJWeb\Framework\ServiceProviders\MigrationsServiceProvider;
 use DJWeb\Framework\ServiceProviders\SchemaServiceProvider;
 

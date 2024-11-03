@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DJWeb\Framework\Log;
 
 use DJWeb\Framework\Config\Config;
-use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\Exceptions\Log\LoggerError;
 use DJWeb\Framework\Log\Formatters\JsonFormatter;
 use DJWeb\Framework\Log\Formatters\TextFormatter;
@@ -21,7 +20,7 @@ class LoggerFactory
     {
         $config = Config::get('logging');
         $handlers = [];
-        foreach ($config['channels'] as $channel => $settings) {
+        foreach ($config['channels'] as $settings) {
             $handlers[] = match ($settings['handler']) {
                 'database' => new DatabaseHandler(),
                 'file' => new FileHandler(

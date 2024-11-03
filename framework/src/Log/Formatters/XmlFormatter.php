@@ -32,6 +32,7 @@ final readonly class XmlFormatter implements FormatterContract
     {
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><log/>');
         $this->arrayToXml($this->toArray($message), $xml);
+        /** @var \DOMDocument $dom */
         $dom = dom_import_simplexml($xml)->ownerDocument;
         $dom->formatOutput = true;
         $data = $dom->saveXML();

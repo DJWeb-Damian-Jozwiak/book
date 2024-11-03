@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Log\Handlers;
 
-use DJWeb\Framework\Exceptions\Log\LoggerError;
 use DJWeb\Framework\Log\Contracts\FormatterContract;
 use DJWeb\Framework\Log\Contracts\HandlerContract;
 use DJWeb\Framework\Log\Contracts\RotatorContract;

@@ -6,7 +6,6 @@ namespace DJWeb\Framework\Log\Rotators;
 
 use Carbon\Carbon;
 use DirectoryIterator;
-use DJWeb\Framework\Exceptions\Log\LoggerError;
 use DJWeb\Framework\Log\Contracts\RotatorContract;
 
 readonly class DailyRotator implements RotatorContract
