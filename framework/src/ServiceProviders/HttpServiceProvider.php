@@ -6,7 +6,7 @@ namespace DJWeb\Framework\ServiceProviders;
 
 use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\Container\ServiceProvider;
-use DJWeb\Framework\Http\RequestFactory;
+use DJWeb\Framework\Http\Request\Psr17\RequestFactory;
 use Psr\Http\Message\ServerRequestInterface;
 
 class HttpServiceProvider extends ServiceProvider
@@ -15,7 +15,7 @@ class HttpServiceProvider extends ServiceProvider
     {
         $container->set(
             key: ServerRequestInterface::class,
-            value: new RequestFactory()->createRequest('GET', '/'),
+            value: new RequestFactory()->createServerRequest('GET', '/'),
         );
     }
 }

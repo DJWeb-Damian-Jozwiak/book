@@ -25,14 +25,14 @@ class KernelTest extends TestCase
         $this->router->addRoute(
             'GET',
             '/',
-            fn() => (new Response())->withContent('hello world')
+            fn() => new Response()->withContent('hello world')
         );
         $this->container->set(Router::class, $this->router);
     }
 
     public function testHandleReturnsResponse()
     {
-        $kernel = new Kernel();
+        $kernel = new Kernel($this->container);
         $request = new RequestFactory()->createServerRequest('GET', '/');
         $response = $kernel->handle($request);
         $this->assertInstanceOf(Response::class, $response);
@@ -40,7 +40,7 @@ class KernelTest extends TestCase
 
     public function testHandleResponseContent()
     {
-        $kernel = new Kernel();
+        $kernel = new Kernel($this->container);
         $request = new RequestFactory()->createServerRequest('GET', '/');
         $response = $kernel->handle($request);
         $this->assertEquals('hello world', (string)$response->getBody());
