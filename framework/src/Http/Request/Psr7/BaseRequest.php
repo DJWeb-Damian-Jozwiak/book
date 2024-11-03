@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace DJWeb\Framework\Http;
+namespace DJWeb\Framework\Http\Request\Psr7;
 
+use DJWeb\Framework\Http\HeaderManager;
+use DJWeb\Framework\Http\UpdateHostFromUri;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
@@ -92,8 +94,7 @@ class BaseRequest implements RequestInterface
     {
         $target = $this->uri->getPath() . '/';
 
-        $target .= '?' . $this->uri->getQuery();
-        return rtrim($target, '?');
+        return str_ends_with($target, '/') ? $target : $target . '?' . $this->uri->getQuery();
     }
 
     public function withRequestTarget(string $requestTarget): static
