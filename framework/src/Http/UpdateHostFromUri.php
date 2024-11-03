@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Http;
 
+use DJWeb\Framework\Http\Request\Psr7\BaseRequest;
+use DJWeb\Framework\Http\Request\Psr7\Request;
 use Psr\Http\Message\UriInterface;
 
 final class UpdateHostFromUri

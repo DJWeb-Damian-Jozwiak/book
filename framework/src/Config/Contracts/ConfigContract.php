@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Config\Contracts;
 
 interface ConfigContract
