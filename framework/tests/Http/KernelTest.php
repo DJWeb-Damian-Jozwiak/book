@@ -3,7 +3,7 @@
 namespace Tests\Http;
 
 use DJWeb\Framework\Http\Kernel;
-use DJWeb\Framework\Http\RequestFactory;
+use DJWeb\Framework\Http\Request\Psr17\RequestFactory;
 use DJWeb\Framework\Http\Response;
 use PHPUnit\Framework\TestCase;
 
@@ -17,7 +17,7 @@ class KernelTest extends TestCase
     public function testHandleReturnsResponse()
     {
         $kernel = new Kernel();
-        $request = (new RequestFactory())->createRequest('GET', '/');
+        $request = new RequestFactory()->createServerRequest('GET', '/');
         $response = $kernel->handle($request);
         $this->assertInstanceOf(Response::class, $response);
     }
@@ -25,7 +25,7 @@ class KernelTest extends TestCase
     public function testHandleResponseContent()
     {
         $kernel = new Kernel();
-        $request = (new RequestFactory())->createRequest('GET', '/');
+        $request = new RequestFactory()->createServerRequest('GET', '/');
         $response = $kernel->handle($request);
         $this->assertEquals(
             'Hello world from kernel',
