@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Tests\Http;
 
 use DJWeb\Framework\Http\HeaderManager;
-use DJWeb\Framework\Http\Request;
-use DJWeb\Framework\Http\RequestFactory;
+use DJWeb\Framework\Http\Request\Psr7\BaseRequest;
 use DJWeb\Framework\Http\UriManager;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
@@ -14,7 +13,7 @@ use Psr\Http\Message\UriInterface;
 
 class RequestTest extends TestCase
 {
-    private Request $request;
+    private BaseRequest $request;
     private UriInterface $uri;
     private StreamInterface $body;
     private HeaderManager $headerManager;
@@ -27,31 +26,28 @@ class RequestTest extends TestCase
             'Content-Type' => 'application/json',
             'Accept' => 'application/json'
         ]);
-        $this->request = new Request(
+        $this->request = new BaseRequest(
             'GET',
             $this->uri,
             $this->body,
             $this->headerManager,
-            ['query' => 'value'],
-            ['post' => 'data']
         );
     }
 
     public function testGetRequestTarget(): void
     {
         $this->assertEquals(
-            '/test/?query=value',
+            '/test/',
             $this->request->getRequestTarget()
         );
 
-        $request = new Request(
+        $request = new BaseRequest(
             'GET',
             new UriManager('https://example.com'),
             $this->body,
             new HeaderManager()
         );
-        $this->assertTrue($request->isGet());
-        $this->assertEquals('/?', $request->getRequestTarget());
+        $this->assertEquals('/', $request->getRequestTarget());
     }
 
     public function testWithRequestTarget(): void
@@ -68,26 +64,14 @@ class RequestTest extends TestCase
     public function testWithMethod(): void
     {
         $new = $this->request->withMethod('POST');
-        $this->assertTrue($new->isPost());
         $this->assertNotSame($this->request, $new);
         $this->assertEquals('POST', $new->getMethod());
         $this->assertEquals('GET', $this->request->getMethod());
     }
 
-    public function testDifferentPort()
-    {
-        $uri = (new UriManager('https://example.com/test'))->withPort(8080);
-        $request = (new RequestFactory())->createRequest('GET', '/test')
-            ->withUri($uri);
-        $this->assertEquals(
-            'https://example.com:8080/test',
-            (string)$request->getUri()
-        );
-    }
-
     public function testWithUri(): void
     {
-        $newUri = new UriManager('https://example.org/new');
+        $newUri = new UriManager('https://example.org/new')->withPort(8080);
         $new = $this->request->withUri($newUri);
         $this->assertNotSame($this->request, $new);
         $this->assertSame($newUri, $new->getUri());
@@ -173,6 +157,7 @@ class RequestTest extends TestCase
             $this->request->getHeader('Accept'));
     }
 
+
     public function testWithoutHeader(): void
     {
         $new = $this->request->withoutHeader('Content-Type');
@@ -193,19 +178,5 @@ class RequestTest extends TestCase
         $this->assertNotSame($this->request, $new);
         $this->assertSame($newBody, $new->getBody());
         $this->assertSame($this->body, $this->request->getBody());
-    }
-
-    public function testQueryAndPostParams(): void
-    {
-        $this->assertEquals(
-            ['query' => 'value', 'post' => 'data'],
-            $this->request->all()
-        );
-        $this->assertEquals('value', $this->request->query('query'));
-        $this->assertEquals('data', $this->request->post('post'));
-        $this->assertTrue($this->request->has('query'));
-        $this->assertTrue($this->request->has('post'));
-        $this->assertEquals('value', $this->request->input('query'));
-        $this->assertEquals('data', $this->request->input('post'));
     }
 }

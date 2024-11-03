@@ -13,7 +13,7 @@ readonly class StreamMetaData
         public bool $timed_out = false,
         public bool $blocked = false,
         public bool $eof = false,
-        public array $wrapper_data = [],
+        public mixed $wrapper_data = [],
         public string $wrapper_type = '',
         public string $stream_type = '',
         public string $uri = '',
