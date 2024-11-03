@@ -6,7 +6,7 @@ use DJWeb\Framework\Container\Container;
 use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\Container\Contracts\ContainerInterface;
 use DJWeb\Framework\Http\Kernel;
-use DJWeb\Framework\Http\RequestFactory;
+use DJWeb\Framework\Http\Request\Psr17\RequestFactory;
 use DJWeb\Framework\Http\Response;
 use DJWeb\Framework\Routing\Router;
 use PHPUnit\Framework\TestCase;
@@ -25,7 +25,7 @@ class KernelTest extends TestCase
         $this->router->addRoute(
             'GET',
             '/',
-            fn() => (new Response())->withContent('hello world')
+            fn() => new Response()->withContent('hello world')
         );
         $this->container->set(Router::class, $this->router);
     }
@@ -33,7 +33,7 @@ class KernelTest extends TestCase
     public function testHandleReturnsResponse()
     {
         $kernel = new Kernel($this->container);
-        $request = (new RequestFactory())->createRequest('GET', '/');
+        $request = new RequestFactory()->createServerRequest('GET', '/');
         $response = $kernel->handle($request);
         $this->assertInstanceOf(Response::class, $response);
     }
@@ -41,7 +41,7 @@ class KernelTest extends TestCase
     public function testHandleResponseContent()
     {
         $kernel = new Kernel($this->container);
-        $request = (new RequestFactory())->createRequest('GET', '/');
+        $request = new RequestFactory()->createServerRequest('GET', '/');
         $response = $kernel->handle($request);
         $this->assertEquals('hello world', (string)$response->getBody());
     }
