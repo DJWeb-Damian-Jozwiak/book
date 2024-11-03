@@ -3,7 +3,7 @@
 namespace Tests\ServiceProviders;
 
 use DJWeb\Framework\Container\Container;
-use DJWeb\Framework\Http\Request;
+use DJWeb\Framework\Http\Request\Psr7\Request;
 use DJWeb\Framework\ServiceProviders\HttpServiceProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
