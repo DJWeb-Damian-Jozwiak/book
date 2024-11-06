@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Routing;
 
+use DJWeb\Framework\Enums\MiddlewarePosition;
 use DJWeb\Framework\Exceptions\Routing\RouteNotFoundError;
+use DJWeb\Framework\Web\Application;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -12,6 +14,56 @@ use Psr\Http\Message\RequestInterface;
  */
 class RouteCollection implements \IteratorAggregate, \Countable
 {
+    /**
+     * @var array<int, Route>
+     */
+    public array $middlewareBefore {
+        get {
+            return [];
+//            return array_values(array_unique(
+//                array_merge(
+//                    ...array_map(
+//                        fn(Route $route): array => $route->middlewareBefore,
+//                        $this->routes
+//                    )
+//                )
+//            ));
+        }
+    }
+
+    /**
+     * @var array<int, Route>
+     */
+    public array $middlewareAfter {
+        get {
+            return [];
+//            return array_values(array_unique(
+//                array_merge(
+//                    ...array_map(
+//                        fn(Route $route): array => $route->middlewareAfter,
+//                        $this->routes
+//                    )
+//                )
+//            ));
+        }
+    }
+
+    /**
+     * @var array<int, Route>
+     */
+    public array $withoutMiddleware {
+        get {
+            return [];
+//            return array_values(array_unique(
+//                array_merge(
+//                    ...array_map(
+//                        fn(Route $route): array => $route->withoutMiddleware,
+//                        $this->routes
+//                    )
+//                )
+//            ));
+        }
+    }
     /**
      * @var list<Route>
      */

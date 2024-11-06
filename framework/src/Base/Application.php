@@ -26,8 +26,6 @@ class Application extends Container
         }
     }
 
-    private ?LoggerInterface $_logger;
-
     public LoggerInterface $logger{
         get {
             $this->_logger ??= LoggerFactory::create();
@@ -35,7 +33,7 @@ class Application extends Container
         }
     }
     protected static ?self $instance = null;
-
+    private ?LoggerInterface $_logger;
     protected function __construct()
     {
         parent::__construct();

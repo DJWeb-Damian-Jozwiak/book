@@ -6,14 +6,14 @@ namespace DJWeb\Framework\Routing;
 
 use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\Exceptions\Routing\RouteNotFoundError;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 readonly class Router
 {
     public function __construct(
         private ContainerContract $container,
-        private RouteCollection $routes = new RouteCollection()
+        public private(set) RouteCollection $routes = new RouteCollection()
     ) {
     }
 
@@ -26,12 +26,8 @@ readonly class Router
      * @param string|null $name Optional route name
      */
     public function addRoute(
-        string $method,
-        string $path,
-        callable|array $handler,
-        ?string $name = null
+        Route $route
     ): self {
-        $route = new Route($path, $method, $handler, $name);
         $this->routes->addRoute($route);
         return $this;
     }
@@ -39,13 +35,13 @@ readonly class Router
     /**
      * Dispatch the request to the appropriate handler.
      *
-     * @param RequestInterface $request The incoming request
+     * @param ServerRequestInterface $request The incoming request
      *
      * @return ResponseInterface The response from the handler
      *
      * @throws RouteNotFoundError If no matching route is found
      */
-    public function dispatch(RequestInterface $request): ResponseInterface
+    public function dispatch(ServerRequestInterface $request): ResponseInterface
     {
         $route = $this->routes->findRoute($request);
 

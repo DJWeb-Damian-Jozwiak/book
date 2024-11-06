@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use DJWeb\Framework\Config\Contracts\ConfigContract;
 use DJWeb\Framework\Web\Application;
 use PHPUnit\Framework\TestCase;
 

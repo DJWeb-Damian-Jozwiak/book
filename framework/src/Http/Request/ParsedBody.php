@@ -21,7 +21,6 @@ class ParsedBody
             }
             return $_POST;
         }
-
         return null;
     }
 }

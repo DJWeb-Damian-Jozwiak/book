@@ -1,7 +1,7 @@
 <?php
 
-use DJWeb\Framework\Application;
 use DJWeb\Framework\Config\Config;
+use DJWeb\Framework\Web\Application;
 
 require_once '../bootstrap/app.php';
 /** @var callable $routes */
