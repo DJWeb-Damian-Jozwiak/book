@@ -50,22 +50,22 @@ class Route
 
     public function withMiddlewareBefore(string $middleware): static
     {
-       // $this->verifyMiddleware($middleware);
-      //  $this->middlewareBefore []= $middleware;
+        $this->verifyMiddleware($middleware);
+        $this->middlewareBefore [] = $middleware;
         return $this;
     }
 
     public function withMiddlewareAfter(string $middleware): static
     {
-      //  $this->verifyMiddleware($middleware);
-       // $this->middlewareAfter []= $middleware;
+        $this->verifyMiddleware($middleware);
+        $this->middlewareAfter [] = $middleware;
         return $this;
     }
 
     public function withoutMiddleware(string $middleware): static
     {
-        //$this->verifyMiddleware($middleware);
-       // $this->withoutMiddleware []= $middleware;
+        $this->verifyMiddleware($middleware);
+        $this->withoutMiddleware [] = $middleware;
         return $this;
     }
 

@@ -37,7 +37,7 @@ class MiddlewareStack implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): \Psr\Http\Message\ResponseInterface
     {
-        if ($this->currentIndex === count($this->middleware) && $this->currentIndex === 0) {
+        if ($this->currentIndex === count($this->middleware)) {
             return $this->router->dispatch($request);
         }
 

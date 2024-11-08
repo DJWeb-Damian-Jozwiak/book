@@ -19,15 +19,14 @@ class RouteCollection implements \IteratorAggregate, \Countable
      */
     public array $middlewareBefore {
         get {
-            return [];
-//            return array_values(array_unique(
-//                array_merge(
-//                    ...array_map(
-//                        fn(Route $route): array => $route->middlewareBefore,
-//                        $this->routes
-//                    )
-//                )
-//            ));
+            return array_values(array_unique(
+                array_merge(
+                    ...array_map(
+                        fn(Route $route): array => $route->middlewareBefore,
+                        $this->routes
+                    )
+                )
+            ));
         }
     }
 
@@ -36,15 +35,14 @@ class RouteCollection implements \IteratorAggregate, \Countable
      */
     public array $middlewareAfter {
         get {
-            return [];
-//            return array_values(array_unique(
-//                array_merge(
-//                    ...array_map(
-//                        fn(Route $route): array => $route->middlewareAfter,
-//                        $this->routes
-//                    )
-//                )
-//            ));
+            return array_values(array_unique(
+                array_merge(
+                    ...array_map(
+                        fn(Route $route): array => $route->middlewareAfter,
+                        $this->routes
+                    )
+                )
+            ));
         }
     }
 
@@ -53,15 +51,14 @@ class RouteCollection implements \IteratorAggregate, \Countable
      */
     public array $withoutMiddleware {
         get {
-            return [];
-//            return array_values(array_unique(
-//                array_merge(
-//                    ...array_map(
-//                        fn(Route $route): array => $route->withoutMiddleware,
-//                        $this->routes
-//                    )
-//                )
-//            ));
+            return array_values(array_unique(
+                array_merge(
+                    ...array_map(
+                        fn(Route $route): array => $route->withoutMiddleware,
+                        $this->routes
+                    )
+                )
+            ));
         }
     }
     /**

@@ -18,7 +18,7 @@ class MiddlewareConfig
         $kernel->withoutMiddleware($withoutMiddleware);
     }
 
-    public function mapMiddleware(Kernel $kernel, mixed $middleware): array
+    private function mapMiddleware(Kernel $kernel, mixed $middleware): array
     {
         $router = $kernel->router;
         $middlewareWithBefore = $router->routes->middlewareBefore;

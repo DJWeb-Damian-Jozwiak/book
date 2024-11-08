@@ -19,6 +19,7 @@ class MiddlewareTest extends BaseTestCase
 
     public function setUp(): void
     {
+        parent::setUp();
         $this->middlewareClass = new class implements MiddlewareInterface
         {
             public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
