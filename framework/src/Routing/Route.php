@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Routing;
 
-use DJWeb\Framework\Enums\MiddlewarePosition;
 use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -13,18 +12,17 @@ use Psr\Http\Server\MiddlewareInterface;
 class Route
 {
     /**
-     * @var array<int, class-string<MiddlewareInterface>>
+     * @var array<int, string>
      */
     public private(set) array $middlewareBefore = [];
     /**
-     * @var array<int, class-string<MiddlewareInterface>>
+     * @var array<int, string>
      */
     public private(set) array $middlewareAfter = [];
     /**
-     * @var array<int, class-string<MiddlewareInterface>>
+     * @var array<int, string>
      */
     public private(set) array $withoutMiddleware = [];
-
 
     /**
      * @var callable|array<int, string>

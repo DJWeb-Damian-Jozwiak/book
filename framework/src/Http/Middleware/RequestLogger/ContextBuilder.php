@@ -10,6 +10,12 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class ContextBuilder
 {
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param Carbon $startTime
+     * @return array<string|int, mixed>
+     */
     public function buildSuccessContext(
         ServerRequestInterface $request,
         ResponseInterface $response,
@@ -23,6 +29,12 @@ class ContextBuilder
         ];
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param Carbon $startTime
+     * @param \Throwable $exception
+     * @return array<string|int, mixed>
+     */
     public function buildExceptionContext(
         ServerRequestInterface $request,
         Carbon $startTime,
@@ -43,7 +55,7 @@ class ContextBuilder
         ServerRequestInterface $request,
         Carbon $startTime,
         \Throwable $exception
-    )
+    ): string
     {
         $context = $this->buildExceptionContext($request, $startTime, $exception);
         return sprintf(
@@ -70,6 +82,12 @@ class ContextBuilder
             $context['duration']
         );
     }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param Carbon $startTime
+     * @return array<string|int, mixed>
+     */
     private function buildBaseContext(
         ServerRequestInterface $request,
         Carbon $startTime

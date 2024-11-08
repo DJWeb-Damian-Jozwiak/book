@@ -18,11 +18,19 @@ class MiddlewareConfig
         $kernel->withoutMiddleware($withoutMiddleware);
     }
 
+    /**
+     * @param Kernel $kernel
+     * @param mixed $middleware
+     * @return array<int, string>
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
     private function mapMiddleware(Kernel $kernel, mixed $middleware): array
     {
         $router = $kernel->router;
         $middlewareWithBefore = $router->routes->middlewareBefore;
         $middlewareWithAfter = $router->routes->middlewareAfter;
+        /** @phpstan-ignore-next-line */
         return array_map(
             static fn (string $middlewareClass) => $kernel->container->get($middlewareClass),
             [

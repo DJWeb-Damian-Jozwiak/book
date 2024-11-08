@@ -41,6 +41,10 @@ class Kernel implements RequestHandlerInterface
         return $this;
     }
 
+    /**
+     * @param MiddlewareInterface|array<int, mixed> $middleware
+     * @return $this
+     */
     public function withoutMiddleware(MiddlewareInterface|array $middleware): self
     {
         $items = is_array($middleware) ? $middleware : [$middleware];

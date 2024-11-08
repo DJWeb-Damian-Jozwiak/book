@@ -17,14 +17,6 @@ readonly class Router
     ) {
     }
 
-    /**
-     * Add a new route to the collection.
-     *
-     * @param string $method The HTTP method
-     * @param string $path The URL path
-     * @param callable|array<int, string> $handler The route handler
-     * @param string|null $name Optional route name
-     */
     public function addRoute(
         Route $route
     ): self {
