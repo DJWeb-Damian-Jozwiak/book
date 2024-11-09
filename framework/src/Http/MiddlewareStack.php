@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DJWeb\Framework\Http;
 
 use DJWeb\Framework\Routing\Router;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -16,7 +17,7 @@ class MiddlewareStack implements RequestHandlerInterface
      */
     private array $middleware = [];
     private int $currentIndex = 0;
-    public function __construct(private Router $router)
+    public function __construct(private readonly Router $router)
     {
     }
 
@@ -35,7 +36,7 @@ class MiddlewareStack implements RequestHandlerInterface
         return $this;
     }
 
-    public function handle(ServerRequestInterface $request): \Psr\Http\Message\ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         if ($this->currentIndex === count($this->middleware)) {
             return $this->router->dispatch($request);

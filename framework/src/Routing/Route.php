@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace DJWeb\Framework\Routing;
 
 use InvalidArgumentException;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
 
 class Route
@@ -25,9 +23,20 @@ class Route
     public private(set) array $withoutMiddleware = [];
 
     /**
-     * @var callable|array<int, string>
+     * @var array<string, RouteParameter>
      */
-    public private(set) mixed $handler;
+    public private(set) array $parameterDefinitions = [];
+
+    /**
+     * @var array<string, mixed>
+     */
+    public private(set) array $parameters = [];
+
+    /**
+     * @var array<int, RouteBinding>
+     */
+    public private(set) array $bindings = [];
+
     private readonly string $method;
 
     /**
@@ -37,13 +46,19 @@ class Route
      * @param string|null $name
      */
     public function __construct(
-        public readonly string $path,
+        public string $path,
         string $method,
-        callable|array $handler,
+        public readonly RouteHandler $handler,
         public readonly ?string $name = null
     ) {
         $this->method = strtoupper($method);
-        $this->handler = $handler;
+        $this->parseParameters();
+    }
+
+    public function withParameters(array $parameters): static
+    {
+       $this->parameters = $parameters;
+        return $this;
     }
 
     public function withMiddlewareBefore(string $middleware): static
@@ -72,16 +87,55 @@ class Route
         return $this->method;
     }
 
-    public function execute(RequestInterface $request): ResponseInterface
-    {
-        /** @phpstan-ignore-next-line */
-        return call_user_func($this->handler, $request);
+    public function bind(
+        string $parameter,
+        string $model,
+        string $findMethod = 'findForRoute',
+        ?callable $condition = null,
+    ): self {
+
+        $modelInstance = new $model();
+        if (! method_exists($modelInstance, $findMethod)) {
+            throw new InvalidArgumentException(
+                "Method {$findMethod} does not exist in model {$model}"
+            );
+        }
+
+        $this->bindings[$parameter] = new RouteBinding(
+            modelClass: $model,
+            findMethod: $findMethod,
+            condition: $condition
+        );
+
+        return $this;
     }
 
     private function verifyMiddleware(string $middleware): void
     {
         if (! is_subclass_of($middleware, MiddlewareInterface::class)) {
             throw new InvalidArgumentException("{$middleware} must implement MiddlewareInterface");
+        }
+    }
+
+    private function parseParameters(): void
+    {
+        preg_match_all('/<([^>]+)>/', $this->path, $matches);
+
+        foreach ($matches[1] as $param) {
+            $parts = explode(':', $param);
+            $name = $parts[0];
+            $pattern = $parts[1] ?? '[^/]+';
+            $optional = str_ends_with($name, '?');
+
+            if ($optional) {
+                $name = rtrim($name, '?');
+            }
+
+            $this->parameterDefinitions[$name] = new RouteParameter(
+                name: $name,
+                pattern: $pattern,
+                optional: $optional
+            );
         }
     }
 }

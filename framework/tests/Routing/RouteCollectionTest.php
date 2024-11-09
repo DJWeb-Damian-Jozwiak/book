@@ -4,6 +4,7 @@ namespace Tests\Routing;
 
 use DJWeb\Framework\Routing\Route;
 use DJWeb\Framework\Routing\RouteCollection;
+use DJWeb\Framework\Routing\RouteHandler;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
@@ -14,7 +15,7 @@ class RouteCollectionTest extends TestCase
 
     public function testAddRoute(): void
     {
-        $route = new Route('/test', 'GET', fn() => 'test');
+        $route = new Route('/test', 'GET', new RouteHandler(callback: fn() => 'test'));
         $this->collection->addRoute($route);
 
         $this->assertCount(1, $this->collection);
@@ -23,7 +24,7 @@ class RouteCollectionTest extends TestCase
 
     public function testAddNamedRoute(): void
     {
-        $route = new Route('/test', 'GET', fn() => 'test', 'test_route');
+        $route = new Route('/test', 'GET', new RouteHandler(callback: fn() => 'test'), 'test_route');
         $this->collection->addRoute($route);
 
         $this->assertSame(
@@ -34,8 +35,8 @@ class RouteCollectionTest extends TestCase
 
     public function testFindRoute(): void
     {
-        $route1 = new Route('/test1', 'GET', fn() => 'test1');
-        $route2 = new Route('/test2', 'POST', fn() => 'test2');
+        $route1 = new Route('/test', 'GET', new RouteHandler(callback: fn() => 'test1'));
+        $route2 = new Route('/test2', 'POST', new RouteHandler(callback: fn() => 'test2'));
 
         $this->collection->addRoute($route1);
         $this->collection->addRoute($route2);
@@ -52,8 +53,8 @@ class RouteCollectionTest extends TestCase
 
     public function testIteration(): void
     {
-        $route1 = new Route('/test1', 'GET', fn() => 'test1');
-        $route2 = new Route('/test2', 'POST', fn() => 'test2');
+        $route1 = new Route('/test', 'GET', new RouteHandler(callback: fn() => 'test1'));
+        $route2 = new Route('/test', 'GET', new RouteHandler(callback: fn() => 'test2'));
 
         $this->collection->addRoute($route1);
         $this->collection->addRoute($route2);

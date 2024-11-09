@@ -16,10 +16,6 @@ use Tests\BaseTestCase;
 
 class LoggerFactoryTest extends BaseTestCase
 {
-    public function setUp(): void
-    {
-        $this->markTestSkipped('Not implemented yet');
-    }
     public function testCreate()
     {
         $app = Application::getInstance();

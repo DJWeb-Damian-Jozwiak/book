@@ -11,6 +11,7 @@ use DJWeb\Framework\Http\MiddlewareConfig;
 use DJWeb\Framework\Http\Request\Psr17\RequestFactory;
 use DJWeb\Framework\Http\Response;
 use DJWeb\Framework\Routing\Route;
+use DJWeb\Framework\Routing\RouteHandler;
 use DJWeb\Framework\Routing\Router;
 use DJWeb\Framework\Web\Application;
 use PHPUnit\Framework\TestCase;
@@ -27,7 +28,11 @@ class KernelTest extends BaseTestCase
         $this->container = Application::getInstance();
         $this->router = new Router($this->container);
         $this->router->addRoute(
-            new Route('/', 'GET', fn() => new Response()->withContent('hello world') )
+            new Route(
+                '/',
+                'GET',
+                handler: new RouteHandler(callback: fn() => new Response()->withContent('hello world'))
+            )
         );
         $this->container->set(Router::class, $this->router);
         $config = $this->createMock(ConfigContract::class);

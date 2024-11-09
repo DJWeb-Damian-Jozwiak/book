@@ -2,7 +2,9 @@
 
 namespace Tests\Routing;
 
+use DJWeb\Framework\Http\Response;
 use DJWeb\Framework\Routing\Route;
+use DJWeb\Framework\Routing\RouteHandler;
 use DJWeb\Framework\Routing\RouteMatcher;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
@@ -13,8 +15,7 @@ class RouteTest extends TestCase
 {
     public function testRouteMatches(): void
     {
-        $route = new Route('/test', 'GET', function () {
-        });
+        $route = new Route('/test', 'GET', new RouteHandler(callback: fn() => new Response()));
 
         $request = $this->createMock(ServerRequestInterface::class);
         $uri = $this->createMock(UriInterface::class);
@@ -29,8 +30,7 @@ class RouteTest extends TestCase
 
     public function testRouteDoesNotMatchDifferentPath(): void
     {
-        $route = new Route('/test', 'GET', function () {
-        });
+        $route = new Route('/test', 'GET', new RouteHandler(callback: fn() => new Response()));
 
         $request = $this->createMock(ServerRequestInterface::class);
         $uri = $this->createMock(UriInterface::class);
@@ -45,8 +45,7 @@ class RouteTest extends TestCase
 
     public function testRouteDoesNotMatchDifferentMethod(): void
     {
-        $route = new Route('/test', 'GET', function () {
-        });
+        $route = new Route('/test', 'GET', new RouteHandler(callback: fn() => new Response()));
 
         $request = $this->createMock(ServerRequestInterface::class);
         $uri = $this->createMock(UriInterface::class);
@@ -59,22 +58,9 @@ class RouteTest extends TestCase
         $this->assertFalse($matcher->matches($request, $route));
     }
 
-    public function testRouteExecution(): void
-    {
-        $response = $this->createMock(ResponseInterface::class);
-        $route = new Route('/test', 'GET', function () use ($response) {
-            return $response;
-        });
-
-        $request = $this->createMock(ServerRequestInterface::class);
-
-        $this->assertSame($response, $route->execute($request));
-    }
-
     public function testRouteGetters(): void
     {
-        $route = new Route('/test', 'GET', function () {
-        }, 'test_route');
+        $route = new Route('/test', 'GET', new RouteHandler(callback: fn() => new Response()), 'test_route');
 
         $this->assertSame('/test', $route->path);
         $this->assertSame('GET', $route->getMethod());

@@ -8,6 +8,7 @@ use DJWeb\Framework\Container\Container;
 use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\Exceptions\Routing\RouteNotFoundError;
 use DJWeb\Framework\Routing\Route;
+use DJWeb\Framework\Routing\RouteHandler;
 use DJWeb\Framework\Routing\Router;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
@@ -28,7 +29,7 @@ class RouterTest extends TestCase
 
     public function testAddRoute(): void
     {
-        $handler = fn() => 'test';
+        $handler = new RouteHandler(callback: fn() => 'test');
         $this->router->addRoute(new Route('/test', 'GET', $handler));
 
         $this->expectNotToPerformAssertions();
@@ -44,7 +45,7 @@ class RouterTest extends TestCase
         $request->method('getUri')->willReturn($uri);
         $request->method('getMethod')->willReturn('GET');
 
-        $handler = fn() => $response;
+        $handler = new RouteHandler(callback: fn() => $response);
         $this->router->addRoute(new Route('/test', 'GET', $handler));
 
         $result = $this->router->dispatch($request);
@@ -61,7 +62,11 @@ class RouterTest extends TestCase
         $request->method('getUri')->willReturn($uri);
         $request->method('getMethod')->willReturn('GET');
 
-        $this->router->addRoute(new Route('/test', 'GET', [TestController::class, 'testMethod']));
+        $this->router->addRoute(new Route(
+                '/test',
+                'GET',
+                new RouteHandler(TestController::class, 'testMethod'))
+        );
 
         $result = $this->router->dispatch($request);
         $this->assertEquals(200, $result->getStatusCode());

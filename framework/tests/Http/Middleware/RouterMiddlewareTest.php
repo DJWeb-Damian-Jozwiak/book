@@ -6,6 +6,7 @@ use DJWeb\Framework\Config\Contracts\ConfigContract;
 use DJWeb\Framework\Http\Middleware\RouterMiddleware;
 use DJWeb\Framework\Http\Response;
 use DJWeb\Framework\Routing\Route;
+use DJWeb\Framework\Routing\RouteHandler;
 use DJWeb\Framework\Routing\Router;
 use DJWeb\Framework\Web\Application;
 use Psr\Http\Server\MiddlewareInterface;
@@ -35,7 +36,7 @@ class RouterMiddlewareTest extends BaseTestCase
     {
         $app = Application::getInstance();
         $response = new Response();
-        $handler = fn() => $response;
+        $handler = new RouteHandler(callback: fn() => $response);
         $app->withRoutes(function (Router $router) use ($handler) {
             $router->addRoute(
                 new Route(
@@ -53,7 +54,7 @@ class RouterMiddlewareTest extends BaseTestCase
     {
         $app = Application::getInstance();
         $response = new Response();
-        $handler = fn() => $response;
+        $handler = new RouteHandler(callback: fn() => $response);
         $app->withRoutes(function (Router $router) use ($handler) {
             $router->addRoute(
                 new Route(

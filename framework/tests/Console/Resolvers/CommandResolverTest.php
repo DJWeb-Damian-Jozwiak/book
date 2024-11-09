@@ -14,8 +14,7 @@ class CommandResolverTest extends TestCase
 
     public function setUp(): void
     {
-        $this->markTestSkipped('Not implemented yet');
-        $this->app = Application::getInstance();
+          $this->app = Application::getInstance();
     }
 
     public function testResolveCommand()

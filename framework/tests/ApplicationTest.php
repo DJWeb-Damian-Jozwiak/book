@@ -6,6 +6,7 @@ use DJWeb\Framework\Config\Contracts\ConfigContract;
 use DJWeb\Framework\Exceptions\Container\ContainerError;
 use DJWeb\Framework\Http\Response;
 use DJWeb\Framework\Routing\Route;
+use DJWeb\Framework\Routing\RouteHandler;
 use DJWeb\Framework\Routing\Router;
 use DJWeb\Framework\Web\Application;
 use Psr\Http\Message\ResponseInterface;
@@ -16,7 +17,7 @@ class ApplicationTest extends BaseTestCase
     {
         $app = Application::getInstance();
         $app->withRoutes(function (Router $router) {
-            $router->addRoute(new Route('/', 'GET', fn() => new Response()));
+            $router->addRoute(new Route('/', 'GET', new RouteHandler(callback: fn() => new Response())));
         });
         $response = $app->handle();
         $this->assertInstanceOf(ResponseInterface::class, $response);

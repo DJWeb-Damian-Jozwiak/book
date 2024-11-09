@@ -178,6 +178,7 @@ class UserTest extends TestCase
 
     protected function setUp(): void
     {
+        //$this->markTestSkipped('argon 2 unsupported');
         $this->mockConnection = $this->createMock(ConnectionContract::class);
         Application::getInstance()->set(
             InsertQueryBuilder::class,

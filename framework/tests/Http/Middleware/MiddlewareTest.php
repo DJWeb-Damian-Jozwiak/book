@@ -5,6 +5,7 @@ namespace Tests\Http\Middleware;
 use DJWeb\Framework\Config\Contracts\ConfigContract;
 use DJWeb\Framework\Http\Response;
 use DJWeb\Framework\Routing\Route;
+use DJWeb\Framework\Routing\RouteHandler;
 use DJWeb\Framework\Routing\Router;
 use DJWeb\Framework\Web\Application;
 use Psr\Http\Message\ResponseInterface;
@@ -20,7 +21,6 @@ class MiddlewareTest extends BaseTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->markTestSkipped('Not implemented yet');
         $this->middlewareClass = new class implements MiddlewareInterface
         {
             public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -47,7 +47,7 @@ class MiddlewareTest extends BaseTestCase
         $app = Application::getInstance();
         $response = new Response();
 
-        $handler = fn() => $response;
+        $handler = new RouteHandler(callback: fn() => $response);
         $app->withRoutes(function (Router $router) use ($handler) {
             $router->addRoute(
                 new Route(
@@ -65,7 +65,7 @@ class MiddlewareTest extends BaseTestCase
     {
         $app = Application::getInstance();
         $response = new Response();
-        $handler = fn() => $response;
+        $handler = new RouteHandler(callback: fn() => $response);
         $app->withRoutes(function (Router $router) use ($handler) {
             $router->addRoute(
                 new Route(
@@ -83,7 +83,7 @@ class MiddlewareTest extends BaseTestCase
     {
         $app = Application::getInstance();
         $response = new Response();
-        $handler = fn() => $response;
+        $handler = new RouteHandler(callback: fn() => $response);
         $app->withRoutes(function (Router $router) use ($handler) {
             $router->addRoute(
                 new Route(

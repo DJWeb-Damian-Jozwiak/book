@@ -92,7 +92,7 @@ class RouteCollection implements \IteratorAggregate, \Countable
      */
     public function findRoute(RequestInterface $request): Route
     {
-        $matcher = new RouteMatcher();
+        $matcher = new AdvancedRouteMatcher();
         $matchingRoutes = array_filter(
             $this->routes,
             static fn (Route $route) => $matcher->matches($request, $route)
