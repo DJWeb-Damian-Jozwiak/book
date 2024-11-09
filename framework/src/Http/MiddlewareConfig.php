@@ -21,7 +21,9 @@ class MiddlewareConfig
     /**
      * @param Kernel $kernel
      * @param mixed $middleware
+     *
      * @return array<int, string>
+     *
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */

@@ -14,6 +14,7 @@ class ContextBuilder
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
      * @param Carbon $startTime
+     *
      * @return array<string|int, mixed>
      */
     public function buildSuccessContext(
@@ -33,6 +34,7 @@ class ContextBuilder
      * @param ServerRequestInterface $request
      * @param Carbon $startTime
      * @param \Throwable $exception
+     *
      * @return array<string|int, mixed>
      */
     public function buildExceptionContext(
@@ -86,6 +88,7 @@ class ContextBuilder
     /**
      * @param ServerRequestInterface $request
      * @param Carbon $startTime
+     *
      * @return array<string|int, mixed>
      */
     private function buildBaseContext(

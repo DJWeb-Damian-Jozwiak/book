@@ -43,6 +43,7 @@ class Kernel implements RequestHandlerInterface
 
     /**
      * @param MiddlewareInterface|array<int, mixed> $middleware
+     *
      * @return $this
      */
     public function withoutMiddleware(MiddlewareInterface|array $middleware): self
