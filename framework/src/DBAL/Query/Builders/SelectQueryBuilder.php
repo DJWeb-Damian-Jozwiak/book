@@ -90,7 +90,7 @@ class SelectQueryBuilder extends BaseQueryBuilder implements SelectQueryBuilderC
 
         $sql .= $this->buildWhereClause();
         $sql .= $this->orderByDecorator->getSQL();
-        $sql .= $this->limitDecorator->getSQL();
+        $sql .= ' '. $this->limitDecorator->getSQL();
 
         return trim($sql);
     }

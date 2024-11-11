@@ -19,6 +19,16 @@ readonly class RouteHandler
     ) {
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param array<string, mixed> $boundParameters
+     * @param ContainerContract $container
+     *
+     * @return ResponseInterface
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
     public function dispatch(
         ServerRequestInterface $request,
         array $boundParameters,
@@ -29,17 +39,25 @@ readonly class RouteHandler
             return ($this->callback)($request);
         }
         $arguments = $this->getArguments($request, $boundParameters);
-        $controller = $container->get($this->controller);
+        $controller = $container->get($this->controller ?? '');
         $action = $this->action;
         return $controller->$action(...$arguments);
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param array<string, mixed> $boundParameters
+     *
+     * @return array<int|string, mixed>
+     *
+     * @throws \ReflectionException
+     */
     public function getArguments(ServerRequestInterface $request, array $boundParameters): array
     {
-        $reflection = new ReflectionMethod($this->controller, $this->action);
+        $reflection = new ReflectionMethod($this->controller ?? '', $this->action ?? '');
         $parameters = $reflection->getParameters();
-        $parameters = array_filter($parameters, static fn ($parameter) => $parameter->getType());
-        $parameters = array_filter(
+        $parameters = array_filter($parameters, static fn ($parameter) => (bool) $parameter->getType());
+           $parameters = array_filter(
             $parameters,
             static fn ($parameter) => isset($boundParameters[$parameter->getName()])
         );

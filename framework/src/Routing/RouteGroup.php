@@ -13,6 +13,12 @@ class RouteGroup
 
     public readonly string $prefix;
 
+    /**
+     * @param string $prefix
+     * @param string|null $namespace
+     * @param array<int, string> $middlewareBefore
+     * @param array<int, string> $middlewareAfter
+     */
     public function __construct(
         string $prefix = '',
         public readonly ?string $namespace = null,
@@ -22,6 +28,14 @@ class RouteGroup
         $this->prefix = $this->normalizePath($prefix);
     }
 
+    /**
+     * @param string $prefix
+     * @param callable $callback
+     * @param string|null $namespace
+     * @param array<int, string> $middleware
+     *
+     * @return void
+     */
     public function group(
         string $prefix,
         callable $callback,
@@ -55,14 +69,10 @@ class RouteGroup
                 name: $route->name,
             );
         }
-        array_walk(
-            $this->middlewareBefore,
-            static fn (string $middleware) => $route->withMiddlewareBefore($middleware)
-        );
-        array_walk(
-            $this->middlewareAfter,
-            static fn (string $middleware) => $route->withMiddlewareAfter($middleware)
-        );
+        $before = $this->middlewareBefore;
+        $after = $this->middlewareAfter;
+        array_walk($before, static fn (string $middleware) => $route->withMiddlewareBefore($middleware));
+        array_walk($after, static fn (string $middleware) => $route->withMiddlewareAfter($middleware));
         $this->routes[] = $route;
     }
 
@@ -73,6 +83,7 @@ class RouteGroup
 
         // Zamień multiple slashes na pojedynczy
         $path = preg_replace('#/+#', '/', $path);
+        $path ??= '';
 
         // Dodaj leading slash jeśli nie ma
         if (! str_starts_with($path, '/')) {

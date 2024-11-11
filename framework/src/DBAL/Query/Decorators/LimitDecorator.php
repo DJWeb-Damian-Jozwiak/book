@@ -37,7 +37,7 @@ class LimitDecorator implements LimitDecoratorContract
         $sql = '';
         if ($this->limit !== null) {
             $sql = trim($sql);
-            $sql .= "LIMIT {$this->limit}";
+            $sql .= " LIMIT {$this->limit}";
         }
         return trim($sql);
     }

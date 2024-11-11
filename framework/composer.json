@@ -20,7 +20,7 @@
     "insights": "./vendor/bin/phpinsights -vvv",
     "insights-json": "./vendor/bin/phpinsights  --format=DJWeb\\\\Helpers\\\\Formatters\\\\FullJsonFormatter -n > insights.json",
     "insights-fix": "./vendor/bin/phpinsights --fix",
-    "phpstan": "vendor/bin/phpstan -l8 analyse",
+    "phpstan": "vendor/bin/phpstan -l8 analyse --memory-limit=-1",
     "test": "vendor/bin/phpunit",
     "test-coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit --extension=DJWeb\\\\Helpers\\\\PhpunitExtensions\\\\CodeCoverageExtension",
     "test-coverage-html": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-html coverage"

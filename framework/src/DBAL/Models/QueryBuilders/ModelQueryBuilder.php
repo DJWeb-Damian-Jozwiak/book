@@ -11,6 +11,7 @@ use DJWeb\Framework\DBAL\Contracts\Query\SelectQueryBuilderContract;
 use DJWeb\Framework\DBAL\Contracts\Query\UpdateQueryBuilderContract;
 use DJWeb\Framework\DBAL\Models\Model;
 use DJWeb\Framework\DBAL\Query\Builders\QueryBuilder;
+use DJWeb\Framework\DBAL\Query\Builders\SelectQueryBuilder;
 
 class ModelQueryBuilder
 {
@@ -52,7 +53,8 @@ class ModelQueryBuilder
 
     public function first(): ?Model
     {
-        $builder = $this->facade->select($this->model->table);
+        /** @var SelectQueryBuilder $builder */
+        $builder = $this->builder ?? $this->facade->select($this->model->table);
         $result = $builder->first();
         $this->builder = $builder;
         return $result ? $this->hydrate($result) : null;
@@ -63,7 +65,8 @@ class ModelQueryBuilder
      */
     public function get(): array
     {
-        $results = $this->builder->get();
+        $builder = $this->facade->select($this->model->table);
+        $results = $builder->get();
         return $this->hydrateMany($results);
     }
 
@@ -74,7 +77,7 @@ class ModelQueryBuilder
      */
     protected function hydrate(array $attributes): Model
     {
-        return $this->model->fill($attributes);
+        return (clone $this->model)->fill($attributes);
     }
 
     /**

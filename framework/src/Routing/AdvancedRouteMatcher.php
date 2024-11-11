@@ -11,11 +11,9 @@ class AdvancedRouteMatcher extends RouteMatcher
         $path = $this->normalizePath($path);
         $pattern = $this->buildPatternFromPath($route->path);
         $matches = [];
-
         if (! preg_match($pattern, $path, $matches)) {
             return parent::matchesPath($path, $route);
         }
-
         $parameters = array_map(
             static fn (RouteParameter $definition) => $definition->getValue($matches),
             $route->parameterDefinitions
@@ -25,30 +23,23 @@ class AdvancedRouteMatcher extends RouteMatcher
     }
     private function buildPatternFromPath(string $path): string
     {
-        $pattern = preg_quote($path, '/');
+        $pattern = $path;
+        $pattern = str_replace('/', '\/', $pattern);
 
-        // Zamiana <param> na named capture groups
-        $pattern = preg_replace('/\\\<([^:>]+)\\\>/', '(?P<$1>[^/]+)', $pattern);
-
-        // Zamiana <param:pattern> na named capture groups z pattern
-        $pattern = preg_replace('/\\\<([^:>]+):([^>]+)\\\>/', '(?P<$1>$2)', $pattern);
-
-        // Obsługa opcjonalnych parametrów
-        $pattern = preg_replace('/\\\<([^:>]+\?):([^>]+)\\\>/', '(?P<$1>$2)?', $pattern);
-        $pattern = preg_replace('/\\\<([^:>]+\?)\\\>/', '(?P<$1>[^/]+)?', $pattern);
-
-        return '/^' . $pattern . '$/';
+        $pattern = preg_replace_callback('/<(\w+)(?::([^>]+))?>/', static function ($matches) {
+            $regexPart = $matches[2] ?? '[\d\p{L}-]+';
+            return '(?<' . $matches[1] . '>' . $regexPart . ')';
+        }, $pattern);
+        return '#^' . $pattern . '$#';
     }
 
     private function normalizePath(string $path): string
     {
-        // Usuń trailing slash
         $path = rtrim($path, '/');
 
-        // Zamień multiple slashes na pojedynczy
         $path = preg_replace('#/+#', '/', $path);
 
-        // Dodaj leading slash jeśli nie ma
+        $path ??= '';
         if (! str_starts_with($path, '/')) {
             $path = '/' . $path;
         }

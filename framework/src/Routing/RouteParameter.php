@@ -8,7 +8,7 @@ readonly class RouteParameter
 {
     final public function __construct(
         public string $name,
-        public string $pattern = '[^/]+',
+        public string $pattern = '[\d\p{L}-]+',
         public bool $optional = false,
         public mixed $defaultValue = null
     ) {

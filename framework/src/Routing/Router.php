@@ -31,6 +31,14 @@ class Router
         return $this;
     }
 
+    /**
+     * @param string $prefix
+     * @param callable $callback
+     * @param string|null $namespace
+     * @param array<int, string>  $middleware
+     *
+     * @return void
+     */
     public function group(
         string $prefix,
         callable $callback,

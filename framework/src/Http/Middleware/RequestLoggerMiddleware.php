@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DJWeb\Framework\Http\Middleware;
 
 use Carbon\Carbon;
+use DJWeb\Framework\Base\Application;
 use DJWeb\Framework\Http\Middleware\RequestLogger\ContextBuilder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -17,13 +18,14 @@ class RequestLoggerMiddleware implements MiddlewareInterface
 {
     private const REQUEST_START_TIME = 'request_start_time';
     public function __construct(
-        private readonly LoggerInterface $logger,
+        private LoggerInterface $logger,
         private readonly ContextBuilder $contextBuilder
     ) {
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+        $this->logger = Application::getInstance()->logger;
         $startTime = Carbon::now();
         $request = $request->withAttribute('request_start_time', $startTime);
         $request = $request->withAttribute(self::REQUEST_START_TIME, $startTime);

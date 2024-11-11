@@ -28,7 +28,7 @@ class QueryBuilderTest extends BaseTestCase
         $query = $this->queryBuilder->select('users')
             ->limit(10)->offset(10);
         $this->assertEquals(
-            'SELECT * FROM users LIMIT 10 OFFSET 10',
+            'SELECT * FROM users  LIMIT 10 OFFSET 10',
             $query->getSQL()
         );
     }

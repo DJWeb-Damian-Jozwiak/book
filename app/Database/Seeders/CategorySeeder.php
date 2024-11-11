@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Database\Seeders;
 
+use App\Database\Factories\CategoryFactory;
 use DJWeb\Framework\DBAL\Models\Seeder;
 
-class DatabaseSeeder extends Seeder
+class CategorySeeder extends Seeder
 {
     public function run(): void
     {
-        $this->call(UserSeeder::class);
-        $this->call(CategorySeeder::class);
+        new CategoryFactory()->createMany(25);
     }
 };

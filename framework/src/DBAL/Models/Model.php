@@ -46,6 +46,11 @@ abstract class Model implements PropertyChangesContract
         $this->relations = new RelationDecorator($this);
     }
 
+    public function findForRoute(string|int $value): static
+    {
+        return self::query()->select()->where('id', '=', $value)->first();
+    }
+
     /**
      * @param array<string, mixed> $attributes
      *

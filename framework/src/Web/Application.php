@@ -6,6 +6,7 @@ namespace DJWeb\Framework\Web;
 
 use DJWeb\Framework\Http\Kernel;
 use DJWeb\Framework\Http\MiddlewareConfig;
+use DJWeb\Framework\Routing\ControllerRegistrar;
 use DJWeb\Framework\ServiceProviders\HttpServiceProvider;
 use DJWeb\Framework\ServiceProviders\RouterServiceProvider;
 use DJWeb\Framework\ServiceProviders\SchemaServiceProvider;
@@ -29,6 +30,17 @@ class Application extends \DJWeb\Framework\Base\Application
     {
         $request = $this->get(ServerRequestInterface::class);
         return $this->kernel->handle($request);
+    }
+
+    public function loadRoutes(
+        string $controllerNamespace,
+        string $controllerDirectory
+    ): void
+    {
+        new ControllerRegistrar($this)->registerControllers(
+            $controllerNamespace,
+            $controllerDirectory
+        );
     }
 
     public function withRoutes(callable $callback): void

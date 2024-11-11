@@ -14,25 +14,24 @@ readonly class ModelBinder implements ModelBinderContract
         private ContainerContract $container,
     ) {
     }
+
+    /**
+     * @param Route $route
+     * @return array<string, mixed>
+     */
     public function resolveBindings(Route $route): array
     {
-        $boundParameters = [];
-        $parameters = $route->parameters;
+        $boundParameters = array_map(fn ($parameterValue) => $parameterValue, $route->parameters);
         $bindings = $route->bindings;
-        $parameters = array_filter($parameters, static fn (string $name) => isset($bindings[$name]));
-
+        $parameters = array_intersect_key($route->parameters, $route->bindings);
         foreach ($parameters as $name => $value) {
             /** @var RouteBinding $binding */
             $binding = $bindings[$name];
             $model = $this->resolveModel($binding, $value);
 
-            if ($model === null) {
-                throw new ModelNotFoundError(
-                    "Model {$binding->modelClass} with identifier {$value} not found"
-                );
-            }
+            $this->checkIfModelExist($model, $binding, $value);
 
-            if ($binding->condition && ! ($binding->condition)($model)) {
+            if (! $binding->validCondition($model)) {
                 throw new ModelNotFoundError(
                     "Model {$binding->modelClass} with identifier {$value} did not satisfy conditions"
                 );
@@ -41,6 +40,15 @@ readonly class ModelBinder implements ModelBinderContract
             $boundParameters[$name] = $model;
         }
         return $boundParameters;
+    }
+
+    public function checkIfModelExist(?object $model, RouteBinding $binding, mixed $value): void
+    {
+        if ($model === null) {
+            throw new ModelNotFoundError(
+                "Model {$binding->modelClass} with identifier {$value} not found"
+            );
+        }
     }
 
     private function resolveModel(RouteBinding $binding, mixed $value): ?object

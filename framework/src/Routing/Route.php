@@ -33,18 +33,12 @@ class Route
     public private(set) array $parameters = [];
 
     /**
-     * @var array<int, RouteBinding>
+     * @var array<int|string, RouteBinding>
      */
     public private(set) array $bindings = [];
 
     private readonly string $method;
 
-    /**
-     * @param string $path
-     * @param string $method
-     * @param callable|array<int, string> $handler
-     * @param string|null $name
-     */
     public function __construct(
         public string $path,
         string $method,
@@ -55,6 +49,11 @@ class Route
         $this->parseParameters();
     }
 
+    /**
+     * @param array<string, mixed> $parameters
+     *
+     * @return $this
+     */
     public function withParameters(array $parameters): static
     {
        $this->parameters = $parameters;
@@ -91,7 +90,7 @@ class Route
         string $parameter,
         string $model,
         string $findMethod = 'findForRoute',
-        ?callable $condition = null,
+        ?\Closure $condition = null,
     ): self {
 
         $modelInstance = new $model();
