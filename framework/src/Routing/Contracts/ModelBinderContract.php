@@ -10,6 +10,7 @@ interface ModelBinderContract
 {
     /**
      * @param Route $route
+     *
      * @return array<string, mixed>
      */
     public function resolveBindings(Route $route): array;

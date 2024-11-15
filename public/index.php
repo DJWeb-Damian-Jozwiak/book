@@ -15,6 +15,11 @@ try {
     );
     $app->withRoutes($routes);
     echo $app->handle()->getBody()->getContents();
+} catch (\DJWeb\Framework\Exceptions\Validation\ValidationError $error) {
+    echo json_encode([
+        'status' => $error->getMessage(),
+        'errors' => $error->validationErrors
+    ]);
 } catch (\Throwable $e) {
     dump($e->getTrace());
     dd($e->getMessage());

@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Database\FormRequests\CategoryRequest;
 use App\Database\Models\Category as CategoryModel;
 use App\Dto\Category;
 use DJWeb\Framework\Http\Response;
@@ -29,5 +30,11 @@ class CategoriesController extends Controller
     {
         $dto = Category::fromCategory($category);
         return new Response()->withContent(json_encode($dto, flags: JSON_PRETTY_PRINT));
+    }
+
+    #[Route('/', methods: ['POST'])]
+    public function store(CategoryRequest $request): ResponseInterface
+    {
+        return new Response()->withContent(json_encode($request->toArray()));
     }
 }

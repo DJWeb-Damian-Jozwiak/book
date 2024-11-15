@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Routing;
 
+use App\Database\FormRequests\CategoryRequest;
 use Closure;
 use DJWeb\Framework\Container\Contracts\ContainerContract;
+use DJWeb\Framework\Exceptions\Validation\ValidationError;
+use DJWeb\Framework\Http\Request\Psr17\RequestFactory;
+use DJWeb\Framework\Validation\FormRequest;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionMethod;
+use ReflectionParameter;
 
 readonly class RouteHandler
 {
@@ -56,16 +61,49 @@ readonly class RouteHandler
     {
         $reflection = new ReflectionMethod($this->controller ?? '', $this->action ?? '');
         $parameters = $reflection->getParameters();
-        $parameters = array_filter($parameters, static fn ($parameter) => (bool) $parameter->getType());
-           $parameters = array_filter(
+        $parameters = array_filter($parameters, static fn($parameter) => (bool)$parameter->getType());
+        $parameters = array_filter(
             $parameters,
-            static fn ($parameter) => isset($boundParameters[$parameter->getName()])
+            static fn($parameter) => isset($boundParameters[$parameter->getName()])
         );
-        $args = array_map(static fn ($parameter) => $boundParameters[$parameter->getName()], $parameters);
-        return [
-            $request,
-            ...$args,
-        ];
+        $this->getRequestParam($request, $reflection);
+        $request = $this->getRequestParam($request, $reflection);
+        $args = array_map(static fn($parameter) => $boundParameters[$parameter->getName()], $parameters);
+        return array_filter(
+            [
+                $request,
+                ...$args,
+            ]
+        );
+    }
+
+    private function getRequestParam(
+        ServerRequestInterface $request,
+        ReflectionMethod $reflection
+    ): ?ServerRequestInterface
+    {
+        $parameters = $reflection->getParameters();
+        $parameters2 = array_filter(
+            $parameters,
+            static fn($parameter) => is_subclass_of($parameter->getType()->getName(), ServerRequestInterface::class)
+        );
+        $parameters3 = array_filter(
+            $parameters,
+            static fn($parameter) => is_subclass_of($parameter->getType()->getName(), FormRequest::class)
+        );
+
+        if ($parameters2) {
+            /** @var class-string<FormRequest> $className */
+            $className = $parameters2[0]->getType()->getName();
+            $item = new $className(...new RequestFactory()->getRequestConstructorParams());
+            $item->populateProperties();
+            $result = $item->validate();
+            if(!$result->isValid()) {
+                throw new ValidationError($result->errors);
+            }
+            return $item;
+        }
+        return $parameters3 ? $request : null;
     }
 
     public function withNamespace(string $namespace): static

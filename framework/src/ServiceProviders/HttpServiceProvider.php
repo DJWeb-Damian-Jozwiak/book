@@ -7,7 +7,9 @@ namespace DJWeb\Framework\ServiceProviders;
 use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\Container\ServiceProvider;
 use DJWeb\Framework\Http\Request\Psr17\RequestFactory;
+use DJWeb\Framework\Log\LoggerFactory;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
 
 class HttpServiceProvider extends ServiceProvider
 {

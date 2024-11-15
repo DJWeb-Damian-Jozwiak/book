@@ -42,6 +42,22 @@ class ServerRequest extends BaseRequest implements ServerRequestInterface
         parent::__construct($method, $uri, $body, $headerManager);
     }
 
+    public static function createFromServerRequest(ServerRequest $request): static
+    {
+        return new static(
+            $request->getMethod(),
+            $request->getUri(),
+            $request->getBody(),
+            $request->headerManager,
+            $request->serverParams,
+            $request->cookieParams,
+            $request->queryParamsManager,
+            $request->uploadedFilesManager,
+            $request->parsedBodyManager,
+            $request->attributesManager
+        );
+    }
+
     /**
      * @return array<string, mixed>
      */

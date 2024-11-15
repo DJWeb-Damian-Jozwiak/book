@@ -48,6 +48,13 @@ class RequestFactory implements ServerRequestFactoryInterface
     public function createFromGlobals(): Request
     {
         return new Request(
+            ...$this->getRequestConstructorParams()
+        );
+    }
+
+    public function getRequestConstructorParams(): array
+    {
+        return [
             $_SERVER['REQUEST_METHOD'] ?? 'GET',
             new UriBuilder()->createUriFromGlobals(),
             new Stream('php://input'),
@@ -58,7 +65,7 @@ class RequestFactory implements ServerRequestFactoryInterface
             new UploadedFilesManager($this->parseFiles($_FILES)),
             new ParsedBodyManager(new ParsedBody()->get()),
             new AttributesManager()
-        );
+        ];
     }
 
     /**
