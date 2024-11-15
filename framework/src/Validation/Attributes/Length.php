@@ -10,8 +10,8 @@ use Attribute;
 class Length extends ValidationAttribute
 {
     public function __construct(
-        private readonly ?int $min = null,
-        private readonly ?int $max = null,
+        private readonly int $min,
+        private readonly int $max,
         ?string $message = null
     ) {
         $this->message = $message ?? "Field must be between {$min} and {$max} characters";

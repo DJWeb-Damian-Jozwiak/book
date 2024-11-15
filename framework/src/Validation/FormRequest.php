@@ -10,10 +10,8 @@ use ReflectionProperty;
 
 abstract class FormRequest extends Request
 {
-    protected ValidationResult $validationResult;
     public protected(set) bool $isValidated = false;
-    private array $validatedData = [];
-
+    protected ValidationResult $validationResult;
     public function validate(): ValidationResult
     {
         if ($this->isValidated)
@@ -25,7 +23,7 @@ abstract class FormRequest extends Request
         $this->isValidated = true;
         return $this->validationResult;
     }
-    public function populateProperties(): array
+    public function populateProperties(): void
     {
         $reflection = new \ReflectionClass($this);
         $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
@@ -33,16 +31,16 @@ abstract class FormRequest extends Request
         $properties = array_filter($properties, $this->propertyProvided(...));
         $properties = array_filter($properties, $this->propertyHasType(...));
         $data = $this->baseData();
-        $result = [];
         foreach ($properties as $property)
         {
             $value = $data[$property->getName()];
+            /** @var \ReflectionNamedType $type */
             $type = $property->getType();
             $propertyName = $property->getName();
-            $value ??= new ValueCaster()->cast($type->getName(), $value);;
+            $value ??= new ValueCaster()->cast($type->getName(), $value);
+
             $this->{$propertyName} = $value;
         }
-        return $result;
     }
 
     /**
@@ -65,13 +63,12 @@ abstract class FormRequest extends Request
     private function hasIsValidatedAttribute(\ReflectionProperty $property): bool
     {
         $attributes = $property->getAttributes(IsValidated::class);
-        return (bool)($attributes);
+        return (bool) ($attributes);
     }
 
     private function propertyProvided(\ReflectionProperty $property): bool
     {
         $property_name = $property->getName();
         return isset($this->baseData()[$property_name]);
-
     }
 }

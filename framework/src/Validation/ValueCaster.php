@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Validation;
+
+use Closure;
 
 class ValueCaster
 {
@@ -8,6 +12,10 @@ class ValueCaster
     {
         return ($this->maps()[$type])($value) ?? $value;
     }
+
+    /**
+     * @return array<string, Closure>
+     */
     protected function maps(): array
     {
         return [
@@ -22,17 +30,24 @@ class ValueCaster
     private function toBool(mixed $value): bool
     {
         $bools = ['true', true, 1, '1', 'on', 'yes', 'y'];
-        return in_array($value, $bools, true);
+return in_array($value, $bools, true);
     }
 
+    /**
+     * @param mixed $value
+     * @return array<int|string, mixed>
+     */
     private function toArray(mixed $value): array
     {
         if (is_array($value)) {
             return $value;
+
         }
         if (is_string($value)) {
-            return json_decode ($value, true);
+            return json_decode($value, true);
+
         }
         return (array) $value;
     }
+
 }

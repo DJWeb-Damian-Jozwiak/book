@@ -52,6 +52,10 @@ class RequestFactory implements ServerRequestFactoryInterface
         );
     }
 
+    /**
+     * @return array<int, mixed>
+     * @throws \JsonException
+     */
     public function getRequestConstructorParams(): array
     {
         return [
@@ -64,7 +68,7 @@ class RequestFactory implements ServerRequestFactoryInterface
             new QueryParamsManager($_GET),
             new UploadedFilesManager($this->parseFiles($_FILES)),
             new ParsedBodyManager(new ParsedBody()->get()),
-            new AttributesManager()
+            new AttributesManager(),
         ];
     }
 

@@ -14,7 +14,8 @@
     "fakerphp/faker": "^1.23",
     "psr/log": "^3.0",
     "psr/http-server-handler": "^1.0",
-    "psr/http-server-middleware": "^1.0"
+    "psr/http-server-middleware": "^1.0",
+    "ezyang/htmlpurifier": "^4.18"
   },
   "scripts": {
     "insights": "./vendor/bin/phpinsights -vvv",

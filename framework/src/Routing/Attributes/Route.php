@@ -9,6 +9,9 @@ use Attribute;
 #[Attribute(Attribute::TARGET_METHOD)]
 readonly class Route
 {
+    /**
+     * @var string|array<int, string>
+     */
     public string|array $methods;
 
     /**

@@ -16,8 +16,8 @@ use Throwable;
 
 class RequestLoggerMiddleware implements MiddlewareInterface
 {
-    private LoggerInterface $logger;
     private const REQUEST_START_TIME = 'request_start_time';
+    private LoggerInterface $logger;
     public function __construct(
         private readonly ContextBuilder $contextBuilder
     ) {

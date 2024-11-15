@@ -44,9 +44,9 @@ class AttributeValidator implements Validator
      */
     private function validateProperty(
         \ReflectionProperty $property,
-        object              $request,
-        array               $data,
-        ValidationResult    $result
+        object $request,
+        array $data,
+        ValidationResult $result
     ): void
     {
         $attributes = $property->getAttributes();
@@ -54,7 +54,7 @@ class AttributeValidator implements Validator
         foreach ($attributes as $attribute) {
             /** @var ValidationRule $rule */
             $rule = $attribute->newInstance();
-            if (!$rule->validate($value, $data)) {
+            if (! $rule->validate($value, $data)) {
                 $result->addError(
                     $property->getName(),
                     $rule->message
@@ -65,6 +65,10 @@ class AttributeValidator implements Validator
         }
     }
 
+    /**
+     * @param object $request
+     * @return array<string, mixed>
+     */
     private function extractData(object $request): array
     {
         return get_object_vars($request);

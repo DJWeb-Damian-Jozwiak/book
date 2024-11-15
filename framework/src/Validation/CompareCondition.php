@@ -14,6 +14,9 @@ readonly class CompareCondition
         return $this->maps()[$operator]($value) ?? false;
     }
 
+    /**
+     * @return array<string, \Closure>
+     */
     protected function maps(): array
     {
         return [

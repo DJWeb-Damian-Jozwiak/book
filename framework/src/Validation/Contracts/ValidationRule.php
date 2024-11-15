@@ -6,6 +6,10 @@ namespace DJWeb\Framework\Validation\Contracts;
 
 interface ValidationRule
 {
+
+    public string $message {
+        get;
+    }
     /**
      * @param mixed $value
      * @param array<string, mixed> $data
@@ -14,7 +18,4 @@ interface ValidationRule
      */
     public function validate(mixed $value, array $data = []): bool;
 
-    public string $message {
-        get;
-    }
 }

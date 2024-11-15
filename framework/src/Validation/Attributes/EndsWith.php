@@ -10,12 +10,12 @@ use Attribute;
 class EndsWith extends ValidationAttribute
 {
     /**
-     * @var list<string>
+     * @var array<int, string>
      */
     private readonly array $suffixes;
 
     /**
-     * @param list<mixed> $suffixes
+     * @param array<int, string> $suffixes
      * @param string|null $message
      */
     public function __construct(

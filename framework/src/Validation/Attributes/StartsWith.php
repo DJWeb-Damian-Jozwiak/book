@@ -8,12 +8,12 @@ use Attribute;
 class StartsWith extends ValidationAttribute
 {
     /**
-     * @var list<string>
+     * @var array<int, string>
      */
     private readonly array $prefixes;
 
     /**
-     * @param list<mixed> $suffixes
+     * @param array<int, string> $suffixes
      * @param string|null $message
      */
     public function __construct(

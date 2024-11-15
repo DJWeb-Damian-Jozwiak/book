@@ -7,7 +7,6 @@ namespace DJWeb\Framework\Validation\Attributes;
 use Attribute;
 use DJWeb\Framework\Validation\Contracts\ValidationRule;
 
-#[Attribute(Attribute::TARGET_PROPERTY)]
 abstract class ValidationAttribute implements ValidationRule
 {
     public string $message {
