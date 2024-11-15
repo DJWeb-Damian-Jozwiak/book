@@ -30,20 +30,10 @@
   "prefer-stable": true,
   "require-dev": {
     "phpunit/phpunit": "^11",
-    "nunomaduro/phpinsights": "dev-feature/sebastian-diff-6",
+    "nunomaduro/phpinsights": "^v2.12.0",
     "phpstan/phpstan": "^1.11",
     "symfony/var-dumper": "^5.0"
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/IsraelPinheiro/phpinsights"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/indy2kro/phploc"
-    }
-  ],
   "config": {
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true
