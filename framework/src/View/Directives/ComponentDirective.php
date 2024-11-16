@@ -18,40 +18,72 @@ class ComponentDirective extends Directive
         $content = $this->compilePattern(
             '/\@slot\([\'"](.*?)[\'"]\)(.*?)\@endslot/s',
             $content,
-            fn($matches) => "<?php \$__component->withNamedSlot('{$matches[1]}', '{$matches[2]}'); ?>"
+            function($matches) {
+                $slotName = $matches[1];
+                // kompilujemy zawartość slotu przed przypisaniem
+                $slotContent = $this->compileComponents($matches[2]);
+                return "<?php ob_start(); ?>{$slotContent}<?php \$__component->withNamedSlot('{$slotName}', ob_get_clean()); ?>";
+            }
         );
 
-        // Komponent z atrybutami
-        $content = $this->compilePattern(
+        // Kompilujemy główny komponent i zagnieżdżone
+        return $this->compileComponents($content);
+    }
+
+    private function compileComponents(string $content): string
+    {
+        return preg_replace_callback(
             '/\<x-([^>]+)(?:\s([^>]*))?\>(.*?)\<\/x-\1\>/s',
-            $content,
             function($matches) {
                 $componentName = $this->formatComponentName($matches[1]);
                 $attributes = $this->parseAttributes($matches[2] ?? '');
                 $slot = $matches[3] ?? '';
 
+                // Rekurencyjnie kompilujemy zagnieżdżone komponenty w slocie
+                $compiledSlot = $this->compileComponents($slot);
+
                 return "<?php 
                     \$__component = new \\App\\View\\Components\\{$componentName}({$attributes}); 
-                    \$__component->withSlot('{$slot}');
+                    ob_start(); 
+                    ?>{$compiledSlot}<?php 
+                    \$__component->withSlot(ob_get_clean());
                     echo \$__component->render();
                 ?>";
-            }
+            },
+            $content
         );
-
-        return $content;
     }
 
     private function parseAttributes(string $attributesString): string
     {
+        if (empty($attributesString)) {
+            return '';
+        }
+
         preg_match_all('/(\w+)=[\'"](.*?)[\'"]/', $attributesString, $matches, PREG_SET_ORDER);
 
         $attributes = [];
         foreach ($matches as $match) {
-            $attributes[$match[1]] = $match[2];
+            $name = $match[1];
+            $value = $match[2];
+
+            // Konwersja stringów na odpowiednie typy
+            if ($value === 'true') {
+                $value = true;
+            } elseif ($value === 'false') {
+                $value = false;
+            }
+
+            $attributes[$name] = $value;
         }
 
         return implode(', ', array_map(
-            fn($key, $value) => "$key: '$value'",
+            function($key, $value) {
+                if (is_bool($value)) {
+                    return "$key: " . ($value ? 'true' : 'false');
+                }
+                return "$key: '$value'";
+            },
             array_keys($attributes),
             $attributes
         ));

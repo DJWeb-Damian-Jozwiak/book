@@ -10,7 +10,7 @@ use DJWeb\Framework\View\Component;
 class Button extends Component
 {
     public function __construct(
-        public ButtonType $type = ButtonType::Primary,
+        public string $type = 'primary',
         public ?string $size = null,
         public bool $outline = false,
         public bool $disabled = false,
