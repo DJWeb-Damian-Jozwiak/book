@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\View\Engines;
 
 use DJWeb\Framework\Config\Config;
@@ -10,21 +12,22 @@ use Twig\Loader\FilesystemLoader;
 class TwigRendererAdapter implements RendererContract
 {
     protected Environment $twig;
+    /**
+     * @var array<string, mixed>
+     */
     protected array $data = [];
 
     public function __construct(
         string $template_path,
         string $cache_path,
-    ) {
+    )
+    {
         $loader = new FilesystemLoader($template_path);
-        $this->twig = new Environment($loader);
+        $this->twig = new Environment($loader, [
+            'cache' => $cache_path,
+        ]);
     }
 
-    /**
-     * @param string $template
-     * @param array<string, mixed> $data
-     * @return string
-     */
     public function render(string $template, array $data = []): string
     {
         return $this->twig->render($template, $data);
@@ -45,14 +48,18 @@ class TwigRendererAdapter implements RendererContract
                 new \RecursiveDirectoryIterator($cache_path, \FilesystemIterator::SKIP_DOTS),
                 \RecursiveIteratorIterator::CHILD_FIRST
             );
-
             foreach ($files as $file) {
                 if ($file->isDir()) {
                     rmdir($file->getRealPath());
+
                 } else {
                     unlink($file->getRealPath());
+
                 }
+
             }
+
         }
     }
+
 }
