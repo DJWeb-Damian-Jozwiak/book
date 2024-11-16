@@ -35,6 +35,7 @@ return in_array($value, $bools, true);
 
     /**
      * @param mixed $value
+     *
      * @return array<int|string, mixed>
      */
     private function toArray(mixed $value): array

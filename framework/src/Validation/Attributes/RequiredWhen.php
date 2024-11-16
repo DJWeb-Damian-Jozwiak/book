@@ -20,17 +20,13 @@ class RequiredWhen extends ValidationAttribute
     ) {
         $this->message = $message ?? 'This field is required based on other fields';
     }
-    /**
-     * @param mixed $value
-     * @param array<string, mixed> $data
-     * @return bool
-     */
-    public function validate(mixed $value, array $data = []): bool
+
+    public function validate(mixed $value): bool
     {
         $conditions = $this->conditions;
-        $conditions = array_intersect_key($conditions, $data);
+        $conditions = array_intersect_key($conditions, $this->data);
         foreach ($conditions as $field => $condition) {
-            $compareCondition = new CompareCondition($data[$field]);
+            $compareCondition = new CompareCondition($this->data[$field]);
 
             if ($compareCondition->compare(...$condition)) {
                 return $value !== null && $value !== '';

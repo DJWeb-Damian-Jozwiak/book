@@ -17,15 +17,9 @@ class Length extends ValidationAttribute
         $this->message = $message ?? "Field must be between {$min} and {$max} characters";
     }
 
-    /**
-     * @param mixed $value
-     * @param array<string, mixed> $data
-     *
-     * @return bool
-     */
-    public function validate(mixed $value, array $data = []): bool
+    public function validate(mixed $value): bool
     {
-        return new MinLength($this->min)->validate($value, $data) &&
-            new MaxLength($this->max)->validate($value, $data);
+        return new MinLength($this->min)->validate($value) &&
+            new MaxLength($this->max)->validate($value);
     }
 }
