@@ -14,7 +14,7 @@ class Required extends ValidationAttribute
         $this->message = $message ?? 'This field is required';
     }
 
-    public function validate(mixed $value, array $data = []): bool
+    public function validate(mixed $value): bool
     {
         return $value !== null;
     }

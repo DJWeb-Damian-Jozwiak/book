@@ -14,13 +14,7 @@ class Email extends ValidationAttribute
         $this->message = $message ?? 'Invalid email format';
     }
 
-    /**
-     * @param mixed $value
-     * @param array<string, mixed> $data
-     *
-     * @return bool
-     */
-    public function validate(mixed $value, array $data = []): bool
+    public function validate(mixed $value): bool
     {
         return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
     }

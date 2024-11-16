@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Validation\Attributes;
 
 use Attribute;
@@ -24,13 +26,8 @@ class StartsWith extends ValidationAttribute
         $this->message = $message ?? 'Invalid suffix';
     }
 
-    /**
-     * @param mixed $value
-     * @param array<string, mixed> $data
-     * @return bool
-     */
-    public function validate(mixed $value, array $data = []): bool
+    public function validate(mixed $value): bool
     {
-        return array_filter($this->prefixes, fn($suffix) => str_starts_with($value, $suffix)) !== [];
+        return array_filter($this->prefixes, static fn ($suffix) => str_starts_with($value, $suffix)) !== [];
     }
 }

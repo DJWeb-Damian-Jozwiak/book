@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Validation;
 
+use DJWeb\Framework\Exceptions\Validation\ValidationError;
 use DJWeb\Framework\Http\Request\Psr7\Request;
 use DJWeb\Framework\Validation\Attributes\IsValidated;
 use ReflectionProperty;
@@ -21,9 +22,12 @@ abstract class FormRequest extends Request
         $validator = new AttributeValidator();
         $this->validationResult = $validator->validate($this);
         $this->isValidated = true;
+        if(! $this->validationResult->isValid()) {
+            throw new ValidationError($this->validationResult->errors);
+        }
         return $this->validationResult;
     }
-    public function populateProperties(): void
+    public function populateProperties(): self
     {
         $reflection = new \ReflectionClass($this);
         $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
@@ -41,6 +45,7 @@ abstract class FormRequest extends Request
 
             $this->{$propertyName} = $value;
         }
+        return $this;
     }
 
     /**

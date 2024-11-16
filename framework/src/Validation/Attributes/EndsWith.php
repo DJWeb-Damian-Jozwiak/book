@@ -26,13 +26,7 @@ class EndsWith extends ValidationAttribute
         $this->message = $message ?? 'Invalid suffix';
     }
 
-    /**
-     * @param mixed $value
-     * @param array<string, mixed> $data
-     *
-     * @return bool
-     */
-    public function validate(mixed $value, array $data = []): bool
+    public function validate(mixed $value): bool
     {
        return array_filter($this->suffixes, static fn ($suffix) => str_ends_with($value, $suffix)) !== [];
     }
