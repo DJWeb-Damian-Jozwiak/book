@@ -6,10 +6,6 @@ namespace DJWeb\Framework\View\Directives;
 
 class SwitchDirective extends Directive
 {
-    public string $name {
-        get => 'switch';
-}
-
     public function compile(string $content): string
     {
         $content = $this->compileSwitch($content);
@@ -64,4 +60,8 @@ return $this->compileEndSwitch($content);
         );
     }
 
+    public function getName(): string
+    {
+        return 'switch';
+    }
 }

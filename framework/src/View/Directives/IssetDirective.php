@@ -6,10 +6,6 @@ namespace DJWeb\Framework\View\Directives;
 
 class IssetDirective extends Directive
 {
-    public string $name {
-        get => 'isset';
-    }
-
     public function compile(string $content): string
     {
         $content = $this->compilePattern(
@@ -23,5 +19,10 @@ class IssetDirective extends Directive
             $content,
             static fn () => '<?php endif; ?>'
         );
+    }
+
+    public function getName(): string
+    {
+        return 'isset';
     }
 }

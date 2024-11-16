@@ -6,10 +6,6 @@ namespace DJWeb\Framework\View\Directives;
 
 class StackDirective extends Directive
 {
-    public string $name {
-        get => 'stack';
-    }
-
     public function compile(string $content): string
     {
         $content = $this->compilePattern(
@@ -27,5 +23,10 @@ PHP
             $content,
             fn ($matches) => "<?php echo \$this->renderStack('{$matches[1]}'); ?>"
         );
+    }
+
+    public function getName(): string
+    {
+        return 'stack';
     }
 }

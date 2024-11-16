@@ -6,10 +6,6 @@ namespace DJWeb\Framework\View\Directives;
 
 class IfDirective extends Directive
 {
-    public string $name {
-        get => 'if';
-    }
-
     public function compile(string $content): string
     {
         $content = $this->compileIf($content);
@@ -52,5 +48,10 @@ class IfDirective extends Directive
             $content,
             static fn () => '<?php endif; ?>'
         );
+    }
+
+    public function getName(): string
+    {
+       return 'if';
     }
 }

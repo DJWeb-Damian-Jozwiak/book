@@ -6,10 +6,6 @@ namespace DJWeb\Framework\View\Directives;
 
 class WhileDirective extends Directive
 {
-    public string $name {
-        get => 'while';
-    }
-
     public function compile(string $content): string
     {
         $content = $this->compilePattern(
@@ -23,5 +19,10 @@ class WhileDirective extends Directive
             $content,
             static fn () => '<?php endwhile; ?>'
         );
+    }
+
+    public function getName(): string
+    {
+        return 'while';
     }
 }

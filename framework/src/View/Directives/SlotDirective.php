@@ -6,10 +6,6 @@ namespace DJWeb\Framework\View\Directives;
 
 class SlotDirective extends Directive
 {
-    public string $name {
-        get => 'slot';
-}
-
     public function compile(string $content): string
     {
         return $this->compilePattern(
@@ -19,4 +15,8 @@ class SlotDirective extends Directive
         );
     }
 
+    public function getName(): string
+    {
+        return 'slot';
+    }
 }

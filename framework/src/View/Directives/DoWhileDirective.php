@@ -6,10 +6,6 @@ namespace DJWeb\Framework\View\Directives;
 
 class DoWhileDirective extends Directive
 {
-    public string $name {
-        get => 'doWhile';
-    }
-
     public function compile(string $content): string
     {
         $content = $this->compilePattern(
@@ -23,5 +19,10 @@ class DoWhileDirective extends Directive
             $content,
             static fn ($matches) => "<?php } while({$matches[1]}); ?>"
         );
+    }
+
+    public function getName(): string
+    {
+        return 'doWhile';
     }
 }

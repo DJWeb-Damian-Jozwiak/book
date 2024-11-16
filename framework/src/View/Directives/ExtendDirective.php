@@ -6,10 +6,6 @@ namespace DJWeb\Framework\View\Directives;
 
 class ExtendDirective extends Directive
 {
-    public string $name {
-        get => 'extends';
-    }
-
     public function compile(string $content): string
     {
         return $this->compilePattern(
@@ -17,5 +13,10 @@ class ExtendDirective extends Directive
             $content,
             fn ($matches) => "<?php \$this->extend('{$matches[1]}'); ?>"
         );
+    }
+
+    public function getName(): string
+    {
+       return 'extends';
     }
 }

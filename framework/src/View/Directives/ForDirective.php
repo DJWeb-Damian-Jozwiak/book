@@ -6,10 +6,6 @@ namespace DJWeb\Framework\View\Directives;
 
 class ForDirective extends Directive
 {
-    public string $name {
-        get => 'for';
-    }
-
     public function compile(string $content): string
     {
         $content = $this->compilePattern(
@@ -23,5 +19,10 @@ class ForDirective extends Directive
             $content,
             static fn () => '<?php endfor; ?>'
         );
+    }
+
+    public function getName(): string
+    {
+        return 'for';
     }
 }

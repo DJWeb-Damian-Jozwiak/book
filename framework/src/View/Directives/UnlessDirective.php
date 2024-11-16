@@ -6,10 +6,6 @@ namespace DJWeb\Framework\View\Directives;
 
 class UnlessDirective extends Directive
 {
-    public string $name {
-        get => 'unless';
-    }
-
     public function compile(string $content): string
     {
         $content = $this->compilePattern(
@@ -23,5 +19,10 @@ class UnlessDirective extends Directive
             $content,
             static fn () => '<?php endif; ?>'
         );
+    }
+
+    public function getName(): string
+    {
+        return 'unless';
     }
 }

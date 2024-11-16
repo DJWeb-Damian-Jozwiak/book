@@ -6,10 +6,6 @@ namespace DJWeb\Framework\View\Directives;
 
 class EmptyDirective extends Directive
 {
-    public string $name {
-        get => 'empty';
-    }
-
     public function compile(string $content): string
     {
         $content = $this->compilePattern(
@@ -23,5 +19,10 @@ class EmptyDirective extends Directive
             $content,
             static fn () => '<?php endif; ?>'
         );
+    }
+
+    public function getName(): string
+    {
+        return 'empty';
     }
 }

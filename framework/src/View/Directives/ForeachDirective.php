@@ -6,10 +6,6 @@ namespace DJWeb\Framework\View\Directives;
 
 class ForeachDirective extends Directive
 {
-    public string $name {
-        get => 'foreach';
-    }
-
     public function compile(string $content): string
     {
         $content = $this->compilePattern(
@@ -22,5 +18,10 @@ class ForeachDirective extends Directive
             $content,
             static fn () => '<?php endforeach; ?>'
         );
+    }
+
+    public function getName(): string
+    {
+        return 'foreach';
     }
 }

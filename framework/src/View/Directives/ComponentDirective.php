@@ -8,10 +8,6 @@ use DJWeb\Framework\Validation\ValueCaster;
 
 class ComponentDirective extends Directive
 {
-    public string $name {
-        get => 'component';
-    }
-
     public function compile(string $content): string
     {
         // Slot-y nazwane (@slot('name'))
@@ -41,6 +37,11 @@ class ComponentDirective extends Directive
                     echo \$__component->render();
                     \$__component = \$__prev_component;
                 ?>";
+    }
+
+    public function getName(): string
+    {
+        return 'component';
     }
 
     private function compileComponents(string $content): string
