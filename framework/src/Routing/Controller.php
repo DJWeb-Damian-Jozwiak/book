@@ -7,7 +7,6 @@ namespace DJWeb\Framework\Routing;
 use DJWeb\Framework\Container\Container;
 use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\View\Contracts\RendererContract;
-use DJWeb\Framework\View\View;
 use DJWeb\Framework\View\ViewManager;
 use DJWeb\Framework\Web\Application;
 use Psr\Http\Message\ResponseInterface;
@@ -26,9 +25,9 @@ abstract class Controller
         $this->viewManager = new ViewManager();
     }
 
-    public function withRenderer(RendererContract $renderer): void
+    public function withRenderer(string $viewRenderer): void
     {
-        $this->renderer = $renderer;
+        $this->viewRenderer = $viewRenderer;
     }
 
     public function render(string $view, array $data = []): ResponseInterface

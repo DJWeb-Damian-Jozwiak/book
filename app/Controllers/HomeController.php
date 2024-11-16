@@ -15,4 +15,11 @@ class HomeController extends Controller
     {
         return $this->render('twig/home.twig');
     }
+
+    #[Route('/blade', methods: 'GET')]
+    public function blade(): ResponseInterface
+    {
+        $this->withRenderer('blade');
+        return $this->render('home.blade.php', ['title' => 'Blade']);
+    }
 }

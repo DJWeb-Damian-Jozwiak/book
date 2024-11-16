@@ -54,6 +54,7 @@ class RequestFactory implements ServerRequestFactoryInterface
 
     /**
      * @return array<int, mixed>
+     *
      * @throws \JsonException
      */
     public function getRequestConstructorParams(): array

@@ -67,6 +67,7 @@ class AttributeValidator implements Validator
 
     /**
      * @param object $request
+     *
      * @return array<string, mixed>
      */
     private function extractData(object $request): array

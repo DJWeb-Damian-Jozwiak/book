@@ -1,0 +1,27 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DJWeb\Framework\View\Directives;
+
+class WhileDirective extends Directive
+{
+    public string $name {
+        get => 'while';
+    }
+
+    public function compile(string $content): string
+    {
+        $content = $this->compilePattern(
+            '/\@while\s*\((.*?)\)/',
+            $content,
+            static fn ($matches) => "<?php while({$matches[1]}): ?>"
+        );
+
+        return $this->compilePattern(
+            '/\@endwhile/',
+            $content,
+            static fn () => '<?php endwhile; ?>'
+        );
+    }
+}

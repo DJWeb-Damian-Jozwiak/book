@@ -6,7 +6,6 @@ namespace DJWeb\Framework\Validation\Contracts;
 
 interface ValidationRule
 {
-
     public string $message {
         get;
     }

@@ -17,6 +17,7 @@ class Email extends ValidationAttribute
     /**
      * @param mixed $value
      * @param array<string, mixed> $data
+     *
      * @return bool
      */
     public function validate(mixed $value, array $data = []): bool
