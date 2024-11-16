@@ -1,5 +1,6 @@
 <?php
 
 return [
-    'env' => env('APP_ENV')
+    'env' => env('APP_ENV'),
+    'name' => 'super blog'
 ];
