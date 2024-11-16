@@ -19,6 +19,6 @@ class Button extends Component
 
     protected function getView(): string
     {
-        return 'components.button';
+        return 'components/button.blade.php';
     }
 }

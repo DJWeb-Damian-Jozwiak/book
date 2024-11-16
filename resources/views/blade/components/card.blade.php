@@ -1,5 +1,5 @@
 <div class="card {{ $class }}">
-    @if(isset($slots['header']))
+    @isset($slots['header'])
         <div class="card-header">
             {{ $slots['header'] }}
         </div>
@@ -13,7 +13,7 @@
         {{ $slot }}
     </div>
 
-    @if(isset($slots['footer']))
+    @isset($slots['footer']))
         <div class="card-footer">
             {{ $slots['footer'] }}
         </div>

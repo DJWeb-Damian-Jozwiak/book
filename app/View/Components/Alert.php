@@ -16,6 +16,6 @@ class Alert extends Component
 
     protected function getView(): string
     {
-        return 'components.alert';
+        return 'components/alert.blade.php';
     }
 }

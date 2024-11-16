@@ -14,6 +14,6 @@ class Card extends Component
 
     protected function getView(): string
     {
-        return 'components.card';
+        return 'components/card.blade.php';
     }
 }

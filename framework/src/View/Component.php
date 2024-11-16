@@ -10,25 +10,58 @@ use ReflectionProperty;
 
 abstract class Component
 {
-    protected array $data = [];
-    protected array $slots = [];
+    private ?array $publicProperties = null;
+    private ?string $slot = null;
+    private array $slots = [];
 
-    public function __construct(array $data = [])
+    abstract protected function getView(): string;
+
+    public function withSlot(string $content): void
     {
-        $this->data = $data;
+        $this->slot = $content;
     }
 
-    abstract protected function getTemplatePath(): string;
+    public function withNamedSlot(string $name, string $content): void
+    {
+        $this->slots[$name] = $content;
+    }
 
     public function render(): string
     {
-        $template = file_get_contents($this->getTemplatePath());
-        return $this->interpolateTemplate($template);
+        $renderer = BladeAdapter::buildDefault();
+
+        try{
+            return $renderer->render(
+                $this->getView(),
+                array_merge(
+                    $this->getPublicProperties(),
+                    [
+                        'slot' => $this->slot,
+                        'slots' => $this->slots
+                    ]
+                )
+            );
+        } catch (\Throwable $e) {
+            dd($e);
+        }
+
     }
 
-    protected function interpolateTemplate(string $template): string
+    private function getPublicProperties(): array
     {
-        // Implementation of template interpolation with slots and data
-        return $template;
+        if ($this->publicProperties === null) {
+            $reflection = new ReflectionClass($this);
+            $properties = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
+
+            $this->publicProperties = [];
+            foreach ($properties as $property) {
+                if (!$property->isStatic()) {
+                    $this->publicProperties[$property->getName()] = $property->getValue($this);
+                }
+            }
+        }
+
+        return $this->publicProperties;
     }
+
 }

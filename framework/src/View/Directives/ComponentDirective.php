@@ -14,19 +14,51 @@ class ComponentDirective extends Directive
 
     public function compile(string $content): string
     {
-        return $this->compilePattern(
-            '/\@component\([\'"](.*?)[\'"](.*?)\)/',
+        // Slot-y nazwane (@slot('name'))
+        $content = $this->compilePattern(
+            '/\@slot\([\'"](.*?)[\'"]\)(.*?)\@endslot/s',
+            $content,
+            fn($matches) => "<?php \$__component->withNamedSlot('{$matches[1]}', '{$matches[2]}'); ?>"
+        );
+
+        // Komponent z atrybutami
+        $content = $this->compilePattern(
+            '/\<x-([^>]+)(?:\s([^>]*))?\>(.*?)\<\/x-\1\>/s',
             $content,
             function($matches) {
-                $component = $matches[1];
-                $params = $matches[2] ? $this->parseParams($matches[2]) : '';
-                return "<?php echo \$this->renderComponent('{$component}', [{$params}]); ?>";
+                $componentName = $this->formatComponentName($matches[1]);
+                $attributes = $this->parseAttributes($matches[2] ?? '');
+                $slot = $matches[3] ?? '';
+
+                return "<?php 
+                    \$__component = new \\App\\View\\Components\\{$componentName}({$attributes}); 
+                    \$__component->withSlot('{$slot}');
+                    echo \$__component->render();
+                ?>";
             }
         );
+
+        return $content;
     }
 
-    private function parseParams(string $params): string
+    private function parseAttributes(string $attributesString): string
     {
-        return $params;
+        preg_match_all('/(\w+)=[\'"](.*?)[\'"]/', $attributesString, $matches, PREG_SET_ORDER);
+
+        $attributes = [];
+        foreach ($matches as $match) {
+            $attributes[$match[1]] = $match[2];
+        }
+
+        return implode(', ', array_map(
+            fn($key, $value) => "$key: '$value'",
+            array_keys($attributes),
+            $attributes
+        ));
+    }
+
+    private function formatComponentName(string $name): string
+    {
+        return str_replace(' ', '', ucwords(str_replace('-', ' ', $name)));
     }
 }
