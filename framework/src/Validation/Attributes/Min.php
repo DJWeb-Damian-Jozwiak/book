@@ -16,7 +16,7 @@ class Min extends ValidationAttribute
         $this->message = $message ?? "Value must be at least {$min}";
     }
 
-    public function validate(mixed $value, array $data = []): bool
+    public function validate(mixed $value): bool
     {
         return (int) $value >= $this->min;
     }

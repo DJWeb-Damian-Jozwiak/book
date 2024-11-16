@@ -6,7 +6,6 @@ namespace DJWeb\Framework\Routing;
 
 use Closure;
 use DJWeb\Framework\Container\Contracts\ContainerContract;
-use DJWeb\Framework\Exceptions\Validation\ValidationError;
 use DJWeb\Framework\Http\Request\Psr17\RequestFactory;
 use DJWeb\Framework\Validation\FormRequest;
 use Psr\Http\Message\ResponseInterface;
@@ -19,7 +18,8 @@ readonly class RouteHandler
         private ?string $controller = null,
         private ?string $action = null,
         private ?Closure $callback = null
-    ) {
+    )
+    {
     }
 
     /**
@@ -77,7 +77,7 @@ readonly class RouteHandler
 
     public function withNamespace(string $namespace): static
     {
-        if(!$this->controller) {
+        if (! $this->controller) {
             return $this;
         }
         return new static(
@@ -113,11 +113,7 @@ readonly class RouteHandler
             /** @phpstan-ignore-next-line */
             $className = $parameters2[0]->getType()->getName();
             $item = new $className(...new RequestFactory()->getRequestConstructorParams());
-            $item->populateProperties();
-            $result = $item->validate();
-            if(! $result->isValid()) {
-                throw new ValidationError($result->errors);
-            }
+            $item->populateProperties()->validate();
             return $item;
         }
         return $parameters3 ? $request : null;

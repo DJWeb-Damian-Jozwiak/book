@@ -16,7 +16,7 @@ class Max extends ValidationAttribute
         $this->message = $message ?? "Value must be at most {$max}";
     }
 
-    public function validate(mixed $value, array $data = []): bool
+    public function validate(mixed $value): bool
     {
         return (int) $value >= $this->max;
     }

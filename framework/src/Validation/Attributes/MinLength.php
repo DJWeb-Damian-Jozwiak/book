@@ -17,13 +17,7 @@ class MinLength extends ValidationAttribute
         $this->message = $message ?? "The field must be at least {$this->minLength} characters long.";
     }
 
-    /**
-     * @param mixed $value
-     * @param array<string, mixed> $data
-     *
-     * @return bool
-     */
-    public function validate(mixed $value, array $data = []): bool
+    public function validate(mixed $value): bool
     {
         return strlen($value) >= $this->minLength;
     }

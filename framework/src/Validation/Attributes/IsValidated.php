@@ -7,10 +7,6 @@ namespace DJWeb\Framework\Validation\Attributes;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class IsValidated extends ValidationAttribute
+class IsValidated
 {
-    public function validate(mixed $value, array $data = []): bool
-    {
-        return true;
-    }
 }
