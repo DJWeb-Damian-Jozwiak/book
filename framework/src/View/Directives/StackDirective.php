@@ -15,8 +15,10 @@ class StackDirective extends Directive
         $content = $this->compilePattern(
             '/\@push\([\'"](.*?)[\'"]\)(.*?)\@endpush/s',
             $content,
-            fn ($matches) => "<?php \$this->pushToStack('{$matches[1]}'".
-                ", (function() { ob_start(); ?>{$matches[2]}<?php return ob_get_clean(); })(); ?>"
+            static fn ($matches) => <<<PHP
+            <?php
+\$this->pushToStack('{$matches[1]}' , (function() { ob_start(); ?>{$matches[2]}<?php return ob_get_clean(); })(); ?>
+PHP
         );
 
         // Handle @stack

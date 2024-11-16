@@ -15,7 +15,7 @@ class AssetManager implements AssetManagerContract
 
     public function push(string $stack, string $content): void
     {
-        if (!isset($this->stacks[$stack])) {
+        if (! isset($this->stacks[$stack])) {
             $this->stacks[$stack] = [];
 
         }
@@ -24,7 +24,7 @@ class AssetManager implements AssetManagerContract
 
     public function render(string $stack): string
     {
-        if (!isset($this->stacks[$stack])) {
+        if (! isset($this->stacks[$stack])) {
             return '';
 
         }

@@ -10,11 +10,21 @@ use ReflectionProperty;
 
 abstract class Component
 {
-    private ?array $publicProperties = null;
-    private ?string $slot = null;
-    private array $slots = [];
+    /**
+     * @var ?array<string, mixed>
+     */
+    private ?array $publicProperties {
+        get {
+            $this->publicProperties ??= $this->getPublicProperties();
+            return $this->publicProperties;
+        }
+    }
 
-    abstract protected function getView(): string;
+    private ?string $slot = null;
+    /**
+     * @var array<string, string>
+     */
+    private array $slots = [];
 
     public function withSlot(string $content): void
     {
@@ -30,38 +40,36 @@ abstract class Component
     {
         $renderer = BladeAdapter::buildDefault();
 
-        try{
-            return $renderer->render(
-                $this->getView(),
-                array_merge(
-                    $this->getPublicProperties(),
-                    [
-                        'slot' => $this->slot,
-                        'slots' => $this->slots
-                    ]
-                )
-            );
-        } catch (\Throwable $e) {
-            dd($e);
-        }
-
+        return $renderer->render(
+            $this->getView(),
+            array_merge(
+                $this->getPublicProperties(),
+                [
+                    'slot' => $this->slot,
+                    'slots' => $this->slots,
+                ]
+            )
+        );
     }
 
+    abstract protected function getView(): string;
+
+    /**
+     * @return array<string, mixed>
+     */
     private function getPublicProperties(): array
     {
-        if ($this->publicProperties === null) {
-            $reflection = new ReflectionClass($this);
-            $properties = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
+        $reflection = new ReflectionClass($this);
+        $properties = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
 
-            $this->publicProperties = [];
-            foreach ($properties as $property) {
-                if (!$property->isStatic()) {
-                    $this->publicProperties[$property->getName()] = $property->getValue($this);
-                }
+        $publicProperties = [];
+        foreach ($properties as $property) {
+            if (! $property->isStatic()) {
+                $publicProperties[$property->getName()] = $property->getValue($this);
             }
         }
 
-        return $this->publicProperties;
+        return $publicProperties;
     }
 
 }

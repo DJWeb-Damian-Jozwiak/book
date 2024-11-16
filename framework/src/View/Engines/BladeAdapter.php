@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace DJWeb\Framework\View\Engines;
 
 use DJWeb\Framework\Config\Config;
+use DJWeb\Framework\Utils\Directory;
+use DJWeb\Framework\Utils\File;
 use DJWeb\Framework\View\AssetManager;
 use DJWeb\Framework\View\Contracts\RendererContract;
 use DJWeb\Framework\View\Directives\ComponentDirective;
@@ -32,6 +34,9 @@ class BladeAdapter extends BaseAdapter implements RendererContract
     private AssetManager $assetManager;
 
     private ?string $extendedTemplate = null;
+    /**
+     * @var array<string, string>
+     */
     private array $sections = [];
     private string $currentSection = '';
 
@@ -60,7 +65,7 @@ class BladeAdapter extends BaseAdapter implements RendererContract
     public function endSection(): void
     {
 
-        if (!empty($this->currentSection)) {
+        if ($this->currentSection) {
             $this->sections[$this->currentSection] = ob_get_clean();
             $this->currentSection = '';
         }
@@ -100,11 +105,19 @@ class BladeAdapter extends BaseAdapter implements RendererContract
         return $content;
     }
 
+    public static function buildDefault(): RendererContract
+    {
+        $config = Config::get('views.engines.blade.paths');
+        $template_path = $config['template_path'];
+        $cache_path = $config['cache_path'];
+        return new BladeAdapter($template_path, $cache_path);
+    }
+
     private function renderTemplate(string $template, array $data): string
     {
         $cached_file = $this->getCachedPath($template);
 
-        if (!$this->isCached($template, $cached_file)) {
+        if (! $this->isCached($template, $cached_file)) {
             $content = $this->loader->load($template);
             $compiled = $this->compiler->compile($content);
             $this->cache($cached_file, $compiled);
@@ -136,12 +149,8 @@ class BladeAdapter extends BaseAdapter implements RendererContract
 
     private function isCached(string $template, string $cached_file): bool
     {
-        if (!file_exists($cached_file)) {
-            return false;
-        }
-
         $template_path = $this->template_path . '/' . $template;
-        return filemtime($cached_file) >= filemtime($template_path);
+        return File::isCached($template_path, $cached_file);
     }
 
     private function getCachedPath(string $template): string
@@ -151,11 +160,8 @@ class BladeAdapter extends BaseAdapter implements RendererContract
 
     private function cache(string $path, string $content): void
     {
-        if (!is_dir(dirname($path))) {
-            mkdir(dirname($path), 0777, true);
-        }
-        file_put_contents($path, $content);
-        chmod($path, 0777);
+        Directory::create(dirname($path));
+        File::create($path, $content);
     }
 
     private function evaluateTemplate(string $cached_file, array $data): string
@@ -164,13 +170,5 @@ class BladeAdapter extends BaseAdapter implements RendererContract
         ob_start();
         include_once $cached_file;
         return ob_get_clean();
-    }
-
-    public static function buildDefault(): RendererContract
-    {
-        $config = Config::get('views.engines.blade.paths');
-        $template_path = $config['template_path'];
-        $cache_path = $config['cache_path'];
-        return new BladeAdapter($template_path, $cache_path);
     }
 }

@@ -6,7 +6,6 @@ namespace DJWeb\Framework\View\Directives;
 
 class SectionDirective extends Directive
 {
-
     public string $name {
         get => 'section';
     }
@@ -16,15 +15,13 @@ class SectionDirective extends Directive
         $content = $this->compilePattern(
             '/\@section\([\'"](.*?)[\'"]\)/',
             $content,
-            fn($matches) => "<?php \$this->section('{$matches[1]}'); ?>"
+            fn ($matches) => "<?php \$this->section('{$matches[1]}'); ?>"
         );
-
-
 
         return $this->compilePattern(
             '/\@endsection/',
             $content,
-            fn() => "<?php \$this->endSection(); ?>"
+            static fn () => '<?php $this->endSection(); ?>'
         );
     }
 }

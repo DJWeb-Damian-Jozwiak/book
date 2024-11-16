@@ -27,7 +27,7 @@ class TemplateCompiler
         // Kompilujemy pozostałe dyrektywy
         array_walk(
             array: $this->directives,
-            callback: function (DirectiveContract $directive) use (&$content) {
+            callback: static function (DirectiveContract $directive) use (&$content): void {
                 $content = $directive->compile($content);
             }
         );
@@ -35,6 +35,11 @@ class TemplateCompiler
         return $content;
     }
 
+    public function addDirective(DirectiveContract $directive): self
+    {
+        $this->directives[] = $directive;
+        return $this;
+    }
 
     private function compileComments(string $content): string
     {
@@ -48,11 +53,5 @@ class TemplateCompiler
 
         // Escaped echo {{ $var }}
         return preg_replace('/\{\{(.*?)\}\}/', '<?php echo htmlspecialchars($1, ENT_QUOTES, \'UTF-8\'); ?>', $content);
-    }
-
-    public function addDirective(DirectiveContract $directive): self
-    {
-        $this->directives[] = $directive;
-        return $this;
     }
 }

@@ -6,11 +6,9 @@ namespace DJWeb\Framework\View\Directives;
 
 class ComponentDirective extends Directive
 {
-
     public string $name {
         get => 'component';
     }
-
 
     public function compile(string $content): string
     {
@@ -18,7 +16,7 @@ class ComponentDirective extends Directive
         $content = $this->compilePattern(
             '/\@slot\([\'"](.*?)[\'"]\)(.*?)\@endslot/s',
             $content,
-            function($matches) {
+            function ($matches) {
                 $slotName = $matches[1];
                 $slotContent = $this->compileComponents($matches[2]);
                 return "<?php \$__current_component = \$__component; ob_start(); ?>{$slotContent}<?php \$__component->withNamedSlot('{$slotName}', trim(ob_get_clean())); ?>";
@@ -33,7 +31,7 @@ class ComponentDirective extends Directive
     {
         return preg_replace_callback(
             '/\<x-([^>]+)(?:\s([^>]*))?\>(.*?)\<\/x-\1\>/s',
-            function($matches) {
+            function ($matches) {
                 static $counter = 0;
                 $counter++;
 
@@ -63,7 +61,7 @@ class ComponentDirective extends Directive
 
     private function parseAttributes(string $attributesString): string
     {
-        if (empty($attributesString)) {
+        if (! $attributesString) {
             return '';
         }
 
@@ -85,11 +83,11 @@ class ComponentDirective extends Directive
         }
 
         return implode(', ', array_map(
-            function($key, $value) {
+            static function ($key, $value) {
                 if (is_bool($value)) {
-                    return "$key: " . ($value ? 'true' : 'false');
+                    return "{$key}: " . ($value ? 'true' : 'false');
                 }
-                return "$key: '$value'";
+                return "{$key}: '{$value}'";
             },
             array_keys($attributes),
             $attributes
