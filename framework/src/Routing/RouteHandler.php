@@ -58,9 +58,9 @@ readonly class RouteHandler
         $parameters = $reflection->getParameters();
         $parameters = array_filter($parameters, static fn ($parameter) => (bool) $parameter->getType());
            $parameters = array_filter(
-            $parameters,
-            static fn ($parameter) => isset($boundParameters[$parameter->getName()])
-        );
+               $parameters,
+               static fn ($parameter) => isset($boundParameters[$parameter->getName()])
+           );
         $args = array_map(static fn ($parameter) => $boundParameters[$parameter->getName()], $parameters);
         return [
             $request,

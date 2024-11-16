@@ -17,11 +17,12 @@ readonly class ModelBinder implements ModelBinderContract
 
     /**
      * @param Route $route
+     *
      * @return array<string, mixed>
      */
     public function resolveBindings(Route $route): array
     {
-        $boundParameters = array_map(fn ($parameterValue) => $parameterValue, $route->parameters);
+        $boundParameters = array_map(static fn ($parameterValue) => $parameterValue, $route->parameters);
         $bindings = $route->bindings;
         $parameters = array_intersect_key($route->parameters, $route->bindings);
         foreach ($parameters as $name => $value) {

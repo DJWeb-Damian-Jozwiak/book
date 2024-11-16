@@ -17,7 +17,7 @@ readonly class Route
      */
     public function __construct(
         public string $path,
-        string|array  $methods = ['GET'],
+        string|array $methods = ['GET'],
     )
     {
         $this->methods = is_string($methods) ? [$methods] : $methods;
