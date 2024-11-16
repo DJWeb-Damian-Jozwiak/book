@@ -77,7 +77,7 @@ readonly class RouteHandler
 
     public function withNamespace(string $namespace): static
     {
-        if(! $this->controller) {
+        if(!$this->controller) {
             return $this;
         }
         return new static(
