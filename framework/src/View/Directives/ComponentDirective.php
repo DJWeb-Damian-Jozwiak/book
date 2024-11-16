@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\View\Directives;
 
+use DJWeb\Framework\Validation\ValueCaster;
+
 class ComponentDirective extends Directive
 {
     public string $name {
@@ -27,6 +29,20 @@ class ComponentDirective extends Directive
         return $this->compileComponents($content);
     }
 
+    function getPhpCompiledString(string $varName, string $componentName, string $attributes, string $compiledSlot): string
+    {
+        return "<?php 
+                    \$__prev_component = \$__component ?? null;
+                    {$varName} = new \\App\\View\\Components\\{$componentName}({$attributes}); 
+                    \$__component = {$varName};
+                    ob_start(); 
+                    ?>{$compiledSlot}<?php 
+                    \$__component->withSlot(trim(ob_get_clean()));
+                    echo \$__component->render();
+                    \$__component = \$__prev_component;
+                ?>";
+    }
+
     private function compileComponents(string $content): string
     {
         return preg_replace_callback(
@@ -44,16 +60,7 @@ class ComponentDirective extends Directive
                 // Rekurencyjnie kompilujemy zagnieżdżone komponenty w slocie
                 $compiledSlot = $this->compileComponents($slot);
 
-                return "<?php 
-                    \$__prev_component = \$__component ?? null;
-                    {$varName} = new \\App\\View\\Components\\{$componentName}({$attributes}); 
-                    \$__component = {$varName};
-                    ob_start(); 
-                    ?>{$compiledSlot}<?php 
-                    \$__component->withSlot(trim(ob_get_clean()));
-                    echo \$__component->render();
-                    \$__component = \$__prev_component;
-                ?>";
+                return $this->getPhpCompiledString($varName, $componentName, $attributes, $compiledSlot);
             },
             $content
         );
@@ -61,25 +68,12 @@ class ComponentDirective extends Directive
 
     private function parseAttributes(string $attributesString): string
     {
-        if (! $attributesString) {
-            return '';
-        }
-
         preg_match_all('/(\w+)=[\'"](.*?)[\'"]/', $attributesString, $matches, PREG_SET_ORDER);
 
         $attributes = [];
         foreach ($matches as $match) {
-            $name = $match[1];
-            $value = $match[2];
-
-            // Konwersja stringów na odpowiednie typy
-            if ($value === 'true') {
-                $value = true;
-            } elseif ($value === 'false') {
-                $value = false;
-            }
-
-            $attributes[$name] = $value;
+            $value = $this->castBool($match[2]);
+            $attributes[$match[1]] = $value;
         }
 
         return implode(', ', array_map(
@@ -92,6 +86,12 @@ class ComponentDirective extends Directive
             array_keys($attributes),
             $attributes
         ));
+    }
+
+    private function castBool(mixed $value): mixed
+    {
+        $booleans = ['true', 'false'];
+        return in_array($value, $booleans) ? new ValueCaster()->cast('bool', $value) : $value;
     }
 
     private function formatComponentName(string $name): string
