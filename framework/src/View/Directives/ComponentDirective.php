@@ -20,9 +20,8 @@ class ComponentDirective extends Directive
             $content,
             function($matches) {
                 $slotName = $matches[1];
-                // kompilujemy zawartość slotu przed przypisaniem
                 $slotContent = $this->compileComponents($matches[2]);
-                return "<?php ob_start(); ?>{$slotContent}<?php \$__component->withNamedSlot('{$slotName}', ob_get_clean()); ?>";
+                return "<?php \$__current_component = \$__component; ob_start(); ?>{$slotContent}<?php \$__component->withNamedSlot('{$slotName}', trim(ob_get_clean())); ?>";
             }
         );
 
@@ -35,19 +34,27 @@ class ComponentDirective extends Directive
         return preg_replace_callback(
             '/\<x-([^>]+)(?:\s([^>]*))?\>(.*?)\<\/x-\1\>/s',
             function($matches) {
+                static $counter = 0;
+                $counter++;
+
                 $componentName = $this->formatComponentName($matches[1]);
                 $attributes = $this->parseAttributes($matches[2] ?? '');
                 $slot = $matches[3] ?? '';
+
+                $varName = "\$__component_{$counter}";
 
                 // Rekurencyjnie kompilujemy zagnieżdżone komponenty w slocie
                 $compiledSlot = $this->compileComponents($slot);
 
                 return "<?php 
-                    \$__component = new \\App\\View\\Components\\{$componentName}({$attributes}); 
+                    \$__prev_component = \$__component ?? null;
+                    {$varName} = new \\App\\View\\Components\\{$componentName}({$attributes}); 
+                    \$__component = {$varName};
                     ob_start(); 
                     ?>{$compiledSlot}<?php 
-                    \$__component->withSlot(ob_get_clean());
+                    \$__component->withSlot(trim(ob_get_clean()));
                     echo \$__component->render();
+                    \$__component = \$__prev_component;
                 ?>";
             },
             $content
