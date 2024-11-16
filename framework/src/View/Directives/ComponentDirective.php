@@ -17,7 +17,8 @@ class ComponentDirective extends Directive
             function ($matches) {
                 $slotName = $matches[1];
                 $slotContent = $this->compileComponents($matches[2]);
-                return "<?php \$__current_component = \$__component; ob_start(); ?>{$slotContent}<?php \$__component->withNamedSlot('{$slotName}', trim(ob_get_clean())); ?>";
+                return "<?php \$__current_component = \$__component; ob_start(); ?>
+{$slotContent}<?php \$__component->withNamedSlot('{$slotName}', trim(ob_get_clean())); ?>";
             }
         );
 
@@ -25,7 +26,12 @@ class ComponentDirective extends Directive
         return $this->compileComponents($content);
     }
 
-    function getPhpCompiledString(string $varName, string $componentName, string $attributes, string $compiledSlot): string
+    function getPhpCompiledString(
+        string $varName,
+        string $componentName,
+        string $attributes,
+        string $compiledSlot
+    ): string
     {
         return "<?php 
                     \$__prev_component = \$__component ?? null;
