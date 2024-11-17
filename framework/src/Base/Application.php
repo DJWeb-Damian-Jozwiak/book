@@ -29,7 +29,12 @@ class Application extends Container
 
     public LoggerInterface $logger{
         get {
-            $this->_logger ??= LoggerFactory::create();
+            if($this->has(LoggerInterface::class)) {
+                $logger = $this->get(LoggerInterface::class);
+            } else {
+                $logger = LoggerFactory::create();
+            }
+            $this->_logger ??= $logger;
             $this->set(LoggerInterface::class, $this->_logger);
             return $this->_logger;
         }

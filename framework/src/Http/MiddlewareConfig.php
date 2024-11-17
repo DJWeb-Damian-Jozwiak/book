@@ -18,10 +18,6 @@ class MiddlewareConfig
         );
         $middleware = Config::get('middleware');
         $items = $this->mapMiddleware($kernel, $middleware);
-        $withoutMiddleware = array_map(
-            static fn (string $middlewareClass) => $kernel->container->get($middlewareClass),
-            $withoutMiddleware
-        );
         $kernel->withMiddleware($items);
         $kernel->withoutMiddleware($withoutMiddleware);
     }
