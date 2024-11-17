@@ -25,9 +25,9 @@ abstract class Controller
         $this->viewManager = new ViewManager();
     }
 
-    public function withRenderer(RendererContract $renderer): void
+    public function withRenderer(string $renderer): void
     {
-        $this->renderer = $renderer;
+        $this->viewRenderer = $renderer;
     }
 
     public function render(string $view, array $data = []): ResponseInterface

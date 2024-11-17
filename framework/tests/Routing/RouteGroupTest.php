@@ -8,11 +8,11 @@ use DJWeb\Framework\Routing\Route;
 use DJWeb\Framework\Routing\RouteGroup;
 use DJWeb\Framework\Routing\RouteHandler;
 use DJWeb\Framework\Routing\Router;
+use Helpers\Controllers\TestController;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 use Tests\BaseTestCase;
-use Tests\Helpers\TestController;
 
 class RouteGroupTest extends BaseTestCase
 {

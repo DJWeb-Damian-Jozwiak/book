@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Helpers;
+namespace Tests\Helpers\Controllers;
 
 use DJWeb\Framework\Http\Response;
 use DJWeb\Framework\Routing\Attributes\Route;

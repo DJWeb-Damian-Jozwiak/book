@@ -1,12 +1,13 @@
 <?php
 
-namespace Tests\Helpers;
+namespace Tests\Helpers\Controllers;
 
 use DJWeb\Framework\Http\Response;
 use DJWeb\Framework\Routing\Attributes\Route;
 use DJWeb\Framework\Routing\Attributes\RouteGroup;
 use DJWeb\Framework\Routing\Controller;
 use Psr\Http\Message\ResponseInterface;
+use Tests\Helpers\SampleValidationDto;
 
 #[RouteGroup('validation')]
 class TestControllerWithValidation extends Controller

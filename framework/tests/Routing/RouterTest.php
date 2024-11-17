@@ -10,11 +10,11 @@ use DJWeb\Framework\Exceptions\Routing\RouteNotFoundError;
 use DJWeb\Framework\Routing\Route;
 use DJWeb\Framework\Routing\RouteHandler;
 use DJWeb\Framework\Routing\Router;
+use Tests\Helpers\Controllers\TestController;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
-use Tests\Helpers\TestController;
 
 class RouterTest extends TestCase
 {
