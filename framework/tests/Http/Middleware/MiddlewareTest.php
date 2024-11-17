@@ -20,7 +20,6 @@ class MiddlewareTest extends BaseTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->markTestSkipped('Not implemented yet');
         $this->middlewareClass = new class implements MiddlewareInterface
         {
             public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -97,5 +96,23 @@ class MiddlewareTest extends BaseTestCase
         });
         $response = $app->handle();
         $this->assertEquals('', $response->getHeaderLine('X-Middleware-Test'));
+    }
+
+    public function testInvalidMiddleware(): void
+    {
+        $app = Application::getInstance();
+        $response = new Response();
+        $handler = fn() => $response;
+        $this->expectException(\InvalidArgumentException::class);
+        $app->withRoutes(function (Router $router) use ($handler) {
+            $router->addRoute(
+                new Route(
+                    '/',
+                    'GET',
+                    $handler
+                )->withMiddlewareAfter('invalid')
+            );
+        });
+
     }
 }

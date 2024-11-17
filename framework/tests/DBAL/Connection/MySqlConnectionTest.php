@@ -138,15 +138,13 @@ class MySqlConnectionTest extends BaseTestCase
 
     public function testConnectMysqlThrowsException(): void
     {
-
-        //$connection = new MySqlConnection();
-        //$this->expectException(PDOException::class);
-        //$connection->connect();
+        $connection = new MySqlConnection();
+        $this->expectException(PDOException::class);
+        $connection->connect();
     }
 
     protected function setUp(): void
     {
-        $this->markTestSkipped('This test is not working properly');
         parent::setUp();
         $this->connection = new MySqlConnection();
         $this->mockApplication();

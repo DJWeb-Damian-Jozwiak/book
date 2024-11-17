@@ -6,15 +6,15 @@ use DJWeb\Framework\Console\Application;
 use DJWeb\Framework\Console\Resolvers\CommandResolver;
 use DJWeb\Framework\Exceptions\Console\CommandNotFound;
 use PHPUnit\Framework\TestCase;
+use Tests\BaseTestCase;
 use Tests\Helpers\TestCommand;
 
-class CommandResolverTest extends TestCase
+class CommandResolverTest extends BaseTestCase
 {
     private Application $app;
 
     public function setUp(): void
     {
-        $this->markTestSkipped('Not implemented yet');
         $this->app = Application::getInstance();
     }
 
