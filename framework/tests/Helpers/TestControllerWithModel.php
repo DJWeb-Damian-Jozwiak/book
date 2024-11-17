@@ -26,4 +26,14 @@ class TestControllerWithModel extends Controller
         ];
         return new Response()->withContent(json_encode($data));
     }
+
+    #[RouteParam('post', '\d+', bind: Post::class)]
+    public function getInvalidPost(ServerRequestInterface $request, Post $post): ResponseInterface
+    {
+        $data = [
+            'id' => $post->id,
+            'status' => $post->status->value,
+        ];
+        return new Response()->withContent(json_encode($data));
+    }
 }
