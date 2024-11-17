@@ -10,8 +10,8 @@ use DJWeb\Framework\Container\Container;
 use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\Container\Contracts\ServiceProviderContract;
 use DJWeb\Framework\Exceptions\Container\ContainerError;
-use DJWeb\Framework\ServiceProviders\SchemaServiceProvider;
 use DJWeb\Framework\Log\LoggerFactory;
+use DJWeb\Framework\ServiceProviders\SchemaServiceProvider;
 use Psr\Log\LoggerInterface;
 
 class Application extends Container

@@ -19,7 +19,9 @@ class RouterMiddleware implements MiddlewareInterface
     /**
      * @param ServerRequestInterface $request
      * @param RequestHandlerInterface $handler
+     *
      * @return ResponseInterface
+     *
      * @codeCoverageIgnore
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

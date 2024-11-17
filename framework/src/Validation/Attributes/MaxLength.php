@@ -19,6 +19,7 @@ class MaxLength extends ValidationAttribute
 
     public function validate(mixed $value): bool
     {
+        $value ??= '';
         return strlen($value) <= $this->maxLength;
     }
 }

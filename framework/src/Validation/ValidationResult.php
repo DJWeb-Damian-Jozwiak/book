@@ -11,6 +11,10 @@ class ValidationResult
      */
     public private(set) array $errors;
 
+    public function __construct() {
+        $this->errors = [];
+    }
+
     public function addError(string $field, string $message): void
     {
         $this->errors[] = new ValidationError($field, $message);

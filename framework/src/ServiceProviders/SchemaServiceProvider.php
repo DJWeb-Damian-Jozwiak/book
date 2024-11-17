@@ -17,11 +17,11 @@ use DJWeb\Framework\DBAL\Contracts\Schema\ColumnManagerContract;
 use DJWeb\Framework\DBAL\Contracts\Schema\DatabaseInfoContract;
 use DJWeb\Framework\DBAL\Contracts\Schema\IndexManagerContract;
 use DJWeb\Framework\DBAL\Contracts\Schema\SchemaContract;
+use DJWeb\Framework\DBAL\Contracts\Schema\TableManagerContract;
 use DJWeb\Framework\DBAL\Query\Builders\DeleteQueryBuilder;
 use DJWeb\Framework\DBAL\Query\Builders\InsertQueryBuilder;
 use DJWeb\Framework\DBAL\Query\Builders\SelectQueryBuilder;
 use DJWeb\Framework\DBAL\Query\Builders\UpdateQueryBuilder;
-use DJWeb\Framework\DBAL\Contracts\Schema\TableManagerContract;
 use DJWeb\Framework\DBAL\Schema\MySQL\Schema;
 use DJWeb\Framework\DBAL\Schema\SchemaFactory;
 

@@ -8,6 +8,7 @@ interface SelectQueryBuilderContract extends QueryBuilderContract
 {
     /**
      * @param array<int, string> $columns
+     *
      * @return self
      */
     public function select(array $columns = ['*']): self;

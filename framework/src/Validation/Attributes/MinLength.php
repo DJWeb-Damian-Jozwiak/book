@@ -19,6 +19,7 @@ class MinLength extends ValidationAttribute
 
     public function validate(mixed $value): bool
     {
+        $value ??= '';
         return strlen($value) >= $this->minLength;
     }
 }
