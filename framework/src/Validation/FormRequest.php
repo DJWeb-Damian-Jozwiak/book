@@ -11,17 +11,11 @@ use ReflectionProperty;
 
 abstract class FormRequest extends Request
 {
-    public protected(set) bool $isValidated = false;
     protected ValidationResult $validationResult;
     public function validate(): ValidationResult
     {
-        if ($this->isValidated)
-        {
-            return $this->validationResult;
-        }
         $validator = new AttributeValidator();
         $this->validationResult = $validator->validate($this);
-        $this->isValidated = true;
         if(! $this->validationResult->isValid()) {
             throw new ValidationError($this->validationResult->errors);
         }
@@ -38,10 +32,7 @@ abstract class FormRequest extends Request
         foreach ($properties as $property)
         {
             $value = $data[$property->getName()];
-            /** @var \ReflectionNamedType $type */
-            $type = $property->getType();
             $propertyName = $property->getName();
-            $value ??= new ValueCaster()->cast($type->getName(), $value);
 
             $this->{$propertyName} = $value;
         }

@@ -18,6 +18,6 @@ class Max extends ValidationAttribute
 
     public function validate(mixed $value): bool
     {
-        return (int) $value >= $this->max;
+        return (int) $value <= $this->max;
     }
 }

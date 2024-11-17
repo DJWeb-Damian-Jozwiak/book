@@ -11,6 +11,7 @@ use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\Container\Contracts\ServiceProviderContract;
 use DJWeb\Framework\Exceptions\Container\ContainerError;
 use DJWeb\Framework\Log\LoggerFactory;
+use DJWeb\Framework\ServiceProviders\SchemaServiceProvider;
 use Psr\Log\LoggerInterface;
 
 class Application extends Container
@@ -29,7 +30,12 @@ class Application extends Container
 
     public LoggerInterface $logger{
         get {
-            $this->_logger ??= LoggerFactory::create();
+            if($this->has(LoggerInterface::class)) {
+                $logger = $this->get(LoggerInterface::class);
+            } else {
+                $logger = LoggerFactory::create();
+            }
+            $this->_logger ??= $logger;
             $this->set(LoggerInterface::class, $this->_logger);
             return $this->_logger;
         }
@@ -42,6 +48,7 @@ class Application extends Container
         $this->set(Container::class, $this);
         $this->set(ContainerContract::class, $this);
         $this->set(ConfigContract::class, new ConfigBase($this));
+        $this->registerServiceProvider(new SchemaServiceProvider());
     }
 
     public function __clone()

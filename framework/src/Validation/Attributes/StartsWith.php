@@ -28,6 +28,7 @@ class StartsWith extends ValidationAttribute
 
     public function validate(mixed $value): bool
     {
+        $value ??= '';
         return array_filter($this->prefixes, static fn ($suffix) => str_starts_with($value, $suffix)) !== [];
     }
 }

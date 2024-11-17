@@ -21,7 +21,7 @@ class RegisterControllerRoutes
     {
         $reflection = new ReflectionClass($controller);
         /** @var ?\ReflectionAttribute<RouteGroupAttribute> $attribute */
-        $attribute = $reflection->getAttributes(RouteGroupAttribute::class)[0];
+        $attribute = $reflection->getAttributes(RouteGroupAttribute::class)[0] ?? null;
         $groupAttribute = $attribute?->newInstance() ?? null;
         $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
         $methods = array_filter(

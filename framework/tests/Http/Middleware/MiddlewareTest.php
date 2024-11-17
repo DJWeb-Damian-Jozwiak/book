@@ -13,6 +13,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Tests\BaseTestCase;
+use function PHPUnit\Framework\callback;
 
 class MiddlewareTest extends BaseTestCase
 {
@@ -97,5 +98,23 @@ class MiddlewareTest extends BaseTestCase
         });
         $response = $app->handle();
         $this->assertEquals('', $response->getHeaderLine('X-Middleware-Test'));
+    }
+
+    public function testInvalidMiddleware(): void
+    {
+        $app = Application::getInstance();
+        $response = new Response();
+        $handler = new RouteHandler(callback: fn() => $response);
+        $this->expectException(\InvalidArgumentException::class);
+        $app->withRoutes(function (Router $router) use ($handler) {
+            $router->addRoute(
+                new Route(
+                    '/',
+                    'GET',
+                    $handler
+                )->withMiddlewareAfter('invalid')
+            );
+        });
+
     }
 }

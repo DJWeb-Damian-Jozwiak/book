@@ -5,6 +5,7 @@ namespace Tests\Http\Middleware;
 use DJWeb\Framework\Http\Middleware\RequestLogger\ContextBuilder;
 use DJWeb\Framework\Http\Middleware\RequestLoggerMiddleware;
 use DJWeb\Framework\Http\Request\Psr7\Request;
+use DJWeb\Framework\Web\Application;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
@@ -13,6 +14,12 @@ use Tests\BaseTestCase;
 
 class LogMiddlewareTest extends BaseTestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+        Application::withInstance(null);
+
+    }
     public function testException()
     {
         $logger = $this->createMock(LoggerInterface::class);
@@ -23,8 +30,10 @@ class LogMiddlewareTest extends BaseTestCase
             ->willThrowException($exception);
 
         $logger->expects($this->once())->method('error');
-
-        $middleware = new RequestLoggerMiddleware($logger, new ContextBuilder());
+        $app = Application::getInstance();
+        $app->bind('base_path', dirname(__DIR__,2));
+        $app->set(LoggerInterface::class, $logger);
+        $middleware = new RequestLoggerMiddleware(new ContextBuilder());
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Test exception');
         $middleware->process(
@@ -41,8 +50,10 @@ class LogMiddlewareTest extends BaseTestCase
             ->method('handle');
 
         $logger->expects($this->once())->method('info');
-
-        $middleware = new RequestLoggerMiddleware($logger, new ContextBuilder());
+        $app = Application::getInstance();
+        $app->bind('base_path', dirname(__DIR__,2));
+        $app->set(LoggerInterface::class, $logger);
+        $middleware = new RequestLoggerMiddleware(new ContextBuilder());
         $middleware->process(
             $this->createMock(ServerRequestInterface::class),
             $handler
