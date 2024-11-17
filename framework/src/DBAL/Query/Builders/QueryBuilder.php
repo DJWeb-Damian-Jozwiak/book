@@ -5,35 +5,39 @@ declare(strict_types=1);
 namespace DJWeb\Framework\DBAL\Query\Builders;
 
 use DJWeb\Framework\Base\Application;
+use DJWeb\Framework\DBAL\Contracts\Query\DeleteQueryBuilderContract;
+use DJWeb\Framework\DBAL\Contracts\Query\InsertQueryBuilderContract;
 use DJWeb\Framework\DBAL\Contracts\Query\QueryBuilderFacadeContract;
+use DJWeb\Framework\DBAL\Contracts\Query\SelectQueryBuilderContract;
+use DJWeb\Framework\DBAL\Contracts\Query\UpdateQueryBuilderContract;
 
 class QueryBuilder implements QueryBuilderFacadeContract
 {
-    public function insert(string $table): InsertQueryBuilder
+    public function insert(string $table): InsertQueryBuilderContract
     {
-        /** @var InsertQueryBuilder $item */
-        $item = Application::getInstance()->get(InsertQueryBuilder::class);
+        /** @var InsertQueryBuilderContract $item */
+        $item = Application::getInstance()->get(InsertQueryBuilderContract::class);
         return $item->table($table);
     }
 
-    public function update(string $table): UpdateQueryBuilder
+    public function update(string $table): UpdateQueryBuilderContract
     {
-        /** @var UpdateQueryBuilder $item */
-        $item = Application::getInstance()->get(UpdateQueryBuilder::class);
+        /** @var UpdateQueryBuilderContract $item */
+        $item = Application::getInstance()->get(UpdateQueryBuilderContract::class);
         return $item->table($table);
     }
 
-    public function delete(string $table): DeleteQueryBuilder
+    public function delete(string $table): DeleteQueryBuilderContract
     {
-        /** @var DeleteQueryBuilder $item */
-        $item = Application::getInstance()->get(DeleteQueryBuilder::class);
+        /** @var DeleteQueryBuilderContract $item */
+        $item = Application::getInstance()->get(DeleteQueryBuilderContract::class);
         return $item->table($table);
     }
 
-    public function select(string $table): SelectQueryBuilder
+    public function select(string $table): SelectQueryBuilderContract
     {
-        /** @var SelectQueryBuilder $item */
-        $item = Application::getInstance()->get(SelectQueryBuilder::class);
+        /** @var SelectQueryBuilderContract $item */
+        $item = Application::getInstance()->get(SelectQueryBuilderContract::class);
         return $item->table($table);
     }
 }
