@@ -9,6 +9,7 @@ use DJWeb\Framework\Config\Contracts\ConfigContract;
 use DJWeb\Framework\Container\Container;
 use DJWeb\Framework\Container\Contracts\ServiceProviderContract;
 use DJWeb\Framework\Exceptions\Container\ContainerError;
+use DJWeb\Framework\ServiceProviders\SchemaServiceProvider;
 use DJWeb\Framework\Log\LoggerFactory;
 use Psr\Log\LoggerInterface;
 
@@ -39,6 +40,7 @@ class Application extends Container
         parent::__construct();
         $this->set(Container::class, $this);
         $this->set(ConfigContract::class, new ConfigBase($this));
+        $this->registerServiceProvider(new SchemaServiceProvider());
     }
 
     public function __clone()
