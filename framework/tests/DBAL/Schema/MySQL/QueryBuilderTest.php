@@ -4,6 +4,10 @@ namespace Tests\DBAL\Schema\MySQL;
 
 use DJWeb\Framework\Base\Application;
 use DJWeb\Framework\DBAL\Contracts\ConnectionContract;
+use DJWeb\Framework\DBAL\Contracts\Query\DeleteQueryBuilderContract;
+use DJWeb\Framework\DBAL\Contracts\Query\InsertQueryBuilderContract;
+use DJWeb\Framework\DBAL\Contracts\Query\SelectQueryBuilderContract;
+use DJWeb\Framework\DBAL\Contracts\Query\UpdateQueryBuilderContract;
 use DJWeb\Framework\DBAL\Query\Builders\DeleteQueryBuilder;
 use DJWeb\Framework\DBAL\Query\Builders\InsertQueryBuilder;
 use DJWeb\Framework\DBAL\Query\Builders\QueryBuilder;
@@ -312,21 +316,21 @@ class QueryBuilderTest extends BaseTestCase
     {
         $this->mockConnection = $this->createMock(ConnectionContract::class);
         Application::getInstance()->set(
-            InsertQueryBuilder::class,
+            InsertQueryBuilderContract::class,
             new InsertQueryBuilder($this->mockConnection)
         );
         Application::getInstance()->set(
-            UpdateQueryBuilder::class,
+            UpdateQueryBuilderContract::class,
             new UpdateQueryBuilder($this->mockConnection)
         );
         Application::getInstance()->set(
-            DeleteQueryBuilder::class,
+            DeleteQueryBuilderContract::class,
             new DeleteQueryBuilder($this->mockConnection)
         );
         Application::getInstance()->set(
-            SelectQueryBuilder::class,
+            SelectQueryBuilderContract::class,
             new SelectQueryBuilder($this->mockConnection)
         );
-        $this->queryBuilder = new QueryBuilder($this->mockConnection);
+        $this->queryBuilder = new QueryBuilder();
     }
 }
