@@ -1,37 +1,25 @@
 <?php
 
-namespace Tests\Routing;
+namespace Routing;
 
 use DJWeb\Framework\Config\Contracts\ConfigContract;
-use DJWeb\Framework\DBAL\Contracts\ConnectionContract;
-use DJWeb\Framework\DBAL\Contracts\Query\InsertQueryBuilderContract;
-use DJWeb\Framework\DBAL\Contracts\Query\SelectQueryBuilderContract;
-use DJWeb\Framework\DBAL\Query\Builders\DeleteQueryBuilder;
-use DJWeb\Framework\DBAL\Query\Builders\InsertQueryBuilder;
-use DJWeb\Framework\DBAL\Query\Builders\SelectQueryBuilder;
-use DJWeb\Framework\DBAL\Query\Builders\UpdateQueryBuilder;
+use DJWeb\Framework\Exceptions\Validation\ValidationError;
 use DJWeb\Framework\Web\Application;
-use PDOStatement;
 use Tests\BaseTestCase;
-use Tests\Helpers\Casts\Status;
-use Tests\Helpers\Models\Post;
 
-class ControllerTest extends BaseTestCase
+class ValidationTest extends BaseTestCase
 {
-    public function setUp(): void
-    {
-        Application::withInstance(null);
-    }
     public function tearDown(): void
     {
         $_SERVER = [];
+        $_POST = [];
         parent::tearDown();
     }
-    public function testDispatchToControllerSimpleRoute(): void
+    public function testValidationFails(): void
     {
         $_SERVER = ['SERVER_NAME' => 'example.com', 'SERVER_PORT' => '443'];
-        $_SERVER['REQUEST_URI'] = '/test-with-attributes/test1';
-        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_URI'] = '/validation/index';
+        $_SERVER['REQUEST_METHOD'] = 'POST';
         $app = Application::getInstance();
         $config = $this->createMock(ConfigContract::class);
         $config->expects($this->any())
@@ -44,16 +32,16 @@ class ControllerTest extends BaseTestCase
             ]);
         $app->bind('base_path', dirname(__DIR__));
         $app->loadRoutes('\\Tests\\Helpers', dirname(__DIR__) . '/Helpers');
-
-        $response = $app->handle();
-        $this->assertEquals('test1', $response->getBody()->getContents());
+        $this->expectException(ValidationError::class);
+        $app->handle();
     }
 
-    public function testDispatchToControllerComplexRoute(): void
+    public function testValidationPasses(): void
     {
         $_SERVER = ['SERVER_NAME' => 'example.com', 'SERVER_PORT' => '443'];
-        $_SERVER['REQUEST_URI'] = '/test-with-attributes/test2/abcde';
-        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_URI'] = '/validation/index';
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST = ['name' => 'test', 'email' => 'test@example.com', 'age' => 25];
         $app = Application::getInstance();
         $config = $this->createMock(ConfigContract::class);
         $config->expects($this->any())
@@ -66,8 +54,10 @@ class ControllerTest extends BaseTestCase
             ]);
         $app->bind('base_path', dirname(__DIR__));
         $app->loadRoutes('\\Tests\\Helpers', dirname(__DIR__) . '/Helpers');
-
-        $response = $app->handle();
-        $this->assertEquals('abcde', $response->getBody()->getContents());
+        $request = $app->handle();
+        $this->assertJson(
+            json_encode(['name' => 'test', 'email' => 'test@example.com', 'age' => 25]),
+            $request->getBody()->getContents()
+        );
     }
 }

@@ -28,6 +28,7 @@ class EndsWith extends ValidationAttribute
 
     public function validate(mixed $value): bool
     {
+        $value ??= '';
        return array_filter($this->suffixes, static fn ($suffix) => str_ends_with($value, $suffix)) !== [];
     }
 }

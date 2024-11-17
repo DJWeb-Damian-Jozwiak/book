@@ -64,7 +64,6 @@ readonly class RouteHandler
             $parameters,
             static fn ($parameter) => isset($boundParameters[$parameter->getName()])
         );
-        $this->getRequestParam($request, $reflection);
         $request = $this->getRequestParam($request, $reflection);
         $args = array_map(static fn ($parameter) => $boundParameters[$parameter->getName()], $parameters);
         return array_filter(
@@ -100,7 +99,7 @@ readonly class RouteHandler
         $parameters2 = array_filter(
             $parameters,
             /** @phpstan-ignore-next-line */
-            static fn ($parameter) => is_subclass_of($parameter->getType()->getName(), ServerRequestInterface::class)
+            static fn ($parameter) => $parameter->getType()->getName() === ServerRequestInterface::class
         );
         $parameters3 = array_filter(
             $parameters,
@@ -108,14 +107,14 @@ readonly class RouteHandler
             static fn ($parameter) => is_subclass_of($parameter->getType()->getName(), FormRequest::class)
         );
 
-        if ($parameters2) {
+        if ($parameters3) {
             /** @var class-string<FormRequest> $className */
             /** @phpstan-ignore-next-line */
-            $className = $parameters2[0]->getType()->getName();
+            $className = $parameters3[0]->getType()->getName();
             $item = new $className(...new RequestFactory()->getRequestConstructorParams());
             $item->populateProperties()->validate();
             return $item;
         }
-        return $parameters3 ? $request : null;
+        return $parameters2 ? $request : null;
     }
 }

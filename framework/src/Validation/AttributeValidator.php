@@ -49,6 +49,13 @@ class AttributeValidator implements Validator
     ): void
     {
         $attributes = $property->getAttributes();
+        $attributes = array_filter(
+            $attributes,
+            static function (\ReflectionAttribute $attribute) {
+                $rule = $attribute->newInstance();
+                return $rule instanceof ValidationRule;
+            }
+        );
         $value = $data[$property->getName()] ?? null;
         foreach ($attributes as $attribute) {
             /** @var ValidationRule $rule */

@@ -9,7 +9,6 @@ use DJWeb\Framework\Http\MiddlewareConfig;
 use DJWeb\Framework\Routing\ControllerRegistrar;
 use DJWeb\Framework\ServiceProviders\HttpServiceProvider;
 use DJWeb\Framework\ServiceProviders\RouterServiceProvider;
-use DJWeb\Framework\ServiceProviders\SchemaServiceProvider;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -22,7 +21,6 @@ class Application extends \DJWeb\Framework\Base\Application
         parent::__construct();
         $this->registerServiceProvider(new HttpServiceProvider());
         $this->registerServiceProvider(new RouterServiceProvider());
-        $this->registerServiceProvider(new SchemaServiceProvider());
         $this->kernel = new Kernel($this, new MiddlewareConfig());
     }
 

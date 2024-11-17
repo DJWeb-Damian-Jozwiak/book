@@ -19,7 +19,7 @@ class TwigRendererAdapter extends BaseAdapter implements RendererContract
 
     public function __construct(
         string $template_path,
-        string $cache_path,
+        private string $cache_path,
     )
     {
         $loader = new FilesystemLoader($template_path);
@@ -30,6 +30,7 @@ class TwigRendererAdapter extends BaseAdapter implements RendererContract
 
     public function render(string $template, array $data = []): string
     {
+        $this->clearCache($this->cache_path);
         return $this->twig->render($template, $data);
     }
 

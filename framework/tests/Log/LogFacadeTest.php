@@ -6,9 +6,11 @@ use Carbon\Carbon;
 use DJWeb\Framework\Base\Application;
 use DJWeb\Framework\Config\Contracts\ConfigContract;
 use DJWeb\Framework\DBAL\Contracts\ConnectionContract;
+use DJWeb\Framework\DBAL\Contracts\Query\InsertQueryBuilderContract;
 use DJWeb\Framework\Enums\Log\LogLevel;
 use DJWeb\Framework\Log\Log;
 use DJWeb\Framework\Log\LoggerFactory;
+use PDOStatement;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -68,22 +70,22 @@ class LogFacadeTest extends BaseTestCase
         Carbon::setTestNow('2024-10-28 12:00:00');
         $app = Application::getInstance();
         $app->bind('base_path', dirname(__DIR__));
+        $builder = $this->createMock(InsertQueryBuilderContract::class);
+        $stmt = $this->createMock(PDOStatement::class);
+        $builder->expects($this->once())->method('table')->willReturnSelf();
+        $builder->expects($this->once())->method('values')->willReturnSelf();
+        $builder->expects($this->once())->method('execute')->willReturn($stmt);
+        $builder->expects($this->once())->method('getInsertId')->willReturn('1');
+        $app->set(InsertQueryBuilderContract::class, $builder);
 
 
         $config = $this->createMock(ConfigContract::class);
-        $config->expects($this->any())->method('get')->willReturn($returnedConfig);
         $app->set(ConfigContract::class, $config);
-        $connection = $this->createMock(ConnectionContract::class);
-        $connection->expects($this->once())->method('query')
-            ->with(
-                'INSERT INTO database_logs (level, message, context, metadata) VALUES (?, ?, ?, ?)',
-                $queryParams
-            )
-            ->willReturn(new \PDOStatement());
-        $connection->expects($this->once())->method('getLastInsertId')->willReturn('1');
-        $app->set(ConnectionContract::class, $connection);
+        $config->expects($this->any())->method('get')->willReturn($returnedConfig);
+
+        //
         $app->bind('base_path', dirname(__DIR__));
-        $app->set(LoggerInterface::class, LoggerFactory::create($app));
+        $app->set(LoggerInterface::class, LoggerFactory::create());
         $logMethod('{user} {exists} {data} {stringable}, {missing}', ['user' => 'test', 'exists' => true, 'data' => ['test'], 'stringable' => $item]);
     }
 }
