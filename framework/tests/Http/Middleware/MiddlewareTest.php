@@ -98,4 +98,22 @@ class MiddlewareTest extends BaseTestCase
         $response = $app->handle();
         $this->assertEquals('', $response->getHeaderLine('X-Middleware-Test'));
     }
+
+    public function testInvalidMiddleware(): void
+    {
+        $app = Application::getInstance();
+        $response = new Response();
+        $handler = fn() => $response;
+        $this->expectException(\InvalidArgumentException::class);
+        $app->withRoutes(function (Router $router) use ($handler) {
+            $router->addRoute(
+                new Route(
+                    '/',
+                    'GET',
+                    $handler
+                )->withMiddlewareAfter('invalid')
+            );
+        });
+
+    }
 }

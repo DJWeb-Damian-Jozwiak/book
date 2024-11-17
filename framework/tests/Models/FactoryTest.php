@@ -33,13 +33,18 @@ class FactoryTest extends BaseTestCase
 
         $app = Application::getInstance();
         $connection = $this->createMock(ConnectionContract::class);
-        $connection->expects($this->once())->method('query')->willReturn(new \PDOStatement());
-        $connection->expects($this->once())->method('getLastInsertId')->willReturn('1');
+        $connection->expects($this->exactly(3))->method('query')->willReturn(new \PDOStatement());
+        $connection->expects($this->exactly(3))->method('getLastInsertId')->willReturn('1');
         $app->set(ConnectionContract::class, $connection);
 
         $factory = new $class();
         $post = $factory->create();
         $this->assertInstanceOf(Post::class, $post);
         $this->assertEquals(Status::draft, $post->status);
+
+        $posts = $factory->createMany(2);
+        $this->assertCount(2, $posts);
+        $this->assertEquals(Status::draft, $posts[0]->status);
+        $this->assertEquals(Status::draft, $posts[1]->status);
     }
 }
