@@ -20,7 +20,6 @@ class Application extends \DJWeb\Framework\Base\Application
         parent::__construct();
         $this->registerServiceProvider(new HttpServiceProvider());
         $this->registerServiceProvider(new RouterServiceProvider());
-        $this->registerServiceProvider(new SchemaServiceProvider());
         $this->kernel = new Kernel($this);
     }
 
