@@ -9,8 +9,6 @@ readonly class RouteParameter
     final public function __construct(
         public string $name,
         public string $pattern = '[\d\p{L}-]+',
-        public bool $optional = false,
-        public mixed $defaultValue = null
     ) {
     }
 
@@ -21,12 +19,6 @@ readonly class RouteParameter
      */
     public function getValue(array $matches): mixed
     {
-       if (isset($matches[$this->name])) {
-           return $matches[$this->name];
-       }
-       if($this->optional) {
-           return $this->defaultValue;
-       }
-       throw new \RuntimeException("Parameter {$this->name} not found");
+        return $matches[$this->name] ?? null;
     }
 }

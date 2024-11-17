@@ -4,6 +4,10 @@ namespace Tests\DBAL\Migrations;
 
 use DJWeb\Framework\Base\Application;
 use DJWeb\Framework\DBAL\Contracts\ConnectionContract;
+use DJWeb\Framework\DBAL\Contracts\Query\DeleteQueryBuilderContract;
+use DJWeb\Framework\DBAL\Contracts\Query\InsertQueryBuilderContract;
+use DJWeb\Framework\DBAL\Contracts\Query\SelectQueryBuilderContract;
+use DJWeb\Framework\DBAL\Contracts\Query\UpdateQueryBuilderContract;
 use DJWeb\Framework\DBAL\Migrations\DatabaseMigrationRepository;
 use DJWeb\Framework\DBAL\Query\Builders\DeleteQueryBuilder;
 use DJWeb\Framework\DBAL\Query\Builders\InsertQueryBuilder;
@@ -23,7 +27,7 @@ class DatabaseMigrationRepositoryTest extends BaseTestCase
     public function testLog(): void
     {
         $insertBuilder = Application::getInstance()->get(
-            InsertQueryBuilder::class
+            InsertQueryBuilderContract::class
         );
         $insertBuilder->expects($this->once())
             ->method('table')
@@ -44,7 +48,7 @@ class DatabaseMigrationRepositoryTest extends BaseTestCase
     public function testDelete(): void
     {
         $deleteBuilder = Application::getInstance()->get(
-            DeleteQueryBuilder::class
+            DeleteQueryBuilderContract::class
         );
         $deleteBuilder->expects($this->once())
             ->method('table')
@@ -56,7 +60,7 @@ class DatabaseMigrationRepositoryTest extends BaseTestCase
     public function testRan(): void
     {
         $selectBuilder = Application::getInstance()->get(
-            SelectQueryBuilder::class
+            SelectQueryBuilderContract::class
         );
         $selectBuilder->expects($this->once())->method('table')->with(
             'migrations'
@@ -70,19 +74,19 @@ class DatabaseMigrationRepositoryTest extends BaseTestCase
     {
         $this->mockConnection = $this->createMock(ConnectionContract::class);
         Application::getInstance()->set(
-            InsertQueryBuilder::class,
+            InsertQueryBuilderContract::class,
             $this->createMock(InsertQueryBuilder::class)
         );
         Application::getInstance()->set(
-            UpdateQueryBuilder::class,
+            UpdateQueryBuilderContract::class,
             $this->createMock(UpdateQueryBuilder::class)
         );
         Application::getInstance()->set(
-            DeleteQueryBuilder::class,
+            DeleteQueryBuilderContract::class,
             $this->createMock(DeleteQueryBuilder::class)
         );
         Application::getInstance()->set(
-            SelectQueryBuilder::class,
+            SelectQueryBuilderContract::class,
             $this->createMock(SelectQueryBuilder::class)
         );
         Application::getInstance()->set(
@@ -90,8 +94,6 @@ class DatabaseMigrationRepositoryTest extends BaseTestCase
             $this->createMock(Schema::class)
         );
         $this->queryBuilder = $this->createMock(QueryBuilder::class);
-        $this->repository = new DatabaseMigrationRepository(
-            $this->mockConnection
-        );
+        $this->repository = new DatabaseMigrationRepository();
     }
 }

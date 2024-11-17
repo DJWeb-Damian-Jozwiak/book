@@ -3,10 +3,25 @@
 namespace Tests\Routing;
 
 use DJWeb\Framework\Config\Contracts\ConfigContract;
+use DJWeb\Framework\DBAL\Contracts\ConnectionContract;
+use DJWeb\Framework\DBAL\Contracts\Query\InsertQueryBuilderContract;
+use DJWeb\Framework\DBAL\Contracts\Query\SelectQueryBuilderContract;
+use DJWeb\Framework\DBAL\Query\Builders\DeleteQueryBuilder;
+use DJWeb\Framework\DBAL\Query\Builders\InsertQueryBuilder;
+use DJWeb\Framework\DBAL\Query\Builders\SelectQueryBuilder;
+use DJWeb\Framework\DBAL\Query\Builders\UpdateQueryBuilder;
 use DJWeb\Framework\Web\Application;
+use PDOStatement;
 use Tests\BaseTestCase;
+use Tests\Helpers\Casts\Status;
+use Tests\Helpers\Models\Post;
+
 class ControllerTest extends BaseTestCase
 {
+    public function setUp(): void
+    {
+        Application::withInstance(null);
+    }
     public function tearDown(): void
     {
         $_SERVER = [];
