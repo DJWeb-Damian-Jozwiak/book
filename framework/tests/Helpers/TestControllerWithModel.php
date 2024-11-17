@@ -27,6 +27,7 @@ class TestControllerWithModel extends Controller
         return new Response()->withContent(json_encode($data));
     }
 
+    #[Route('post/<post:\d+>', 'GET')]
     #[RouteParam('post', '\d+', bind: Post::class)]
     public function getInvalidPost(ServerRequestInterface $request, Post $post): ResponseInterface
     {

@@ -90,20 +90,10 @@ class Route
         string $parameter,
         string $model,
         string $findMethod = 'findForRoute',
-        ?\Closure $condition = null,
     ): self {
-
-        $modelInstance = new $model();
-        if (! method_exists($modelInstance, $findMethod)) {
-            throw new InvalidArgumentException(
-                "Method {$findMethod} does not exist in model {$model}"
-            );
-        }
-
         $this->bindings[$parameter] = new RouteBinding(
             modelClass: $model,
             findMethod: $findMethod,
-            condition: $condition
         );
 
         return $this;
@@ -124,16 +114,10 @@ class Route
             $parts = explode(':', $param);
             $name = $parts[0];
             $pattern = $parts[1] ?? '[^/]+';
-            $optional = str_ends_with($name, '?');
-
-            if ($optional) {
-                $name = rtrim($name, '?');
-            }
 
             $this->parameterDefinitions[$name] = new RouteParameter(
                 name: $name,
                 pattern: $pattern,
-                optional: $optional
             );
         }
     }
