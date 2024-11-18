@@ -24,13 +24,12 @@ class TwigRendererAdapter extends BaseAdapter implements RendererContract
     {
         $loader = new FilesystemLoader($template_path);
         $this->twig = new Environment($loader, [
-            'cache' => $cache_path,
+            'cache' => $this->cache_path,
         ]);
     }
 
     public function render(string $template, array $data = []): string
     {
-        $this->clearCache($this->cache_path);
         return $this->twig->render($template, $data);
     }
 
@@ -41,26 +40,4 @@ $template_path = $config['template_path'];
 $cache_path = $config['cache_path'];
 return new TwigRendererAdapter($template_path, $cache_path);
     }
-
-    public function clearCache(string $cache_path): void
-    {
-        if (is_dir($cache_path)) {
-            $files = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($cache_path, \FilesystemIterator::SKIP_DOTS),
-                \RecursiveIteratorIterator::CHILD_FIRST
-            );
-            foreach ($files as $file) {
-                if ($file->isDir()) {
-                    rmdir($file->getRealPath());
-
-                } else {
-                    unlink($file->getRealPath());
-
-                }
-
-            }
-
-        }
-    }
-
 }

@@ -14,9 +14,4 @@ class SlotDirective extends Directive
             fn ($matches) => "<?php \$this->slot('{$matches[1]}', function() { ?>{$matches[2]}<?php }); ?>"
         );
     }
-
-    public function getName(): string
-    {
-        return 'slot';
-    }
 }

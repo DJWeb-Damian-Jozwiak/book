@@ -14,6 +14,9 @@ return [
             'paths' => [
                 'template_path' => __DIR__ . '/../resources/views/blade',
                 'cache_path' => __DIR__ . '/../storage/cache/blade',
+            ],
+            'components' => [
+                'namespace' => '\\App\\View\\Components\\',
             ]
         ]
     ],

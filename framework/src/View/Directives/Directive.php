@@ -12,5 +12,4 @@ abstract class Directive implements DirectiveContract
     {
         return preg_replace_callback($pattern, $callback, $content);
     }
-
 }

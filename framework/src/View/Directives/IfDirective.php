@@ -49,9 +49,4 @@ class IfDirective extends Directive
             static fn () => '<?php endif; ?>'
         );
     }
-
-    public function getName(): string
-    {
-       return 'if';
-    }
 }

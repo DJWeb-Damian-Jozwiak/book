@@ -6,11 +6,6 @@ namespace DJWeb\Framework\View\Directives;
 
 class YieldDirective extends Directive
 {
-    public function getName(): string
-    {
-        return 'doWhile';
-    }
-
     public function compile(string $content): string
     {
         return $this->compilePattern(

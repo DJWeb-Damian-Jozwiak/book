@@ -59,9 +59,4 @@ return $this->compileEndSwitch($content);
             static fn () => '<?php endswitch; ?>'
         );
     }
-
-    public function getName(): string
-    {
-        return 'switch';
-    }
 }

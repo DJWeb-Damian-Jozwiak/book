@@ -20,9 +20,4 @@ class ForDirective extends Directive
             static fn () => '<?php endfor; ?>'
         );
     }
-
-    public function getName(): string
-    {
-        return 'for';
-    }
 }

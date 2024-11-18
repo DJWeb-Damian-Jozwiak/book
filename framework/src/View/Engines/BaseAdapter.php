@@ -15,18 +15,9 @@ abstract class BaseAdapter implements RendererContract
                 new \RecursiveDirectoryIterator($cache_path, \FilesystemIterator::SKIP_DOTS),
                 \RecursiveIteratorIterator::CHILD_FIRST
             );
-foreach ($files as $file) {
-                if ($file->isDir()) {
-                    rmdir($file->getRealPath());
-
-                } else {
-                    unlink($file->getRealPath());
-
-                }
-
-}
-
+            foreach ($files as $file) {
+                unlink($file->getRealPath());
+            }
         }
     }
-
 }

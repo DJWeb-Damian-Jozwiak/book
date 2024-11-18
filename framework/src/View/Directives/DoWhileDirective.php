@@ -20,9 +20,4 @@ class DoWhileDirective extends Directive
             static fn ($matches) => "<?php } while({$matches[1]}); ?>"
         );
     }
-
-    public function getName(): string
-    {
-        return 'doWhile';
-    }
 }

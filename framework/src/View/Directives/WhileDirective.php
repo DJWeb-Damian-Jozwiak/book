@@ -20,9 +20,4 @@ class WhileDirective extends Directive
             static fn () => '<?php endwhile; ?>'
         );
     }
-
-    public function getName(): string
-    {
-        return 'while';
-    }
 }

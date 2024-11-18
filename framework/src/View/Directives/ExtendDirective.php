@@ -14,9 +14,4 @@ class ExtendDirective extends Directive
             fn ($matches) => "<?php \$this->extend('{$matches[1]}'); ?>"
         );
     }
-
-    public function getName(): string
-    {
-       return 'extends';
-    }
 }

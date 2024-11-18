@@ -12,6 +12,12 @@ class File
         chmod($path, $mode);
     }
 
+    /**
+     * @param string $path
+     * @param string $cached_file
+     * @return bool
+     * @codeCoverageIgnore
+     */
     public static function isCached(string $path, string $cached_file): bool
     {
         if (! file_exists($cached_file)) {

@@ -20,9 +20,4 @@ class UnlessDirective extends Directive
             static fn () => '<?php endif; ?>'
         );
     }
-
-    public function getName(): string
-    {
-        return 'unless';
-    }
 }

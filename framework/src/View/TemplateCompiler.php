@@ -18,13 +18,10 @@ class TemplateCompiler
 
     public function compile(string $content): string
     {
-        // Najpierw kompilujemy komentarze, żeby nie interferowały z innymi dyrektywami
         $content = $this->compileComments($content);
 
-        // Kompilujemy wyrażenia
         $content = $this->compileEchos($content);
 
-        // Kompilujemy pozostałe dyrektywy
         array_walk(
             array: $this->directives,
             callback: static function (DirectiveContract $directive) use (&$content): void {
@@ -52,6 +49,10 @@ class TemplateCompiler
         $content = preg_replace('/\{!!(.*?)!!\}/', '<?php echo $1; ?>', $content);
 
         // Escaped echo {{ $var }}
-        return preg_replace('/\{\{(.*?)\}\}/', '<?php echo htmlspecialchars($1, ENT_QUOTES, \'UTF-8\'); ?>', $content);
+        return preg_replace(
+            '/\{\{(.*?)\}\}/',
+            '<?php echo htmlspecialchars($1, ENT_QUOTES, \'UTF-8\'); ?>',
+            $content
+        );
     }
 }

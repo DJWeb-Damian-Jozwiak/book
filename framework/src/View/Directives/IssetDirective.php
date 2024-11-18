@@ -20,9 +20,4 @@ class IssetDirective extends Directive
             static fn () => '<?php endif; ?>'
         );
     }
-
-    public function getName(): string
-    {
-        return 'isset';
-    }
 }

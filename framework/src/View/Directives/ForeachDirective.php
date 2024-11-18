@@ -19,9 +19,4 @@ class ForeachDirective extends Directive
             static fn () => '<?php endforeach; ?>'
         );
     }
-
-    public function getName(): string
-    {
-        return 'foreach';
-    }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DJWeb\Framework\View\Engines;
 
 use DJWeb\Framework\Config\Config;
-use DJWeb\Framework\Utils\Directory;
 use DJWeb\Framework\Utils\File;
 use DJWeb\Framework\View\AssetManager;
 use DJWeb\Framework\View\Contracts\RendererContract;
@@ -42,7 +41,8 @@ class BladeAdapter extends BaseAdapter implements RendererContract
 
     public function __construct(
         private string $template_path,
-        private string $cache_path
+        private string $cache_path,
+        public readonly string $componentNamespace = '\\App\\View\\Components',
     ) {
         $this->compiler = new TemplateCompiler();
         $this->loader = new TemplateLoader($template_path);
@@ -50,7 +50,6 @@ class BladeAdapter extends BaseAdapter implements RendererContract
         $this->registerDefaultDirectives();
     }
 
-    // Metody używane w skompilowanym kodzie
     public function extend(string $template): void
     {
         $this->extendedTemplate = $template;
@@ -76,11 +75,6 @@ class BladeAdapter extends BaseAdapter implements RendererContract
         return $this->sections[$section] ?? '';
     }
 
-    public function include(string $template, array $data = []): string
-    {
-        return $this->render($template, $data);
-    }
-
     public function pushToStack(string $stack, string $content): void
     {
         $this->assetManager->push($stack, $content);
@@ -97,7 +91,6 @@ class BladeAdapter extends BaseAdapter implements RendererContract
 
         $content = $this->renderTemplate($template, $data);
 
-        // Jeśli szablon rozszerza inny, renderujemy layout
         if ($this->extendedTemplate !== null) {
             return $this->render($this->extendedTemplate, $data);
         }
@@ -107,10 +100,11 @@ class BladeAdapter extends BaseAdapter implements RendererContract
 
     public static function buildDefault(): RendererContract
     {
-        $config = Config::get('views.engines.blade.paths');
-        $template_path = $config['template_path'];
-        $cache_path = $config['cache_path'];
-        return new BladeAdapter($template_path, $cache_path);
+        $config = Config::get('views.engines.blade');
+        $template_path = $config['paths']['template_path'];
+        $cache_path = $config['paths']['cache_path'];
+        $namespace = $config['components']['namespace'];
+        return new BladeAdapter($template_path, $cache_path, $namespace);
     }
 
     private function renderTemplate(string $template, array $data): string
@@ -160,7 +154,6 @@ class BladeAdapter extends BaseAdapter implements RendererContract
 
     private function cache(string $path, string $content): void
     {
-        Directory::create(dirname($path));
         File::create($path, $content);
     }
 

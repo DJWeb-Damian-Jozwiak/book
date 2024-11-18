@@ -13,7 +13,7 @@ class StackDirective extends Directive
             $content,
             static fn ($matches) => <<<PHP
             <?php
-\$this->pushToStack('{$matches[1]}' , (function() { ob_start(); ?>{$matches[2]}<?php return ob_get_clean(); })(); ?>
+\$this->pushToStack('{$matches[1]}' , '{$matches[2]}'); ?>
 PHP
         );
 
@@ -23,10 +23,5 @@ PHP
             $content,
             fn ($matches) => "<?php echo \$this->renderStack('{$matches[1]}'); ?>"
         );
-    }
-
-    public function getName(): string
-    {
-        return 'stack';
     }
 }

@@ -6,6 +6,5 @@ namespace DJWeb\Framework\View\Contracts;
 
 interface DirectiveContract
 {
-    public function getName(): string;
     public function compile(string $content): string;
 }

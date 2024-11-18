@@ -20,9 +20,4 @@ class SectionDirective extends Directive
             static fn () => '<?php $this->endSection(); ?>'
         );
     }
-
-    public function getName(): string
-    {
-        return 'section';
-    }
 }

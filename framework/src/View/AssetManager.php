@@ -24,11 +24,7 @@ class AssetManager implements AssetManagerContract
 
     public function render(string $stack): string
     {
-        if (! isset($this->stacks[$stack])) {
-            return '';
-
-        }
-        return implode("\n", $this->stacks[$stack]);
+        return implode("\n", $this->stacks[$stack] ?? []);
     }
 
 }

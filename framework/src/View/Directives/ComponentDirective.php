@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace DJWeb\Framework\View\Directives;
 
 use DJWeb\Framework\Validation\ValueCaster;
+use DJWeb\Framework\View\Engines\BladeAdapter;
 
 class ComponentDirective extends Directive
 {
     public function compile(string $content): string
     {
-        // Slot-y nazwane (@slot('name'))
+        // named slots (@slot('name'))
         $content = $this->compilePattern(
             '/\@slot\([\'"](.*?)[\'"]\)(.*?)\@endslot/s',
             $content,
@@ -22,7 +23,7 @@ class ComponentDirective extends Directive
             }
         );
 
-        // Kompilujemy główny komponent i zagnieżdżone
+        // render components and nested children
         return $this->compileComponents($content);
     }
 
@@ -33,9 +34,12 @@ class ComponentDirective extends Directive
         string $compiledSlot
     ): string
     {
+        /** @var BladeAdapter $adapter */
+        $adapter = BladeAdapter::buildDefault();
+        $namespace = $adapter->componentNamespace;
         return "<?php 
                     \$__prev_component = \$__component ?? null;
-                    {$varName} = new \\App\\View\\Components\\{$componentName}({$attributes}); 
+                    {$varName} = new {$namespace}{$componentName}({$attributes}); 
                     \$__component = {$varName};
                     ob_start(); 
                     ?>{$compiledSlot}<?php 
@@ -43,11 +47,6 @@ class ComponentDirective extends Directive
                     echo \$__component->render();
                     \$__component = \$__prev_component;
                 ?>";
-    }
-
-    public function getName(): string
-    {
-        return 'component';
     }
 
     private function compileComponents(string $content): string
@@ -64,7 +63,6 @@ class ComponentDirective extends Directive
 
                 $varName = "\$__component_{$counter}";
 
-                // Rekurencyjnie kompilujemy zagnieżdżone komponenty w slocie
                 $compiledSlot = $this->compileComponents($slot);
 
                 return $this->getPhpCompiledString($varName, $componentName, $attributes, $compiledSlot);
