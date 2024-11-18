@@ -15,7 +15,9 @@ class File
     /**
      * @param string $path
      * @param string $cached_file
+     *
      * @return bool
+     *
      * @codeCoverageIgnore
      */
     public static function isCached(string $path, string $cached_file): bool
