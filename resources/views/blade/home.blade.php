@@ -16,9 +16,6 @@
                 @endslot
 
             </x-card>
-
-
-
         </div>
     </div>
 @endsection

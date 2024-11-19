@@ -6,7 +6,8 @@ namespace DJWeb\Framework\View\Contracts;
 
 interface RendererContract
 {
-public function __construct(string $template_path, string $cache_path);
+    public function __construct(string $template_path, string $cache_path);
+
     /**
      * namespace DJWeb\Framework\View\Contracts;
      *
@@ -25,7 +26,9 @@ public function __construct(string $template_path, string $cache_path);
      * {
      */
     public function render(string $template, array $data = []): string;
-public static function buildDefault(): RendererContract;
-public function clearCache(string $cache_path): void;
+
+    public static function buildDefault(): RendererContract;
+
+    public function clearCache(string $cache_path): void;
 
 }

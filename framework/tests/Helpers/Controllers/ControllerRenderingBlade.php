@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Helpers\Controllers;
 
 use DJWeb\Framework\Routing\Attributes\Route;

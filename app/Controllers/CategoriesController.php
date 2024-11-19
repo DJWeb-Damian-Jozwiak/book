@@ -19,7 +19,7 @@ class CategoriesController extends Controller
     #[Route('/', methods: ['GET'])]
     public function index(ServerRequestInterface $request): ResponseInterface
     {
-        $categories = CategoryModel::query()->get();
+        $categories = CategoryModel::query()->select()->limit(10)->get();
         $categories = array_map(Category::fromCategory(...), $categories);
         return new Response()->withContent(json_encode($categories, flags: JSON_PRETTY_PRINT));
     }

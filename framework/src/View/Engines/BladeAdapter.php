@@ -15,12 +15,14 @@ use DJWeb\Framework\View\Directives\ExtendDirective;
 use DJWeb\Framework\View\Directives\ForDirective;
 use DJWeb\Framework\View\Directives\ForeachDirective;
 use DJWeb\Framework\View\Directives\IfDirective;
+use DJWeb\Framework\View\Directives\InertiaHeadDirective;
 use DJWeb\Framework\View\Directives\IssetDirective;
 use DJWeb\Framework\View\Directives\SectionDirective;
 use DJWeb\Framework\View\Directives\SlotDirective;
 use DJWeb\Framework\View\Directives\StackDirective;
 use DJWeb\Framework\View\Directives\SwitchDirective;
 use DJWeb\Framework\View\Directives\UnlessDirective;
+use DJWeb\Framework\View\Directives\ViteDirective;
 use DJWeb\Framework\View\Directives\WhileDirective;
 use DJWeb\Framework\View\Directives\YieldDirective;
 use DJWeb\Framework\View\TemplateCompiler;
@@ -138,7 +140,9 @@ class BladeAdapter extends BaseAdapter implements RendererContract
             ->addDirective(new SwitchDirective())
             ->addDirective(new IssetDirective())
             ->addDirective(new EmptyDirective())
-            ->addDirective(new YieldDirective());
+            ->addDirective(new YieldDirective())
+            ->addDirective(new InertiaHeadDirective())
+            ->addDirective(new ViteDirective());
     }
 
     private function isCached(string $template, string $cached_file): bool

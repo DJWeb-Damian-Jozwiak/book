@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\View\Components;
 
-use App\Enums\ButtonType;
 use DJWeb\Framework\View\Component;
 
 class Button extends Component

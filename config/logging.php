@@ -1,12 +1,12 @@
 <?php
 
 return [
-    'default' => 'stack',
+    'default' => 'database',
 
     'channels' => [
         'stack' => [
             'handler' => 'file',
-            'path' => __DIR__.'storage/logs/app.log',
+            'path' => __DIR__.'/../storage/logs/app.log',
             'formatter' => 'text',
             'max_days' => 14
         ],
@@ -17,7 +17,7 @@ return [
 
         'daily' => [
             'handler' => 'file',
-            'path' =>  __DIR__.'storage/logs/daily.log',
+            'path' =>  __DIR__.'/../storage/logs/daily.log',
             'formatter' => 'json',
             'max_days' => 7
         ]

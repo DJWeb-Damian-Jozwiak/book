@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'default' => env('VIEW_ENGINE', 'twig'),
+    'default' => env('VIEW_ENGINE', 'blade'),
 
     'engines' => [
         'twig' => [
