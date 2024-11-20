@@ -35,10 +35,9 @@ class InsertQueryBuilder extends BaseQueryBuilder implements
     public function execute(): bool|\PDOStatement
     {
         /** @phpstan-ignore-next-line */
-        return $this->connection->query(
-            $this->getSQL(),
-            $this->values
-        );
+        $this->connection->query($this->getSQL(), array_values($this->values));
+
+        return true;
     }
 
     public function getInsertId(): ?string
