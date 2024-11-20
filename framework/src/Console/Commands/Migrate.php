@@ -61,7 +61,7 @@ class Migrate extends Command
         $migrations = $this->getPendingMigrations();
 
         if (! $migrations) {
-            $this->getOutput()->info('Nic do zmigrowania.');
+            $this->getOutput()->info('Nothing to migrate');
             return 0;
         }
 
@@ -96,9 +96,7 @@ class Migrate extends Command
         );
 
         foreach ($migrations as $migration) {
-            $this->repository->log($migration);
-
-            $this->getOutput()->info("Zmigrowano: {$migration}");
+            $this->getOutput()->info("Migrated: {$migration}");
         }
     }
 }
