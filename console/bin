@@ -14,5 +14,4 @@ $app->registerCommands(
         path: dirname(__DIR__) . '/app/Console/Commands'
     )
 );
-$app->loadConfig();
 $app->handle();
