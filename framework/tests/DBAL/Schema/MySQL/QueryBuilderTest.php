@@ -207,9 +207,6 @@ class QueryBuilderTest extends BaseTestCase
         $this->mockConnection->expects($this->once())
             ->method('query')
             ->willReturn($mockPDOStatement);
-        $mockPDOStatement->expects($this->once())
-            ->method('execute')
-            ->willReturn(true);
         $query = $this->queryBuilder->insert('users')
             ->values(['name' => 'John Doe', 'age' => 30]);
 
