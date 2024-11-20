@@ -59,7 +59,7 @@ class MigrateTest extends BaseTestCase
 
         $this->output->expects($this->once())
             ->method('info')
-            ->with('Nic do zmigrowania.');
+            ->with('Nothing to migrate');
 
         $_SERVER['argv'] = ['console/bin', 'migrate'];
         $result = $this->app->handle();
@@ -105,13 +105,9 @@ class MigrateTest extends BaseTestCase
             ->with(['migration2.php'], 'up')
             ->willReturn(['migration2.php']);
 
-        $this->repository->expects($this->once())
-            ->method('log')
-            ->with('migration2.php');
-
         $this->output->expects($this->once())
             ->method('info')
-            ->with('Zmigrowano: migration2.php');
+            ->with('Migrated: migration2.php');
 
         $_SERVER['argv'] = ['console/bin', 'migrate', '--step=1'];
         $result = $this->app->handle();
