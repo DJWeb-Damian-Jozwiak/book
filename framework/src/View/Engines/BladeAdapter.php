@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DJWeb\Framework\View\Engines;
 
 use DJWeb\Framework\Config\Config;
-use DJWeb\Framework\Utils\File;
+use DJWeb\Framework\Storage\File;
 use DJWeb\Framework\View\AssetManager;
 use DJWeb\Framework\View\Contracts\RendererContract;
 use DJWeb\Framework\View\Directives\ComponentDirective;

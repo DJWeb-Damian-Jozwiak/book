@@ -9,6 +9,7 @@ use DJWeb\Framework\Config\Contracts\ConfigContract;
 use DJWeb\Framework\Container\Container;
 use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\Container\Contracts\ServiceProviderContract;
+use DJWeb\Framework\DBAL\Contracts\Schema\SchemaContract;
 use DJWeb\Framework\Exceptions\Container\ContainerError;
 use DJWeb\Framework\Log\LoggerFactory;
 use DJWeb\Framework\ServiceProviders\SchemaServiceProvider;
@@ -18,6 +19,10 @@ class Application extends Container
 {
     public string $base_path{
         get => $this->getBinding('base_path') ?? '';
+    }
+
+    public SchemaContract $schema{
+        get => $this->get(SchemaContract::class);
     }
 
     public ?ConfigContract $config{

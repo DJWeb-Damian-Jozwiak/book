@@ -2,5 +2,6 @@
 
 return [
     'env' => env('APP_ENV'),
-    'name' => 'super blog'
+    'name' => 'super blog',
+    'key' => env('APP_KEY'),
 ];

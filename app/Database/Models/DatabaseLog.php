@@ -64,4 +64,4 @@ class DatabaseLog extends Model
     ];
 }
 
-;
+

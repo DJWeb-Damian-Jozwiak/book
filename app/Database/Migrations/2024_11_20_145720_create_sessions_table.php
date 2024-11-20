@@ -18,16 +18,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $this->schema->createTable('database_logs', [
-            new IntColumn('id', nullable: false, autoIncrement: true),
-            new VarcharColumn('level'),
-            new TextColumn('message'),
-            new TextColumn('metadata'),
-            new TextColumn('context'),
+        $this->schema->createTable('sessions', [
+            new VarcharColumn('id', length: 128, nullable: false),
+            new TextColumn('payload'),
+            new IntColumn('last_activity'),
+            new VarcharColumn('user_ip', length: 45),
+            new VarcharColumn('user_agent', length: 255),
+            new IntColumn('user_id', nullable: true),
             new DateTimeColumn('created_at', current: true),
             new DateTimeColumn('updated_at', currentOnUpdate: true),
             new PrimaryColumn('id'),
+
         ]);
+        $this->schema->createIndex('sessions', 'sessions_last_activity_index', ['last_activity']);
+        $this->schema->createIndex('sessions', 'sessions_user_id_index', ['user_id']);
     }
 
     /**
@@ -35,6 +39,5 @@ return new class extends Migration
      */
     public function down(): void
     {
-        $this->schema->dropTable('database_logs');
     }
 };

@@ -17,6 +17,7 @@ try {
     /** @var callable $routes */
     $routes = require_once '../routes/web.php';
     $app = Application::getInstance();
+    $app->session->start();
     $app->loadRoutes(
         '\\App\\Controllers\\',
         __DIR__ . '/../app/Controllers/'

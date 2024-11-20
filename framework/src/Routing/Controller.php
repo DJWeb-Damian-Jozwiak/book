@@ -6,6 +6,7 @@ namespace DJWeb\Framework\Routing;
 
 use DJWeb\Framework\Container\Container;
 use DJWeb\Framework\Container\Contracts\ContainerContract;
+use DJWeb\Framework\Storage\Session\SessionManager;
 use DJWeb\Framework\View\Contracts\RendererContract;
 use DJWeb\Framework\View\ViewManager;
 use DJWeb\Framework\Web\Application;
@@ -13,6 +14,9 @@ use Psr\Http\Message\ResponseInterface;
 
 abstract class Controller
 {
+    public SessionManager $session {
+        get => Application::getInstance()->session;
+    }
     protected string $viewRenderer = 'twig';
     protected ViewManager $viewManager;
 
