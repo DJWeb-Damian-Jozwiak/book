@@ -35,7 +35,7 @@ class InsertQueryBuilder extends BaseQueryBuilder implements
     public function execute(): bool
     {
         /** @phpstan-ignore-next-line */
-        $this->connection->query($this->getSQL(), $this->values);
+        $this->connection->query($this->getSQL(), array_values($this->values));
 
         return true;
     }
