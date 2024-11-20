@@ -18,5 +18,4 @@ $app->bind('app.migrations_path', dirname(__DIR__) . '/app/Database/Migrations')
 $app->bind('app.models_path', dirname(__DIR__) . '/app/Database/Models');
 $app->bind('app.factories_path', dirname(__DIR__) . '/app/Database/Factories');
 $app->bind('app.seeders_path', dirname(__DIR__) . '/app/Database/Seeders');
-$app->loadConfig();
 $app->handle();
