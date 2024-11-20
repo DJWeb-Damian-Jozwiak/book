@@ -18,7 +18,7 @@ class Inertia
      * @var array<string, mixed>
      */
     private static array $props = [];
-    private static string $rootView = 'app';
+    private static string $rootView = 'inertia.blade.php';
 
     public function head(): string
     {

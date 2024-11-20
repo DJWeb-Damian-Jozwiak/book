@@ -1,10 +1,18 @@
 <?php
 
-use DJWeb\Framework\Config\Config;
+use DJWeb\Framework\ErrorHandling\Backtrace;
+use DJWeb\Framework\ErrorHandling\Handlers\WebHandler;
+use DJWeb\Framework\ErrorHandling\Renderers\WebRenderer;
 use DJWeb\Framework\Web\Application;
 
 require_once '../bootstrap/app.php';
-
+$errorHandler = new WebHandler(
+    new WebRenderer(
+        debug: true,
+        backtrace: new Backtrace()
+    ),
+);
+$errorHandler->register();
 try {
     /** @var callable $routes */
     $routes = require_once '../routes/web.php';
@@ -20,7 +28,4 @@ try {
         'status' => $error->getMessage(),
         'errors' => $error->validationErrors
     ]);
-} catch (\Throwable $e) {
-    dump($e->getTrace());
-    dd($e->getMessage());
 }

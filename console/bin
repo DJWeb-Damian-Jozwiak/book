@@ -1,12 +1,18 @@
 <?php
 
 use DJWeb\Framework\Console\Application;
+use DJWeb\Framework\Console\Output\Contacts\OutputContract;
 use DJWeb\Framework\Console\Utils\CommandNamespace;
+use DJWeb\Framework\ErrorHandling\Handlers\ConsoleHandler;
+use DJWeb\Framework\ErrorHandling\Renderers\ConsoleRenderer;
+use DJWeb\Framework\ErrorHandling\Renderers\Partials\ConsoleRendererFactory;
 
 require_once 'vendor/autoload.php';
 require_once 'helpers/functions.php';
 
 $app = Application:: getInstance();
+$handler = new ConsoleHandler(new ConsoleRendererFactory($app)->create());
+$handler->register();
 $app->bind('base_path', dirname(__DIR__));
 $app->registerCommands(
     new CommandNamespace(

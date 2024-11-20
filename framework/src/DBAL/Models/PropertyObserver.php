@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DJWeb\Framework\DBAL\Models;
 
 use DJWeb\Framework\DBAL\Models\Contracts\NotifyPropertyChangesContract;
+use Stringable;
 
 class PropertyObserver implements NotifyPropertyChangesContract
 {
@@ -24,7 +25,16 @@ class PropertyObserver implements NotifyPropertyChangesContract
         string $propertyName,
         mixed $value,
     ): void {
-       $this->changedProperties[$propertyName] = $value;
+       $this->changedProperties[$propertyName] = $this->toString($value);
+    }
+
+    public function toString(mixed $value): mixed
+    {
+        return match (true) {
+            $value instanceof Stringable => $value->toString(),
+            is_array($value), is_object($value) => json_encode($value),
+            default => $value,
+        };
     }
 
     /**
