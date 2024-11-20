@@ -43,7 +43,7 @@ class DatabaseMigrationRepository implements MigrationRepositoryContract
             ->values([
                 'migration' => $migration,
                 'batch' => $this->getNextBatchNumber(),
-            ]);
+            ])->execute();
     }
 
     public function delete(string $migration): void
@@ -63,8 +63,7 @@ class DatabaseMigrationRepository implements MigrationRepositoryContract
      */
     public function getMigrations(): array
     {
-        $data = $this->queryBuilder->select(self::MIGRATIONS_TABLE)->get();
-        return array_column($data, 'migration');
+        return $this->queryBuilder->select(self::MIGRATIONS_TABLE)->get();
     }
 
     private function getNextBatchNumber(): int
