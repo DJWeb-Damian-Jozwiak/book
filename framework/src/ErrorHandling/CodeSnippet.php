@@ -6,7 +6,6 @@ namespace DJWeb\Framework\ErrorHandling;
 
 class CodeSnippet
 {
-
     /**
      * @var array<int, string>
      */

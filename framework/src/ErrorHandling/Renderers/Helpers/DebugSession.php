@@ -16,7 +16,8 @@ class DebugSession
         private readonly OutputContract $output,
         private readonly ConsoleCommandProcessor $processor,
         private readonly TraceCollection $trace
-    ) {}
+    ) {
+    }
 
     public function run(): void
     {

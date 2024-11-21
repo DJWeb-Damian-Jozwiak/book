@@ -51,6 +51,11 @@ class ModelQueryBuilder
         return $this;
     }
 
+    public function delete(): DeleteQueryBuilderContract
+    {
+        return $this->facade->delete($this->model->table);
+    }
+
     public function first(): ?Model
     {
         /** @var SelectQueryBuilder $builder */

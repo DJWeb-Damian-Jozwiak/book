@@ -32,7 +32,7 @@ class File
     {
         $content = file_get_contents($path);
         if ($content === false) {
-            throw new \RuntimeException("Unable to read file: $path");
+            throw new \RuntimeException("Unable to read file: {$path}");
         }
     }
 
@@ -42,17 +42,10 @@ class File
             unlink($path);
         }
     }
-    public static function ensureFileIsWritable(string $path): void
-    {
-        if(!is_writable($path)) {
-            throw new \RuntimeException("Unable to write file: $path");
-        }
-    }
-
     public static function ensureFileIsReadable(string $path): void
     {
-        if(!is_readable($path)) {
-            throw new \RuntimeException("Unable to read file: $path");
+        if(! is_readable($path)) {
+            throw new \RuntimeException("Unable to read file: {$path}");
         }
     }
 

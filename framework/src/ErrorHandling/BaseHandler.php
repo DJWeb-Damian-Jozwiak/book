@@ -20,13 +20,13 @@ abstract class BaseHandler
     public abstract function handleException(Throwable $exception): void;
 
     public function handleError(
-        int    $level,
+        int $level,
         string $message,
         string $file = '',
-        int    $line = 0
+        int $line = 0
     ): bool
     {
-        if (!(error_reporting() & $level)) {
+        if (! (error_reporting() & $level)) {
             return false;
 
         }

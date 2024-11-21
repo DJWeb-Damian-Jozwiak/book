@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Storage\Session\Handlers;
 
 use DJWeb\Framework\Storage\Directory;
 use DJWeb\Framework\Storage\File;
-use DJWeb\Framework\Storage\Session\Contracts\SessionStorageContract;
 use DJWeb\Framework\Storage\Session\SessionSecurity;
 
 final readonly class FileSessionHandler implements \SessionHandlerInterface
@@ -13,7 +14,6 @@ final readonly class FileSessionHandler implements \SessionHandlerInterface
     {
         Directory::ensureDirectoryExists($this->savePath);
         Directory::ensureDirectoryIsWritable($this->savePath);
-        //dump($this->security);
     }
 
     public function open(string $path, string $name): bool
@@ -29,14 +29,12 @@ final readonly class FileSessionHandler implements \SessionHandlerInterface
     public function read(string $id): string
     {
         $file = $this->getFilePath($id);
-        if (!file_exists($file)) {
+        if (! file_exists($file)) {
             return '';
         }
         File::ensureFileIsReadable($file);
         $encrypted = file_get_contents($file);
-        /** @var string $decrypted */
-        $decrypted = $this->security->decrypt($encrypted);
-        return $decrypted;
+        return $this->security->decrypt($encrypted);
     }
 
     public function write(string $id, string $data): bool
@@ -58,8 +56,8 @@ final readonly class FileSessionHandler implements \SessionHandlerInterface
     public function gc(int $max_lifetime): int
     {
         $files = glob($this->savePath . '/sess_*');
-        $files = array_filter($files, fn(string $file) => filemtime($file) + $max_lifetime < time() && unlink($file));
-        array_walk($files, fn(string $file) => unlink($file));
+        $files = array_filter($files, static fn (string $file) => filemtime($file) + $max_lifetime < time());
+        array_walk($files, static fn (string $file) => unlink($file));
         return count($files);
     }
 

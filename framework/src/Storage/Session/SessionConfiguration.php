@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Storage\Session;
 
 use InvalidArgumentException;
@@ -21,7 +23,7 @@ final class SessionConfiguration
 
     public function getHandler(string $handler): SessionHandlerInterface
     {
-        $exception = new InvalidArgumentException("Session handler $handler not found");
+        $exception = new InvalidArgumentException("Session handler {$handler} not found");
         return $this->handlers[$handler] ?? throw $exception;
     }
 }

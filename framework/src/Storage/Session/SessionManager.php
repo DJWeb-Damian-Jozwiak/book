@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace DJWeb\Framework\Storage\Session;
 
 use DJWeb\Framework\Config\Config;
-use DJWeb\Framework\Log\Log;
+use DJWeb\Framework\Storage\Session\Handlers\DatabaseSessionHandler;
 use DJWeb\Framework\Storage\Session\Handlers\FileSessionHandler;
-
 
 final class SessionManager
 {
@@ -21,7 +20,7 @@ final class SessionManager
 
     public function __construct(private readonly SessionConfiguration $config)
     {
-        $this->options = (array)Config::get('session.cookie_params');
+        $this->options = (array) Config::get('session.cookie_params');
         $this->handler = $this->config->getHandler(Config::get('session.handler'));
         session_set_cookie_params($this->options);
         session_set_save_handler($this->handler, true);
@@ -33,6 +32,7 @@ final class SessionManager
         $configSession = new SessionConfiguration();
         $security = new SessionSecurity();
         $configSession->registerHandler(new FileSessionHandler($path, $security));
+        $configSession->registerHandler(new DatabaseSessionHandler($security));
         $manager = new SessionManager($configSession);
         $manager->start();
         return $manager;
@@ -48,9 +48,6 @@ final class SessionManager
             $this->started = true;
             return true;
         }
-
-        Log::debug('Before session_start(). Cookie: ' . print_r($_COOKIE, true));
-
         session_name('PHPSESSID');
         if (session_start()) {
             $this->started = true;
@@ -72,7 +69,7 @@ final class SessionManager
 
     public function destroy(): bool
     {
-        if (!$this->started) {
+        if (! $this->started) {
             return false;
         }
 
@@ -94,7 +91,6 @@ final class SessionManager
     {
         return $_SESSION;
     }
-
 
     public function remove(string $key): void
     {

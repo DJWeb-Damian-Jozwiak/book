@@ -10,15 +10,16 @@ use RuntimeException;
 
 final class EncryptionService
 {
-    private const NONCE_LENGTH = SODIUM_CRYPTO_SECRETBOX_NONCEBYTES;
-    private const KEY_LENGTH = SODIUM_CRYPTO_SECRETBOX_KEYBYTES;
+    private const NONCE_LENGTH = SODIUM_CRYPTO_AEAD_XCHACHA20POLY1305_IETF_NPUBBYTES;
+    private const KEY_LENGTH = SODIUM_CRYPTO_AEAD_XCHACHA20POLY1305_IETF_KEYBYTES;
 
     private readonly string $key;
+
     public function __construct()
     {
         $key = Config::get('app.key');
 
-        if (!$key) {
+        if (! $key) {
             throw new RuntimeException(
                 'No encryption key set. Run "php console/bin key:generate"'
             );
@@ -40,13 +41,14 @@ final class EncryptionService
         $nonce = random_bytes(self::NONCE_LENGTH);
         $serialized = serialize($value);
 
-        $encrypted = sodium_crypto_secretbox(
+        $ciphertext = sodium_crypto_aead_xchacha20poly1305_ietf_encrypt(
             $serialized,
+            '',
             $nonce,
             $this->key
         );
 
-        $merged = $nonce . $encrypted;
+        $merged = $nonce . $ciphertext;
         return base64_encode($merged);
     }
 
@@ -65,8 +67,9 @@ final class EncryptionService
         $nonce = substr($decoded, 0, self::NONCE_LENGTH);
         $ciphertext = substr($decoded, self::NONCE_LENGTH);
 
-        $decrypted = sodium_crypto_secretbox_open(
+        $decrypted = sodium_crypto_aead_xchacha20poly1305_ietf_decrypt(
             $ciphertext,
+            '',
             $nonce,
             $this->key
         );

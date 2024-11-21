@@ -4,7 +4,7 @@ use DJWeb\Framework\Storage\Session\Handlers\FileSessionHandler;
 
 return [
     'path' => sys_get_temp_dir() . '/sessions',
-    'handler' => FileSessionHandler::class,
+    'handler' => \DJWeb\Framework\Storage\Session\Handlers\DatabaseSessionHandler::class,
     'cookie_params' => [
         'lifetime' => 7200,
         'path' => null,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DJWeb\Framework\Storage\Session;
 
 use DJWeb\Framework\Encryption\EncryptionService;
@@ -13,8 +15,6 @@ final class SessionSecurity
 
     public function decrypt(string $data): mixed
     {
-
         return new EncryptionService()->decrypt($data);
-
     }
 }

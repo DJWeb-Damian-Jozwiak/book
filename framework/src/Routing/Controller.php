@@ -6,6 +6,7 @@ namespace DJWeb\Framework\Routing;
 
 use DJWeb\Framework\Container\Container;
 use DJWeb\Framework\Container\Contracts\ContainerContract;
+use DJWeb\Framework\Storage\CookieManager;
 use DJWeb\Framework\Storage\Session\SessionManager;
 use DJWeb\Framework\View\Contracts\RendererContract;
 use DJWeb\Framework\View\ViewManager;
@@ -16,6 +17,10 @@ abstract class Controller
 {
     public SessionManager $session {
         get => Application::getInstance()->session;
+    }
+
+    public CookieManager $cookies {
+        get => Application::getInstance()->cookies;
     }
     protected string $viewRenderer = 'twig';
     protected ViewManager $viewManager;
