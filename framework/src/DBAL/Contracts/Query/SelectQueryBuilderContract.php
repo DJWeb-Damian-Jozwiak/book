@@ -17,6 +17,10 @@ interface SelectQueryBuilderContract extends QueryBuilderContract
 
     public function offset(int $offset): self;
 
+    public function leftJoin(string $table, string $first, string $operator, string $second): self;
+    public function rightJoin(string $table, string $first, string $operator, string $second): self;
+    public function innerJoin(string $table, string $first, string $operator, string $second): self;
+
     /**
      * @return array<string, mixed>|null
      */
