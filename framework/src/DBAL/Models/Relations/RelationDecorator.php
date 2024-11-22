@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace DJWeb\Framework\DBAL\Models\Relations;
 
 use DJWeb\Framework\DBAL\Models\Attributes\BelongsTo as BelongsToAttribute;
+use DJWeb\Framework\DBAL\Models\Attributes\BelongsToMany as BelongsToManyAttribute;
 use DJWeb\Framework\DBAL\Models\Attributes\HasMany as HasManyAttribute;
+use DJWeb\Framework\DBAL\Models\Attributes\HasManyThrough as HasManyThroughAttribute;
 use DJWeb\Framework\DBAL\Models\Contracts\RelationContract;
 use DJWeb\Framework\DBAL\Models\Model;
 use ReflectionAttribute;
@@ -58,6 +60,16 @@ class RelationDecorator
             HasManyAttribute::class,
             $this->initializeHasMany(...)
         );
+        $this->initializeAllRelations(
+            $property,
+            BelongsToManyAttribute::class,
+            $this->initializeBelongsToMany(...)
+        );
+        $this->initializeAllRelations(
+            $property,
+            HasManyThroughAttribute::class,
+            $this->initializeHasManyThrough(...)
+        );
     }
 
     private function initializeAllRelations(
@@ -79,11 +91,27 @@ class RelationDecorator
         );
     }
 
+    private function initializeBelongsToMany(
+        ReflectionProperty $property,
+        BelongsToManyAttribute $attribute
+    ): void {
+        $value = RelationFactory::belongsToMany($this->model, $attribute);
+        $this->relations[$property->getName()] = $value;
+    }
+
     private function initializeBelongsTo(
         ReflectionProperty $property,
         BelongsToAttribute $attribute
     ): void {
         $value = RelationFactory::belongsTo($this->model, $attribute);
+        $this->relations[$property->getName()] = $value;
+    }
+
+    private function initializeHasManyThrough(
+        ReflectionProperty $property,
+        HasManyThroughAttribute $attribute
+    ): void {
+        $value = RelationFactory::hasManyThrough($this->model, $attribute);
         $this->relations[$property->getName()] = $value;
     }
 
