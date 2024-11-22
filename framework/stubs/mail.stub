@@ -1,0 +1,35 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyRootNamespace;
+
+use DJWeb\Framework\Mail\Mailable;
+use DJWeb\Framework\Mail\Envelope;
+use DJWeb\Framework\Mail\Content;
+use DJWeb\Framework\Mail\Address;
+
+
+class DummyClass extends Mailable
+{
+    public function __construct(
+        private readonly string $name,
+        private readonly string $email
+    ) {}
+
+    public function envelope(): Envelope
+    {
+        return new Envelope(
+            new Address('from@example.com', 'Example'),
+            '{{ class }} Subject'
+        );
+    }
+
+    public function content(): Content
+    {
+        return new Content('emails.DummyName', [
+            'name' => $this->name,
+            'email' => $this->email
+        ]);
+    }
+};

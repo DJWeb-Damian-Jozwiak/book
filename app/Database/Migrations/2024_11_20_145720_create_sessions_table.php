@@ -19,7 +19,7 @@ return new class extends Migration
     public function up(): void
     {
         $this->schema->createTable('sessions', [
-            new VarcharColumn('id', length: 128, nullable: false),
+            new VarcharColumn('id', nullable: false, length: 128),
             new TextColumn('payload', nullable: true),
             new IntColumn('last_activity', nullable: true),
             new VarcharColumn('user_ip', nullable: true, length: 45),
