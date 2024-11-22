@@ -11,7 +11,7 @@ class MakeSeederTest extends BaseTestCase
 {
     private Application $app;
     private OutputContract $output;
-    public function testMakeFactory()
+    public function testMakeSeeder()
     {
         $seederName = 'UserSeeder';
         $file = 'UserSeeder.php';
