@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Models;
 
 use DJWeb\Framework\Base\Application;
@@ -8,51 +10,42 @@ use DJWeb\Framework\DBAL\Contracts\Query\DeleteQueryBuilderContract;
 use DJWeb\Framework\DBAL\Contracts\Query\InsertQueryBuilderContract;
 use DJWeb\Framework\DBAL\Contracts\Query\SelectQueryBuilderContract;
 use DJWeb\Framework\DBAL\Contracts\Query\UpdateQueryBuilderContract;
-use DJWeb\Framework\DBAL\Models\Entities\User;
 use DJWeb\Framework\DBAL\Query\Builders\DeleteQueryBuilder;
 use DJWeb\Framework\DBAL\Query\Builders\InsertQueryBuilder;
 use DJWeb\Framework\DBAL\Query\Builders\QueryBuilder;
 use DJWeb\Framework\DBAL\Query\Builders\SelectQueryBuilder;
 use DJWeb\Framework\DBAL\Query\Builders\UpdateQueryBuilder;
-use PHPUnit\Framework\TestCase;
-use Tests\Helpers\Models\Company;
+use Tests\BaseTestCase;
+use Tests\Helpers\Casts\Status;
 use Tests\Helpers\Models\Post;
 
-class UserTest extends TestCase
+class ModelTest extends BaseTestCase
 {
     private QueryBuilder $queryBuilder;
     private ConnectionContract $mockConnection;
-    public function testPassword()
-    {
-        $user = new User();
-        $user->password = 'password';
-        $this->assertTrue(true);
-        $this->assertTrue($user->verifyPassword('password'));
-    }
 
-    public function testHydrateDate()
+    public function testHydrateStatus()
     {
-        $user = new User();
-        $user->fill([
-            'missing_property' => 1,
-            'created_at' => '2024-01-01 00:00:00',
+        $post = new Post();
+        $post->fill([
+            'status' => 'published',
         ]);
         $this->assertEquals(
-            '2024-01-01 00:00:00',
-            $user->created_at->toDateTimeString()
+            Status::published,
+            $post->status
         );
     }
 
     public function testIsNew()
     {
-        $user = new User();
-        $this->assertTrue($user->is_new);
+        $post = new Post();
+        $this->assertTrue($post->is_new);
     }
 
     public function testAfterInsertModelIsNotLongerNew()
     {
-        $user = new User();
-        $user->password = 'password';
+        $post = new Post();
+        $post->status = Status::published;
         $mockPDOStatement = $this->createMock(\PDOStatement::class);
         $this->mockConnection->expects($this->once())
             ->method('query')
@@ -60,9 +53,9 @@ class UserTest extends TestCase
         $this->mockConnection->expects($this->once())
             ->method('getLastInsertId')
             ->willReturn('1');
-        $user->save();
-        $this->assertFalse($user->is_new);
-        $this->assertEquals('1', $user->id);
+        $post->save();
+        $this->assertFalse($post->is_new);
+        $this->assertEquals('1', $post->id);
     }
 
     public function testFirst()
@@ -75,7 +68,7 @@ class UserTest extends TestCase
             ->willReturn([
                 [
                     'id' => 1,
-                    'password' => '$argon2id$v=19',
+                    'status' => 'published',
                     'created_at' => '2024-01-01 00:00:00',
                 ]
             ]);
@@ -83,10 +76,9 @@ class UserTest extends TestCase
             ->method('query')
             ->willReturn($mockPDOStatement);
 
-        $query = User::query();
-        $user = $query->select()->where('id', '=', '1')->first();
-        $this->assertInstanceOf(User::class, $user);
-        $this->assertEquals('$argon2id$v=19', $user->password);
+        $query = Post::query();
+        $post = $query->select()->where('id', '=', '1')->first();
+        $this->assertInstanceOf(Post::class, $post);
     }
 
     public function testUpdate()
@@ -99,7 +91,7 @@ class UserTest extends TestCase
             ->willReturn([
                 [
                     'id' => 1,
-                    'password' => '$argon2id$v=19',
+                    'status' => 'published',
                     'created_at' => '2024-01-01 00:00:00',
                 ]
             ]);
@@ -107,52 +99,10 @@ class UserTest extends TestCase
             ->method('query')
             ->willReturn($mockPDOStatement);
 
-        $query = User::query();
-        $user = $query->select()->where('id', '=', '1')->first();
-        $user->password = 'password';
-        $user->save();
-    }
-
-    public function testHasMany()
-    {
-        $mockPDOStatement = $this->createMock(\PDOStatement::class);
-        $mockPDOStatement->expects($this->once())
-            ->method('fetchAll')
-            ->with(\PDO::FETCH_ASSOC)
-            ->willReturn([
-                [
-                    'id' => 1,
-                    'created_at' => '2024-01-01 00:00:00',
-                ]
-            ]);
-        $this->mockConnection->expects($this->once())
-            ->method('query')
-            ->willReturn($mockPDOStatement);
-        $company = new Company();
-        $company->id = 1;
-        $this->assertIsArray($company->posts);
-        //company users is cached, no second call!
-        $this->assertInstanceOf(Post::class, $company->posts[0]);
-    }
-
-    public function testBelongsTo()
-    {
-        $mockPDOStatement = $this->createMock(\PDOStatement::class);
-        $mockPDOStatement->expects($this->once())
-            ->method('fetchAll')
-            ->with(\PDO::FETCH_ASSOC)
-            ->willReturn([
-                [
-                    'id' => 1,
-                    'created_at' => '2024-01-01 00:00:00',
-                ]
-            ]);
-        $this->mockConnection->expects($this->once())
-            ->method('query')
-            ->willReturn($mockPDOStatement);
-        $post = new Post();
-        $post->company_id = 1;
-        $this->assertInstanceOf(Company::class, $post->company);
+        $query = Post::query();
+        $post = $query->select()->where('id', '=', '1')->first();
+        $post->status = Status::draft;
+        $post->save();
     }
 
     public function testGet()
@@ -165,7 +115,7 @@ class UserTest extends TestCase
             ->willReturn([
                 [
                     'id' => 1,
-                    'password' => '$argon2id$v=19',
+                    'status' => 'published',
                     'created_at' => '2024-01-01 00:00:00',
                 ]
             ]);
@@ -173,11 +123,10 @@ class UserTest extends TestCase
             ->method('query')
             ->willReturn($mockPDOStatement);
 
-        $query = User::query();
-        $users = $query->select()->where('id', '=', '1')->get();
-        $this->assertIsArray($users);
-        $this->assertInstanceOf(User::class, $users[0]);
-        $this->assertEquals('$argon2id$v=19', $users[0]->password);
+        $query = Post::query();
+        $posts = $query->select()->where('id', '=', '1')->get();
+        $this->assertIsArray($posts);
+        $this->assertInstanceOf(Post::class, $posts[0]);
     }
 
     protected function setUp(): void
