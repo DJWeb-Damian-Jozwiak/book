@@ -17,16 +17,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $this->schema->createTable('users', [
+        $this->schema->createTable('products', [
             new IntColumn('id', nullable: false, autoIncrement: true),
             new VarcharColumn('name'),
-            new VarcharColumn('email'),
-            new VarcharColumn('password'),
             new DateTimeColumn('created_at', current: true),
             new DateTimeColumn('updated_at', currentOnUpdate: true),
             new PrimaryColumn('id'),
         ]);
-        $this->schema->uniqueIndex('users', 'unique_users_email', 'email');
+        $this->schema->uniqueIndex('products', 'unique_users_email', 'email');
     }
 
     /**
@@ -34,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        $this->schema->dropTable('users');
+        $this->schema->dropTable('products');
     }
 };

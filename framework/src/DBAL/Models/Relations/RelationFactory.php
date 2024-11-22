@@ -6,7 +6,9 @@ namespace DJWeb\Framework\DBAL\Models\Relations;
 
 use DJWeb\Framework\DBAL\Enums\RelationType;
 use DJWeb\Framework\DBAL\Models\Attributes\BelongsTo as BelongsToAttribute;
+use DJWeb\Framework\DBAL\Models\Attributes\BelongsToMany as BelongsToManyAtrribute;
 use DJWeb\Framework\DBAL\Models\Attributes\HasMany as HasManyAttribute;
+use DJWeb\Framework\DBAL\Models\Attributes\HasManyThrough as HasManyThroughAttribute;
 use DJWeb\Framework\DBAL\Models\Contracts\RelationContract;
 use DJWeb\Framework\DBAL\Models\Model;
 
@@ -22,6 +24,38 @@ class RelationFactory
             $attribute->related,
             $attribute->foreign_key,
             $attribute->local_key
+        );
+        $relation->addConstraints();
+        return $relation;
+    }
+
+    public static function belongsToMany(
+        Model $parent,
+        BelongsToManyAtrribute $attribute,
+    ): RelationContract {
+        $relation = new BelongsToMany(
+            $parent,
+            $attribute->related,
+            $attribute->pivot_table,
+            $attribute->foreign_pivot_key,
+            $attribute->related_pivot_key
+        );
+        $relation->addConstraints();
+        return $relation;
+    }
+
+    public static function hasManyThrough(
+        Model $parent,
+        HasManyThroughAttribute $attribute,
+    ): RelationContract {
+        $relation = new HasManyThrough(
+            $parent,
+            $attribute->related,
+            $attribute->through,
+            $attribute->first_key,
+            $attribute->second_key,
+            $attribute->local_key,
+            $attribute->second_local_key
         );
         $relation->addConstraints();
         return $relation;
