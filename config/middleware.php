@@ -4,6 +4,7 @@ use DJWeb\Framework\Http\Middleware\InertiaMiddleware;
 use DJWeb\Framework\Http\Middleware\RedirectMiddleware;
 use DJWeb\Framework\Http\Middleware\RequestLoggerMiddleware;
 use DJWeb\Framework\Http\Middleware\RouterMiddleware;
+use DJWeb\Framework\Http\Middleware\ValidationErrorMiddleware;
 
 return [
     'before_global' => [
@@ -14,6 +15,7 @@ return [
         RouterMiddleware::class
     ],
     'after_global' => [
+        ValidationErrorMiddleware::class,
         RedirectMiddleware::class,
     ],
 ];
