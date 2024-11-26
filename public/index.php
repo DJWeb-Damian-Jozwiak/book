@@ -3,6 +3,7 @@
 use DJWeb\Framework\ErrorHandling\Backtrace;
 use DJWeb\Framework\ErrorHandling\Handlers\WebHandler;
 use DJWeb\Framework\ErrorHandling\Renderers\WebRenderer;
+use DJWeb\Framework\Http\Response;
 use DJWeb\Framework\Web\Application;
 
 require_once '../bootstrap/app.php';
