@@ -6,8 +6,11 @@ namespace App\Controllers;
 
 use App\FormValidators\ResetPasswordDTO;
 use Carbon\Carbon;
+use DJWeb\Framework\Auth\Auth;
 use DJWeb\Framework\DBAL\Models\Entities\User;
+use DJWeb\Framework\Http\Middleware\GuestMiddleware;
 use DJWeb\Framework\Http\Response;
+use DJWeb\Framework\Routing\Attributes\Middleware;
 use DJWeb\Framework\Routing\Attributes\Route;
 use DJWeb\Framework\Routing\Attributes\RouteGroup;
 use DJWeb\Framework\Routing\Controller;
@@ -27,6 +30,7 @@ class ResetPasswordController extends Controller
     }
 
     #[Route('/reset-password', methods: 'POST')]
+    #[Middleware(beforeGlobal: [GuestMiddleware::class])]
     public function reset(ResetPasswordDTO $request): ResponseInterface
     {
         $data = $request->toArray();
@@ -34,12 +38,6 @@ class ResetPasswordController extends Controller
         $user = User::query()->select()->where('password_reset_token', $data['token'])
             ->where('password_reset_expires', '>', Carbon::now())
             ->first();
-
-//        if (!$user) {
-//            throw new ValidationException([
-//                'token' => ['Invalid or expired password reset token']
-//            ]);
-//        }
 
         $user->fill([
             'password' => $data['password'],
@@ -49,8 +47,6 @@ class ResetPasswordController extends Controller
 
         Auth::login($user);
 
-        return new Response()
-            ->withHeader('Location', '/')
-            ->withStatus(303);
+        return new Response()->redirect('/');
     }
 }

@@ -37,8 +37,6 @@ class ForgotPasswordController extends Controller
                 'password_reset_expires' => Carbon::now()->addMinutes(60)
             ])->save();
 
-            // TODO: Zaimplementuj wysyłanie maila
-            // Mail::send(...);
         }
 
         return new Response()->withJson([
