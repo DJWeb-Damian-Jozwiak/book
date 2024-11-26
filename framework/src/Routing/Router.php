@@ -9,6 +9,7 @@ use DJWeb\Framework\Exceptions\Routing\RouteNotFoundError;
 use DJWeb\Framework\Routing\Contracts\ModelBinderContract;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 class Router
 {
@@ -69,13 +70,14 @@ class Router
      *
      * @throws RouteNotFoundError If no matching route is found
      */
-    public function dispatch(ServerRequestInterface $request): ResponseInterface
+    public function dispatch(ServerRequestInterface $request, RequestHandlerInterface $next): ResponseInterface
     {
         $route = $this->routes->findRoute($request);
         $boundParameters = $this->modelBinder->resolveBindings($route);
 
         $handler = $route->handler;
 
-        return $handler->dispatch($request, $boundParameters, $this->container);
+        $response = $handler->dispatch($request, $boundParameters, $this->container);
+        return $next->handle($request->withAttribute('route_response', $response));
     }
 }
