@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Routing;
 
+use DJWeb\Framework\Routing\Attributes\Middleware;
 use DJWeb\Framework\Routing\Attributes\Route as RouteAttribute;
 use DJWeb\Framework\Routing\Attributes\RouteGroup as RouteGroupAttribute;
 use DJWeb\Framework\Routing\Attributes\RouteParam;
@@ -21,7 +22,7 @@ class RegisterControllerRoutes
     {
         $reflection = new ReflectionClass($controller);
         /** @var ?\ReflectionAttribute<RouteGroupAttribute> $attribute */
-        $attribute = $reflection->getAttributes(RouteGroupAttribute::class)[0];
+        $attribute = $reflection->getAttributes(RouteGroupAttribute::class)[0] ?? null;
         $groupAttribute = $attribute?->newInstance() ?? null;
         $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
         $methods = array_filter(
@@ -41,9 +42,12 @@ class RegisterControllerRoutes
 
     private function mapMethod(ReflectionMethod $method): Route
     {
-        $routeAttribute = $method->getAttributes(RouteAttribute::class)[0]->newInstance();
+        $routeAttribute = $method->getAttributes(RouteAttribute::class)[0]?->newInstance();
         $handler = new RouteHandler($method->class, $method->name);
         $route = new Route($routeAttribute->path, $routeAttribute->methods[0], $handler);
+        $middleware = $method->getAttributes(Middleware::class)[0] ?? null;
+        $middleware = $middleware?->newInstance();
+        $middleware?->addToRoute($route);
         $params = $method->getAttributes(RouteParam::class);
         $params = array_filter($params, static fn ($param) => $param->newInstance()->bind !== null, );
         foreach ($params as $param) {
