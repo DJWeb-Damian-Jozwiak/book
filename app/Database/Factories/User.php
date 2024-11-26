@@ -10,7 +10,7 @@ class User extends Factory
 {
     protected function getModelClass(): string
     {
-        return \App\Database\Models\User::class;
+        return \DJWeb\Framework\DBAL\Models\Entities\User::class;
     }
 
     public function definition(): array

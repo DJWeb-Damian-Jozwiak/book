@@ -19,7 +19,7 @@ return new class extends Migration
     public function up(): void
     {
         $this->schema->createTable('mail_history', [
-            new IntColumn('id', autoIncrement: true),
+            new IntColumn('id', autoIncrement: true, nullable: false),
             new VarcharColumn('from_email', length: 255),
             new VarcharColumn('from_name', length: 255),
             new VarcharColumn('subject', length: 255),

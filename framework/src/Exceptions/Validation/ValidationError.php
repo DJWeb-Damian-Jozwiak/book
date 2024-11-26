@@ -19,4 +19,10 @@ class ValidationError extends BaseRuntimeError
         parent::__construct($message);
     }
 
+    public static function fromFieldAndMessage(string $field, string $message): self
+    {
+        return new self([
+           new \DJWeb\Framework\Validation\ValidationError($field, $message)
+        ]);
+    }
 }
