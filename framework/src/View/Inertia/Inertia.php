@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace DJWeb\Framework\View\Inertia;
 
 use DJWeb\Framework\Config\Config;
+use DJWeb\Framework\Http\Response;
+use DJWeb\Framework\Http\Stream;
 use Psr\Http\Message\ResponseInterface;
 
 class Inertia
@@ -47,14 +49,13 @@ class Inertia
     public static function render(string $component, array $props = []): ResponseInterface
     {
         $responseFactory = new ResponseFactory();
-
         self::$props = array_merge(self::$sharedProps, $props);
 
         $page = [
             'component' => $component,
             'props' => self::$props,
             'url' => $_SERVER['REQUEST_URI'] ?? '/',
-            'version' => 1.0,
+            'version' => '1.0',
         ];
 
         return $responseFactory->createResponse($page);
@@ -77,6 +78,30 @@ class Inertia
     public static function withRootView(string $view): void
     {
         self::$rootView = $view;
+    }
+
+
+    public static function location(string $url): ResponseInterface
+    {
+        $headers = [
+            'X-Inertia-Location' => $url,
+            'Vary' => ['Accept', 'X-Requested-With']
+        ];
+
+        return new Response(
+            headers: $headers,
+            body: new Stream()->withContent(''),
+            status: 409
+        );
+    }
+
+    public static function locationJs(string $url): void
+    {
+        echo sprintf(
+            '<script>window.location.href = "%s";</script>',
+            htmlspecialchars($url, ENT_QUOTES)
+        );
+        exit;
     }
 
     /**
