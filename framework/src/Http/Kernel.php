@@ -25,7 +25,40 @@ class Kernel implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $this->config->configure($this);
-        return $this->middlewareStack->handle($request);
+        $response = $this->middlewareStack->handle($request);
+        $response = $this->handleHeaders($response);
+        return $this->handleRedirects($response);
+    }
+
+    public function handleHeaders(ResponseInterface $response): ResponseInterface
+    {
+        http_response_code($response->getStatusCode());
+        $headers = $response->getHeaders();
+        foreach ($headers as $name => $values) {
+            if($name === 'Location') {
+                continue;
+            }
+            header($name . ': ' . implode(', ', $values), false);
+        }
+        return $response;
+    }
+
+    public function handleRedirects(ResponseInterface $response, ?callable $callback = null): ResponseInterface
+    {
+        $callback ??= exit(...);
+        if ($response->hasHeader('Location')) {
+            $location = $response->getHeaderLine('Location');
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 300 || $statusCode >= 400) {
+                $statusCode = 302;
+            }
+
+            header('Location: ' . $location, true, $statusCode);
+            $callback($statusCode);
+        }
+
+        return $response;
     }
 
     /**
