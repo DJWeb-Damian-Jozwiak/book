@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\DBAL\Models\Relations;
 
-use DJWeb\Framework\DBAL\Contracts\Query\SelectQueryBuilderContract;
 use DJWeb\Framework\DBAL\Models\Model;
-use DJWeb\Framework\DBAL\Models\Relation;
 
 class BelongsToMany extends HasMany
 {
@@ -18,7 +16,7 @@ class BelongsToMany extends HasMany
      * @param string $related_pivot_key
      */
     public function __construct(
-        protected Model  $parent,
+        protected Model $parent,
         protected string $related,
         protected string $pivot_table,
         protected string $foreign_pivot_key,
