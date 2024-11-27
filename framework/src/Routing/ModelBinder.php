@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DJWeb\Framework\Routing;
 
 use DJWeb\Framework\Container\Contracts\ContainerContract;
-use DJWeb\Framework\Exceptions\DBAL\ModelNotFoundError;
 use DJWeb\Framework\Routing\Contracts\ModelBinderContract;
 
 readonly class ModelBinder implements ModelBinderContract

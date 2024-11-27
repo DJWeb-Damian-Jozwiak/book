@@ -62,6 +62,6 @@ class MiddlewareStack implements RequestHandlerInterface
         }
         $this->currentIndex++;
         //continue process middleware
-        return  $middleware?->process($request, $this) ?? $this->originalResponse;
+        return $middleware?->process($request, $this) ?? $this->originalResponse;
     }
 }

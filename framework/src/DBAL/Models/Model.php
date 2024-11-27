@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DJWeb\Framework\DBAL\Models;
 
 use Carbon\Carbon;
-use DJWeb\Framework\DBAL\Models\Casts\ArrayCaster;
 use DJWeb\Framework\DBAL\Models\Contracts\PropertyChangesContract;
 use DJWeb\Framework\DBAL\Models\Decorators\EntityManager;
 use DJWeb\Framework\DBAL\Models\QueryBuilders\ModelQueryBuilder;
