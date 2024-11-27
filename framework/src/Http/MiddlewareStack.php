@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Http;
 
+use DJWeb\Framework\Http\Middleware\RouterMiddleware;
 use DJWeb\Framework\Routing\Router;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -17,8 +18,11 @@ class MiddlewareStack implements RequestHandlerInterface
      */
     private array $middleware = [];
     private int $currentIndex = 0;
+    private bool $routerExecuted = false;
+    private ResponseInterface $originalResponse;
     public function __construct(private readonly Router $router)
     {
+        $this->originalResponse = new Response();
     }
 
     public function add(MiddlewareInterface $middleware): self
@@ -38,13 +42,26 @@ class MiddlewareStack implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        if ($this->currentIndex === count($this->middleware)) {
-            return $this->router->dispatch($request);
+        $exception = $request->getAttribute('exception');
+        if($exception !== null) {
+            throw $exception;
         }
-
-        $middleware = $this->middleware[$this->currentIndex];
+        $middleware = $this->middleware[$this->currentIndex] ?? null;
+        if ($this->currentIndex === count($this->middleware) && $this->routerExecuted) {
+            return $request->getAttribute('route_response', $this->originalResponse);
+        }
+        //router not executed and no middleware left!
+        if ($this->currentIndex === count($this->middleware))
+        {
+            $this->routerExecuted = true;
+            $this->originalResponse = $this->router->dispatch($request, $this);
+        }
+        if ($middleware instanceof RouterMiddleware)
+        {
+            $this->routerExecuted = true;
+        }
         $this->currentIndex++;
-
-        return $middleware->process($request, $this);
+        //continue process middleware
+        return $middleware?->process($request, $this) ?? $this->originalResponse;
     }
 }

@@ -28,8 +28,9 @@ class RouterMiddleware implements MiddlewareInterface
     {
 
         try {
-            return $this->router->dispatch($request);
-        } catch (\Throwable) {
+            return $this->router->dispatch($request, $handler);
+        } catch (\Throwable $exception) {
+            $request = $request->withAttribute('exception', $exception);
             return $handler->handle($request);
         }
     }

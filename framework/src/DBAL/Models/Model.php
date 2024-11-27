@@ -10,8 +10,9 @@ use DJWeb\Framework\DBAL\Models\Decorators\EntityManager;
 use DJWeb\Framework\DBAL\Models\QueryBuilders\ModelQueryBuilder;
 use DJWeb\Framework\DBAL\Models\Relations\RelationDecorator;
 use DJWeb\Framework\DBAL\Models\Relations\RelationFactory;
-
-abstract class Model implements PropertyChangesContract
+use JsonSerializable;
+use LogicException;
+abstract class Model implements PropertyChangesContract, JsonSerializable
 {
     abstract public string $table { get; }
 
@@ -43,6 +44,13 @@ abstract class Model implements PropertyChangesContract
         $this->entity_manager = new EntityManager($this);
         $this->relation_factory = new RelationFactory();
         $this->relations = new RelationDecorator($this);
+    }
+
+
+    public function jsonSerialize(): array
+    {
+        $msg = 'Direct serialization of models is not allowed. Use a Data Transfer Object (DTO) for serialization';
+        throw new LogicException($msg);
     }
 
     public function findForRoute(string|int $value): static
