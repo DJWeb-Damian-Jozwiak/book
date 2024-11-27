@@ -7,6 +7,8 @@ namespace Tests\Routing;
 use DJWeb\Framework\Container\Container;
 use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\Exceptions\Routing\RouteNotFoundError;
+use DJWeb\Framework\Http\MiddlewareStack;
+use DJWeb\Framework\Http\Response;
 use DJWeb\Framework\Routing\Route;
 use DJWeb\Framework\Routing\RouteHandler;
 use DJWeb\Framework\Routing\Router;
@@ -14,6 +16,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Tests\Helpers\TestController;
 
 class RouterTest extends TestCase
@@ -44,11 +47,15 @@ class RouterTest extends TestCase
         $uri->method('getPath')->willReturn('/test');
         $request->method('getUri')->willReturn($uri);
         $request->method('getMethod')->willReturn('GET');
-
+        $request->expects($this->once())->method('withAttribute')
+            ->with('route_response')->willReturnSelf();
+        $request->expects($this->once())->method('getAttribute')
+            ->with('route_response')->willReturn($response);
         $handler = new RouteHandler(callback: fn() => $response);
         $this->router->addRoute(new Route('/test', 'GET', $handler));
 
-        $result = $this->router->dispatch($request);
+        $stack = new MiddlewareStack($this->router);
+        $result = $stack->handle($request);
 
         $this->assertSame($response, $result);
     }
@@ -62,13 +69,19 @@ class RouterTest extends TestCase
         $request->method('getUri')->willReturn($uri);
         $request->method('getMethod')->willReturn('GET');
 
+
         $this->router->addRoute(new Route(
                 '/test',
                 'GET',
                 new RouteHandler(TestController::class, 'testMethod'))
         );
 
-        $result = $this->router->dispatch($request);
+        $request->expects($this->once())->method('withAttribute')
+            ->with('route_response')->willReturnSelf();
+        $request->expects($this->once())->method('getAttribute')
+            ->with('route_response')->willReturn(new Response()->withContent('ok'));
+        $stack = new MiddlewareStack($this->router);
+        $result = $stack->handle($request);
         $this->assertEquals(200, $result->getStatusCode());
 
         $this->assertEquals('ok', $result->getBody()->getContents());
@@ -78,6 +91,6 @@ class RouterTest extends TestCase
     {
         $request = $this->createMock(ServerRequestInterface::class);
         $this->expectException(RouteNotFoundError::class);
-        $this->router->dispatch($request);
+        $this->router->dispatch($request, $this->createMock(RequestHandlerInterface::class));
     }
 }
