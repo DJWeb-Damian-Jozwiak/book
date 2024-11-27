@@ -14,7 +14,7 @@ class PropertyObserver implements NotifyPropertyChangesContract
     /**
      * @var array<string, int|string|float|null>
      */
-    private array $changedProperties = [];
+    public private(set) array $changedProperties = [];
 
     public function __construct(private Model $model)
     {
