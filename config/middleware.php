@@ -11,7 +11,5 @@ return [
     'global' => [
         RouterMiddleware::class,
     ],
-    'after_global' => [
-        RedirectMiddleware::class,
-    ],
+    'after_global' => [],
 ];
