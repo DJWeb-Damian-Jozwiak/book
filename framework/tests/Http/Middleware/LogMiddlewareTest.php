@@ -33,7 +33,7 @@ class LogMiddlewareTest extends BaseTestCase
         $app = Application::getInstance();
         $app->bind('base_path', dirname(__DIR__,2));
         $app->set(LoggerInterface::class, $logger);
-        $middleware = new RequestLoggerMiddleware($logger, new ContextBuilder());
+        $middleware = new RequestLoggerMiddleware(new ContextBuilder());
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Test exception');
         $middleware->process(
@@ -53,7 +53,7 @@ class LogMiddlewareTest extends BaseTestCase
         $app = Application::getInstance();
         $app->bind('base_path', dirname(__DIR__,2));
         $app->set(LoggerInterface::class, $logger);
-        $middleware = new RequestLoggerMiddleware($logger, new ContextBuilder());
+        $middleware = new RequestLoggerMiddleware(new ContextBuilder());
         $middleware->process(
             $this->createMock(ServerRequestInterface::class),
             $handler

@@ -19,8 +19,10 @@ class MiddlewareStack implements RequestHandlerInterface
     private array $middleware = [];
     private int $currentIndex = 0;
     private bool $routerExecuted = false;
+    private ResponseInterface $originalResponse;
     public function __construct(private readonly Router $router)
     {
+        $this->originalResponse = new Response();
     }
 
     public function add(MiddlewareInterface $middleware): self
@@ -40,14 +42,15 @@ class MiddlewareStack implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $middleware = $this->middleware[$this->currentIndex];
+        $middleware = $this->middleware[$this->currentIndex] ?? null;
         if ($this->currentIndex === count($this->middleware) && $this->routerExecuted) {
-            return $request->getAttribute('route_response');
+            return $request->getAttribute('route_response', $this->originalResponse);
         }
         //router not executed and no middleware left!
         if ($this->currentIndex === count($this->middleware))
         {
-            return $this->router->dispatch($request, $this);
+            $this->routerExecuted = true;
+            $this->originalResponse = $this->router->dispatch($request, $this);
         }
         if ($middleware instanceof RouterMiddleware)
         {
@@ -55,6 +58,6 @@ class MiddlewareStack implements RequestHandlerInterface
         }
         $this->currentIndex++;
         //continue process middleware
-        return  $middleware->process($request, $this);;
+        return  $middleware?->process($request, $this) ?? $this->originalResponse;
     }
 }
