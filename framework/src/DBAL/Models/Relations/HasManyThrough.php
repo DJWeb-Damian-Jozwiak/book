@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DJWeb\Framework\DBAL\Models\Relations;
 
 use DJWeb\Framework\DBAL\Models\Model;
-use DJWeb\Framework\DBAL\Models\Relation;
 
 class HasManyThrough extends HasMany
 {
@@ -19,7 +18,7 @@ class HasManyThrough extends HasMany
      * @param string $second_local_key
      */
     public function __construct(
-        protected Model  $parent,
+        protected Model $parent,
         protected string $related,
         protected string $through,
         protected string $first_key,
