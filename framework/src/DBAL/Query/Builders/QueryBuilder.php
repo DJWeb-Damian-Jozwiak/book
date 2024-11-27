@@ -17,6 +17,7 @@ class QueryBuilder implements QueryBuilderFacadeContract
     {
         /** @var InsertQueryBuilderContract $item */
         $item = Application::getInstance()->get(InsertQueryBuilderContract::class);
+        $item->clean();
         return $item->table($table);
     }
 
@@ -24,6 +25,7 @@ class QueryBuilder implements QueryBuilderFacadeContract
     {
         /** @var UpdateQueryBuilderContract $item */
         $item = Application::getInstance()->get(UpdateQueryBuilderContract::class);
+        $item->clean();
         return $item->table($table);
     }
 
@@ -31,6 +33,7 @@ class QueryBuilder implements QueryBuilderFacadeContract
     {
         /** @var DeleteQueryBuilderContract $item */
         $item = Application::getInstance()->get(DeleteQueryBuilderContract::class);
+        $item->clean();
         return $item->table($table);
     }
 
@@ -38,6 +41,7 @@ class QueryBuilder implements QueryBuilderFacadeContract
     {
         /** @var SelectQueryBuilderContract $item */
         $item = Application::getInstance()->get(SelectQueryBuilderContract::class);
+        $item->clean();
         return $item->table($table);
     }
 }
