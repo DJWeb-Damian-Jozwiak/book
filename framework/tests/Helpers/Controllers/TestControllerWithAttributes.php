@@ -12,6 +12,7 @@ use DJWeb\Framework\Routing\Attributes\RouteParam;
 use DJWeb\Framework\Routing\Controller;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Tests\Helpers\ExampleMiddleware;
 
 #[RouteGroup('test-with-attributes')]
 class TestControllerWithAttributes extends Controller

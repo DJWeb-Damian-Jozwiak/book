@@ -11,7 +11,7 @@ return [
         InertiaMiddleware::class,
     ],
     'global' => [
-        RouterMiddleware::class
+        RouterMiddleware::class,
     ],
     'after_global' => [
         RedirectMiddleware::class,
