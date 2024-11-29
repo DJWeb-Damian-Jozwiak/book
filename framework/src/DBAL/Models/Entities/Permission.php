@@ -11,22 +11,22 @@ class Permission extends Model
 {
     public string $table {
         get => 'permissions';
-}
+    }
 
     public string $name {
         get => $this->name;
-set {
+        set {
             $this->name = $value;
-$this->markPropertyAsChanged('name');
-}
+            $this->markPropertyAsChanged('name');
+        }
     }
 
     public ?string $description {
         get => $this->description;
-set {
+        set {
             $this->description = $value;
-$this->markPropertyAsChanged('description');
-}
+            $this->markPropertyAsChanged('description');
+        }
     }
 
     // Relacje

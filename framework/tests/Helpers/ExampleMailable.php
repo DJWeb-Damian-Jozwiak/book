@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace Tests\Helpers;
 
+use DJWeb\Framework\Config\Config;
 use DJWeb\Framework\Mail\Address;
 use DJWeb\Framework\Mail\Content;
 use DJWeb\Framework\Mail\Envelope;
 use DJWeb\Framework\Mail\Mailable;
+use DJWeb\Framework\Mail\MailerFactory;
 
 class ExampleMailable extends Mailable
 {
     public function content(): Content
     {
+        MailerFactory::createSmtpMailer(...Config::get('mail.default'))->send(new ExampleMailable());
         return new Content('mail/test.blade.php', ['name' => 'test']);
     }
 

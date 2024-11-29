@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\FormValidators\RegisterFormDTO;
+use App\Mail\WelcomeMailable;
+use DJWeb\Framework\Auth\Auth;
+use DJWeb\Framework\Config\Config;
 use DJWeb\Framework\DBAL\Models\Entities\Role;
 use DJWeb\Framework\DBAL\Models\Entities\User;
 use DJWeb\Framework\Http\Response;
+use DJWeb\Framework\Mail\MailerFactory;
 use DJWeb\Framework\Routing\Attributes\Route;
 use DJWeb\Framework\Routing\Attributes\RouteGroup;
 use DJWeb\Framework\Routing\Controller;
@@ -34,6 +38,9 @@ class RegisterController extends Controller
         if($defaultRole) {
             $user->addRole($defaultRole);
         }
+
+        MailerFactory::createSmtpMailer(...Config::get('mail.default'))
+            ->send(new WelcomeMailable($user));
 
         Auth::login($user);
 

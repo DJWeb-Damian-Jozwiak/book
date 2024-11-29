@@ -12,6 +12,7 @@ use DJWeb\Framework\DBAL\Models\Relations\RelationDecorator;
 use DJWeb\Framework\DBAL\Models\Relations\RelationFactory;
 use JsonSerializable;
 use LogicException;
+
 abstract class Model implements PropertyChangesContract, JsonSerializable
 {
     abstract public string $table { get; }

@@ -39,7 +39,7 @@ class RegisterFormDTO extends FormRequest
         return [
             'email' => $this->email,
             'username' => $this->username,
-            'password' => $this->password,
+            'password' => password_hash($this->password, PASSWORD_ARGON2ID),
         ];
     }
 }

@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\FormValidators\ForgotPasswordDTO;
+use App\Mail\PasswordResetMailable;
 use Carbon\Carbon;
+use DJWeb\Framework\Config\Config;
 use DJWeb\Framework\DBAL\Models\Entities\User;
 use DJWeb\Framework\Http\Response;
+use DJWeb\Framework\Mail\MailerFactory;
 use DJWeb\Framework\Routing\Attributes\Route;
 use DJWeb\Framework\Routing\Attributes\RouteGroup;
 use DJWeb\Framework\Routing\Controller;
@@ -37,6 +40,8 @@ class ForgotPasswordController extends Controller
                 'password_reset_expires' => Carbon::now()->addMinutes(60)
             ])->save();
 
+            MailerFactory::createSmtpMailer(...Config::get('mail.default'))
+                ->send(new PasswordResetMailable($user, $token));
         }
 
         return new Response()->withJson([

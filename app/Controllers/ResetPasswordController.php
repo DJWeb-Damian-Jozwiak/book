@@ -35,7 +35,7 @@ class ResetPasswordController extends Controller
     {
         $data = $request->toArray();
 
-        $user = User::query()->select()->where('password_reset_token', $data['token'])
+        $user = User::query()->select()->where('password_reset_token', '=', $data['token'])
             ->where('password_reset_expires', '>', Carbon::now())
             ->first();
 

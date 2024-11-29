@@ -17,20 +17,20 @@ final readonly class PermissionManager
 
     public function hasAnyPermission(array $permissions): bool
     {
-        if (!$this->userManager->check()) {
+        if (! $this->userManager->check()) {
             return false;
         }
 
-        return array_any($permissions, fn(string $permission) => $this->hasPermission($permission));
+        return array_any($permissions, fn (string $permission) => $this->hasPermission($permission));
     }
 
     public function hasAllPermissions(array $permissions): bool
     {
-        if (!$this->userManager->check()) {
+        if (! $this->userManager->check()) {
             return false;
         }
 
-        return array_all($permissions, fn($permission) => $this->hasPermission($permission));
+        return array_all($permissions, fn ($permission) => $this->hasPermission($permission));
     }
 
 }

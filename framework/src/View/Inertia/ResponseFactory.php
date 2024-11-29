@@ -7,25 +7,21 @@ namespace DJWeb\Framework\View\Inertia;
 use DJWeb\Framework\Config\Config;
 use DJWeb\Framework\Http\JsonResponse;
 use DJWeb\Framework\Http\Response;
-use DJWeb\Framework\Http\Stream;
-use DJWeb\Framework\Log\Log;
 use DJWeb\Framework\View\ViewManager;
 use Psr\Http\Message\ResponseInterface;
+
 class ResponseFactory
 {
     public function createResponse(array $page): ResponseInterface
     {
-        // Jeśli to visit request (nie XHR) - zwracamy HTML
-        if (!$this->isXmlHttpRequest()) {
+        if (! $this->isXmlHttpRequest()) {
             return $this->htmlResponse($page);
         }
 
-        // Jeśli to Inertia i chce HTML (czyli nawigacja przez link) - zwracamy 409
         if ($this->isInertiaRequest() && $this->wantsHtml()) {
             return $this->locationResponse($page['url'] ?? '/');
         }
 
-        // W innych przypadkach zwracamy JSON
         return $this->jsonResponse($page);
     }
 

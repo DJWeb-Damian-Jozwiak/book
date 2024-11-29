@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace DJWeb\Framework\DBAL\Models\Entities;
 
 use Carbon\Carbon;
+use DJWeb\Framework\Auth\Auth;
 use DJWeb\Framework\DBAL\Models\Attributes\BelongsToMany;
 use DJWeb\Framework\DBAL\Models\Model;
+use DJWeb\Framework\DBAL\Query\Builders\QueryBuilder;
 
 class User extends Model
 {
@@ -97,14 +99,26 @@ class User extends Model
         get => $this->relations->getRelation('roles');
     }
 
+    public function addRole(Role $role): void
+    {
+        if (Auth::user()->hasRole($role->name)) {
+            return;
+        }
+        new QueryBuilder()->insert('user_roles')
+            ->values([
+                'user_id' => $this->id,
+                'role_id' => $role->id,
+            ])->execute();
+    }
+
     public function hasRole(string $roleName): bool
     {
-        return array_any($this->roles, fn(Role $role) => $role->name === $roleName);
+        return array_any($this->roles, static fn (Role $role) => $role->name === $roleName);
     }
 
     public function hasPermission(string $permissionName): bool
     {
-        return array_any($this->roles, fn(Role $role) => $role->hasPermission($permissionName));
+        return array_any($this->roles, static fn (Role $role) => $role->hasPermission($permissionName));
     }
 
     protected array $casts = [

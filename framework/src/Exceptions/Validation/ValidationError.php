@@ -22,7 +22,7 @@ class ValidationError extends BaseRuntimeError
     public static function fromFieldAndMessage(string $field, string $message): self
     {
         return new self([
-           new \DJWeb\Framework\Validation\ValidationError($field, $message)
+            new \DJWeb\Framework\Validation\ValidationError($field, $message),
         ]);
     }
 }
