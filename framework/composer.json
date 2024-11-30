@@ -11,6 +11,7 @@
     "ext-pdo": "*",
     "ext-simplexml": "*",
     "ext-dom": "*",
+    "ext-redis": "*",
     "nesbot/carbon": "^3.8",
     "fakerphp/faker": "^1.23",
     "psr/log": "^3.0",
@@ -18,7 +19,8 @@
     "psr/http-server-middleware": "^1.0",
     "ezyang/htmlpurifier": "^4.18",
     "twig/twig": "^3.14",
-    "symfony/mailer": "^7.1"
+    "symfony/mailer": "^7.1",
+    "psr/cache": "^3.0"
   },
   "scripts": {
     "insights": "./vendor/bin/phpinsights -vvv",
