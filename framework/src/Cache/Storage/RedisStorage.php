@@ -11,7 +11,7 @@ use Redis;
 readonly class RedisStorage implements StorageContract
 {
     public function __construct(
-        private Redis  $redis,
+        private Redis $redis,
         private string $prefix = 'cache:',
     ) {
         $this->setEvictionPolicy(RedisEvictionPolicy::ALLKEYS_LFU);
@@ -43,12 +43,12 @@ readonly class RedisStorage implements StorageContract
 
     public function delete(string $key): bool
     {
-        return (bool)$this->redis->del($this->prefix . $key);
+        return (bool) $this->redis->del($this->prefix . $key);
     }
 
     public function clear(): bool
     {
         $keys = $this->redis->keys($this->prefix . '*');
-        return !$keys || $this->redis->del($keys);
+        return ! $keys || $this->redis->del($keys);
     }
 }

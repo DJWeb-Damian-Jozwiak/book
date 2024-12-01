@@ -10,6 +10,7 @@ use DJWeb\Framework\Auth\Auth;
 use DJWeb\Framework\Config\Config;
 use DJWeb\Framework\DBAL\Models\Entities\Role;
 use DJWeb\Framework\DBAL\Models\Entities\User;
+use DJWeb\Framework\Events\Auth\UserRegisteredEvent;
 use DJWeb\Framework\Http\Response;
 use DJWeb\Framework\Mail\MailerFactory;
 use DJWeb\Framework\Routing\Attributes\Route;
@@ -39,8 +40,7 @@ class RegisterController extends Controller
             $user->addRole($defaultRole);
         }
 
-        MailerFactory::createSmtpMailer(...Config::get('mail.default'))
-            ->send(new WelcomeMailable($user));
+        $this->events->dispatch(new UserRegisteredEvent($user));
 
         Auth::login($user);
 

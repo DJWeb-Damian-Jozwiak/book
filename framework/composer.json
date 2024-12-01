@@ -20,7 +20,8 @@
     "ezyang/htmlpurifier": "^4.18",
     "twig/twig": "^3.14",
     "symfony/mailer": "^7.1",
-    "psr/cache": "^3.0"
+    "psr/cache": "^3.0",
+    "psr/event-dispatcher": "^1.0"
   },
   "scripts": {
     "insights": "./vendor/bin/phpinsights -vvv",

@@ -13,9 +13,6 @@ use DJWeb\Framework\DBAL\Schema\MySQL\Columns\VarcharColumn;
 
 return new class extends Migration
 {
-    /**
-     * run migration.
-     */
     public function up(): void
     {
         $this->schema->createTable('sessions', [
@@ -32,10 +29,6 @@ return new class extends Migration
         $this->schema->createIndex('sessions', 'sessions_last_activity_index', ['last_activity']);
         $this->schema->createIndex('sessions', 'sessions_user_id_index', ['user_id']);
     }
-
-    /**
-     * rollback migration.
-     */
     public function down(): void
     {
         $this->schema->dropTable('sessions');

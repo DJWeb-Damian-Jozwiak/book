@@ -24,12 +24,17 @@ use DJWeb\Framework\DBAL\Query\Builders\SelectQueryBuilder;
 use DJWeb\Framework\DBAL\Query\Builders\UpdateQueryBuilder;
 use DJWeb\Framework\DBAL\Schema\MySQL\Schema;
 use DJWeb\Framework\DBAL\Schema\SchemaFactory;
+use DJWeb\Framework\Events\EventManager;
 
 class SchemaServiceProvider extends ServiceProvider
 {
+    public function __construct(private EventManager $manager)
+    {
+    }
     public function register(ContainerContract $container): void
     {
         $connection = new MySqlConnection();
+        $connection->withEventManager($this->manager);
         $container->set(ConnectionContract::class, $connection);
         $container->set(
             SchemaContract::class,

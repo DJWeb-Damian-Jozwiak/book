@@ -33,13 +33,13 @@ class FileStorage implements StorageContract
 
         $this->accessLog[$key] = time();
         $this->saveMeta();
-        return (bool)file_put_contents($this->getPath($key), serialize($data));
+        return (bool) file_put_contents($this->getPath($key), serialize($data));
     }
 
     public function delete(string $key): bool
     {
         $file = $this->getPath($key);
-        return !file_exists($file) || unlink($file);
+        return ! file_exists($file) || unlink($file);
     }
 
     public function clear(): bool
@@ -48,16 +48,16 @@ class FileStorage implements StorageContract
         return true;
     }
 
-    private function getPath(string $key): string
-    {
-        return $this->directory . '/' . md5($key) . '.cache';
-    }
-
     public function maxCapacity(int $size): void {
         $this->maxItems = $size;
         while ($this->getCurrentItemCount() > $size) {
             $this->evictLRU();
         }
+    }
+
+    private function getPath(string $key): string
+    {
+        return $this->directory . '/' . md5($key) . '.cache';
     }
 
     private function loadMeta(): void

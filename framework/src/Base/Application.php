@@ -10,6 +10,7 @@ use DJWeb\Framework\Container\Container;
 use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\Container\Contracts\ServiceProviderContract;
 use DJWeb\Framework\DBAL\Contracts\Schema\SchemaContract;
+use DJWeb\Framework\Events\EventManager;
 use DJWeb\Framework\Exceptions\Container\ContainerError;
 use DJWeb\Framework\Log\LoggerFactory;
 use DJWeb\Framework\ServiceProviders\SchemaServiceProvider;
@@ -19,6 +20,10 @@ class Application extends Container
 {
     public string $base_path{
         get => $this->getBinding('base_path') ?? '';
+    }
+
+    public EventManager $events {
+        get => $this->_eventManager ??= new EventManager();
     }
 
     public SchemaContract $schema{
@@ -47,13 +52,14 @@ class Application extends Container
     }
     protected static ?self $instance = null;
     private ?LoggerInterface $_logger;
+    private ?EventManager $_eventManager = null;
     protected function __construct()
     {
         parent::__construct();
         $this->set(Container::class, $this);
         $this->set(ContainerContract::class, $this);
         $this->set(ConfigContract::class, new ConfigBase($this));
-        $this->registerServiceProvider(new SchemaServiceProvider());
+        $this->registerServiceProvider(new SchemaServiceProvider($this->events));
     }
 
     public function __clone()

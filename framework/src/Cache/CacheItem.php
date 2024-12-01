@@ -10,7 +10,6 @@ use Psr\Cache\CacheItemInterface;
 
 class CacheItem implements CacheItemInterface
 {
-
     private mixed $value = null;
     private bool $isHit = false;
     private ?Carbon $expiry = null;
@@ -24,7 +23,6 @@ class CacheItem implements CacheItemInterface
     {
         return $this->key;
     }
-
 
     public function get(): mixed
     {

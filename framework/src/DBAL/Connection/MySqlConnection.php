@@ -6,12 +6,21 @@ namespace DJWeb\Framework\DBAL\Connection;
 
 use DJWeb\Framework\Config\Config;
 use DJWeb\Framework\DBAL\Contracts\ConnectionContract;
+use DJWeb\Framework\Events\Database\QueryExecutedEvent;
+use DJWeb\Framework\Events\EventManager;
 use PDO;
 use SensitiveParameter;
 
 class MySqlConnection implements ConnectionContract
 {
     private ?PDO $connection = null;
+    private ?EventManager $eventManager = null;
+
+    public function withEventManager(EventManager $eventManager): static
+    {
+        $this->eventManager = $eventManager;
+        return $this;
+    }
 
     public function getConnection(): ?PDO
     {
@@ -34,11 +43,24 @@ class MySqlConnection implements ConnectionContract
             $this->connect();
         }
 
-        $statement = $this->connection?->prepare($sql);
-        /** @phpstan-ignore-next-line */
-        $statement->execute(array_values($params));
+        $startTime = new \DateTimeImmutable();
+        $start = microtime(true);
 
-        return $statement;
+        $statement = $this->connection->prepare($sql);
+        /** @phpstan-ignore-next-line */
+        $result = $statement->execute(array_values($params));
+
+        $executionTime = microtime(true) - $start;
+
+        $this->eventManager?->dispatch(new QueryExecutedEvent(
+            sql: $sql,
+            parameters: $params,
+            startTime: $startTime,
+            executionTime: $executionTime,
+            connection: $this->connection->getAttribute(\PDO::ATTR_CONNECTION_STATUS)
+        ));
+
+        return $result;
     }
 
     public function connect(): void

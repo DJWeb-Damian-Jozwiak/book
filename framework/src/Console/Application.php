@@ -8,7 +8,6 @@ use DJWeb\Framework\Console\Resolvers\CommandResolver;
 use DJWeb\Framework\Console\Utils\CommandNamespace;
 use DJWeb\Framework\ServiceProviders\ConsoleServiceProvider;
 use DJWeb\Framework\ServiceProviders\MigrationsServiceProvider;
-use DJWeb\Framework\ServiceProviders\SchemaServiceProvider;
 
 class Application extends \DJWeb\Framework\Base\Application
 {
@@ -18,7 +17,6 @@ class Application extends \DJWeb\Framework\Base\Application
     {
         parent::__construct();
         $this->registerServiceProvider(new ConsoleServiceProvider());
-        $this->registerServiceProvider(new SchemaServiceProvider());
         $this->registerServiceProvider(new MigrationsServiceProvider());
         $this->kernel = new Kernel($this->get(CommandResolver::class));
         $dir = __DIR__ . DIRECTORY_SEPARATOR . 'Commands';
