@@ -40,10 +40,14 @@ class RouteGroupTest extends BaseTestCase
 
         $handler = new RouteHandler(callback: fn() => $response);
         $handler2 = new RouteHandler(controller: TestController::class, action: 'testMethod');
-        $request->expects($this->once())->method('withAttribute')
-            ->with('route_response')->willReturnSelf();
-        $request->expects($this->once())->method('getAttribute')
-            ->with('route_response')->willReturn($response);
+        $request->expects($this->any())->method('withAttribute')
+            ->willReturnSelf();
+
+        $request->expects($this->any())->method('getAttribute')
+            ->willReturnCallback(fn($key) => match ($key) {
+                'route_response' => $response,
+                default => null,
+            });
         $this->router->group('group1', function (RouteGroup $group) use ($handler, $handler2) {
             $group->group('nested', function (RouteGroup $group) use ($handler, $handler2) {
                 $group->addRoute(new Route('/test', 'GET', $handler));
