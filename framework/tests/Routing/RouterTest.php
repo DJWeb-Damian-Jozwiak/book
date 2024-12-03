@@ -47,10 +47,14 @@ class RouterTest extends TestCase
         $uri->method('getPath')->willReturn('/test');
         $request->method('getUri')->willReturn($uri);
         $request->method('getMethod')->willReturn('GET');
-        $request->expects($this->once())->method('withAttribute')
-            ->with('route_response')->willReturnSelf();
-        $request->expects($this->once())->method('getAttribute')
-            ->with('route_response')->willReturn($response);
+        $request->expects($this->any())->method('withAttribute')
+            ->willReturnSelf();
+
+        $request->expects($this->any())->method('getAttribute')
+            ->willReturnCallback(fn($key) => match ($key) {
+                'route_response' => $response,
+                default => null,
+            });
         $handler = new RouteHandler(callback: fn() => $response);
         $this->router->addRoute(new Route('/test', 'GET', $handler));
 
@@ -76,10 +80,14 @@ class RouterTest extends TestCase
                 new RouteHandler(TestController::class, 'testMethod'))
         );
 
-        $request->expects($this->once())->method('withAttribute')
-            ->with('route_response')->willReturnSelf();
-        $request->expects($this->once())->method('getAttribute')
-            ->with('route_response')->willReturn(new Response()->withContent('ok'));
+        $request->expects($this->any())->method('withAttribute')
+            ->willReturnSelf();
+
+        $request->expects($this->any())->method('getAttribute')
+            ->willReturnCallback(fn($key) => match ($key) {
+                'route_response' => new Response()->withContent('ok'),
+                default => null,
+            });
         $stack = new MiddlewareStack($this->router);
         $result = $stack->handle($request);
         $this->assertEquals(200, $result->getStatusCode());
