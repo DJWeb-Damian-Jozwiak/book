@@ -48,7 +48,7 @@ class MySqlConnection implements ConnectionContract
 
         $statement = $this->connection->prepare($sql);
         /** @phpstan-ignore-next-line */
-        $result = $statement->execute(array_values($params));
+        $statement->execute(array_values($params));
 
         $executionTime = microtime(true) - $start;
 
@@ -60,7 +60,7 @@ class MySqlConnection implements ConnectionContract
             connection: $this->connection->getAttribute(\PDO::ATTR_CONNECTION_STATUS)
         ));
 
-        return $result;
+        return $statement;
     }
 
     public function connect(): void
