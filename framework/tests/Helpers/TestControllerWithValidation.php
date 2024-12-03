@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Helpers;
 
 use DJWeb\Framework\Http\Response;
