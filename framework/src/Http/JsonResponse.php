@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Http;
 
-use Psr\Http\Message\StreamInterface;
-use RuntimeException;
-
 class JsonResponse extends Response
 {
     public function __construct(
         public mixed $data,
-        int                  $status = 200,
-        array                $headers = [],
+        int $status = 200,
+        array $headers = [],
         public int $flags = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_THROW_ON_ERROR,
-        string               $version = '1.1'
+        string $version = '1.1'
     )
     {
         $body = $this->encodeData($data);
@@ -47,12 +44,9 @@ class JsonResponse extends Response
         return $this->withBody(new Stream()->withContent($body));
     }
 
-
     private function encodeData(mixed $data): string
     {
         return json_encode($data, $this->flags);
     }
-
-
 
 }

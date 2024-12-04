@@ -1,30 +1,30 @@
 {
-    "execution_time": 0.45,
+    "execution_time": 0.53,
     "code_coverage": {
         "classes": {
-            "total": 104,
-            "tested": 104
+            "total": 178,
+            "tested": 166
         },
         "methods": {
-            "total": 456,
-            "tested": 456
+            "total": 702,
+            "tested": 684
         },
         "lines": {
-            "total": 1412,
-            "tested": 1412
+            "total": 2401,
+            "tested": 2306
         }
     },
     "tests": {
-        "tests": 277,
-        "failed": 0,
-        "assertions": 485,
-        "errors": 0,
+        "tests": 379,
+        "failed": 3,
+        "assertions": 645,
+        "errors": 1,
         "warnings": 0,
         "deprecations": 0,
         "notices": 0,
-        "success": 277,
+        "success": 378,
         "incomplete": 0,
-        "risky": 0,
+        "risky": 3,
         "skipped": 0
     }
 }

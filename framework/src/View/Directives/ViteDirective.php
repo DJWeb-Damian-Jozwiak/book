@@ -13,7 +13,7 @@ class ViteDirective extends Directive
             $content,
             static function ($matches) {
                 $assets = trim($matches[1]);
-                return "<?php echo vite({$assets}); ?>";
+                return "<?php echo new \DJWeb\Framework\View\Inertia\Vite()->render({$assets}); ?>";
             }
         );
     }
