@@ -6,10 +6,7 @@ namespace DJWeb\Framework\Http\Middleware;
 
 use DJWeb\Framework\Http\JsonResponse;
 use DJWeb\Framework\Http\Response;
-use DJWeb\Framework\Log\Log;
 use DJWeb\Framework\View\Inertia\Inertia;
-use DJWeb\Framework\View\Inertia\ResponseFactory;
-use DJWeb\Framework\Web\Application;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -21,7 +18,7 @@ class InertiaMiddleware implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if (!$this->isInertiaRequest($request)) {
+        if (! $this->isInertiaRequest($request)) {
             return $handler->handle($request);
         }
 
@@ -42,9 +39,9 @@ class InertiaMiddleware implements MiddlewareInterface
 
         // For JSON responses, ensure they're proper Inertia responses
         if ($response instanceof JsonResponse) {
-            $data = json_decode((string)$response->getBody(), true);
+            $data = json_decode((string) $response->getBody(), true);
 
-            if (!isset($data['component']) || !isset($data['props'])) {
+            if (! isset($data['component']) || ! isset($data['props'])) {
                 throw new \RuntimeException('Invalid Inertia response: missing required fields');
             }
 

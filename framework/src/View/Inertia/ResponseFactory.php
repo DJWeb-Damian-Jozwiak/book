@@ -7,16 +7,15 @@ namespace DJWeb\Framework\View\Inertia;
 use DJWeb\Framework\Config\Config;
 use DJWeb\Framework\Http\JsonResponse;
 use DJWeb\Framework\Http\Response;
-use DJWeb\Framework\Http\Stream;
-use DJWeb\Framework\Log\Log;
 use DJWeb\Framework\View\ViewManager;
 use Psr\Http\Message\ResponseInterface;
+
 class ResponseFactory
 {
     public function createResponse(array $page): ResponseInterface
     {
         // Jeśli to visit request (nie XHR) - zwracamy HTML
-        if (!$this->isXmlHttpRequest()) {
+        if (! $this->isXmlHttpRequest()) {
             return $this->htmlResponse($page);
         }
 
