@@ -1,6 +1,8 @@
 <?php
 
-namespace Routing;
+declare(strict_types=1);
+
+namespace Tests\Routing;
 
 use DJWeb\Framework\Config\Contracts\ConfigContract;
 use DJWeb\Framework\Exceptions\Validation\ValidationError;
