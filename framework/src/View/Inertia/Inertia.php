@@ -80,12 +80,11 @@ class Inertia
         self::$rootView = $view;
     }
 
-
     public static function location(string $url): ResponseInterface
     {
         $headers = [
             'X-Inertia-Location' => $url,
-            'Vary' => ['Accept', 'X-Requested-With']
+            'Vary' => ['Accept', 'X-Requested-With'],
         ];
 
         return new Response(
