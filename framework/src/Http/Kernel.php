@@ -33,11 +33,12 @@ class Kernel implements RequestHandlerInterface
     public function handleHeaders(ResponseInterface $response): ResponseInterface
     {
         http_response_code($response->getStatusCode());
-        $headers = $response->getHeaders();
+        $headers = array_filter(
+            $response->getHeaders(),
+            fn($name) => $name !== 'Location',
+            ARRAY_FILTER_USE_KEY
+        );
         foreach ($headers as $name => $values) {
-            if($name === 'Location') {
-                continue;
-            }
             header($name . ': ' . implode(', ', $values), false);
         }
         return $response;

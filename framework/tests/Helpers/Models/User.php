@@ -26,4 +26,18 @@ class User extends Model
     public array $companies {
         get => $this->relations->getRelation('companies');
     }
+
+    #[BelongsToMany(
+        Role::class,
+        pivot_table: 'role_user',
+        foreign_pivot_key: 'role_id',
+        related_pivot_key: 'user_id',
+    )]
+    public array $roles {
+        get {
+            /** @var Role[] $models */
+            $models = $this->relations->getRelation('roles');
+            return $models;
+        }
+    }
 }
