@@ -1,6 +1,5 @@
 <?php
 
-use DJWeb\Framework\Http\Middleware\RedirectMiddleware;
 use DJWeb\Framework\Http\Middleware\RequestLoggerMiddleware;
 use DJWeb\Framework\Http\Middleware\RouterMiddleware;
 
@@ -11,7 +10,5 @@ return [
     'global' => [
         RouterMiddleware::class
     ],
-    'after_global' => [
-        RedirectMiddleware::class,
-    ],
+    'after_global' => [],
 ];
