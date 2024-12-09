@@ -281,7 +281,7 @@ class QueryBuilderTest extends BaseTestCase
             ->leftJoin('books', 'users.id', '=', 'books.author')
             ->where('users.id', '>', 20);
         $this->assertEquals(
-            'SELECT * FROM users SELECT * FROM users LEFT JOIN books ON users.id = books.author WHERE users.id > ?',
+            'SELECT * FROM users LEFT JOIN books ON users.id = books.author WHERE users.id > ?',
             $query->getSQL()
         );
     }
@@ -292,7 +292,7 @@ class QueryBuilderTest extends BaseTestCase
             ->rightJoin('books', 'users.id', '=', 'books.author')
             ->where('users.id', '>', 20);
         $this->assertEquals(
-            'SELECT * FROM users SELECT * FROM users RIGHT JOIN books ON users.id = books.author WHERE users.id > ?',
+            'SELECT * FROM users RIGHT JOIN books ON users.id = books.author WHERE users.id > ?',
             $query->getSQL()
         );
     }
@@ -303,7 +303,7 @@ class QueryBuilderTest extends BaseTestCase
             ->innerJoin('books', 'users.id', '=', 'books.author')
             ->where('users.id', '>', 20);
         $this->assertEquals(
-            'SELECT * FROM users SELECT * FROM users INNER JOIN books ON users.id = books.author WHERE users.id > ?',
+            'SELECT * FROM users INNER JOIN books ON users.id = books.author WHERE users.id > ?',
             $query->getSQL()
         );
     }
