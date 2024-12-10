@@ -27,9 +27,6 @@ class CodeSnippet
     private function processFile(): void
     {
         $allLines = file($this->file, FILE_IGNORE_NEW_LINES);
-        if ($allLines === false) {
-            return;
-        }
         $this->startLine = max(1, $this->errorLine - $this->contextLines);
         $this->endLine = min(
             count($allLines),

@@ -17,6 +17,12 @@ abstract class BaseHandler
         register_shutdown_function([$this, 'handleFatalError']);
     }
 
+    public function unregister(): void
+    {
+        restore_error_handler();
+        restore_exception_handler();
+    }
+
     public abstract function handleException(Throwable $exception): void;
 
     public function handleError(
@@ -59,7 +65,7 @@ abstract class BaseHandler
             E_CORE_ERROR,
             E_COMPILE_ERROR,
             E_USER_ERROR,
+            E_USER_DEPRECATED
         ], true);
     }
-
 }

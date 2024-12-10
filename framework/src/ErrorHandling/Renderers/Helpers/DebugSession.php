@@ -18,11 +18,12 @@ class DebugSession
         private readonly TraceCollection $trace
     ) {}
 
-    public function run(): void
+    public function run(): int
     {
         while ($this->isRunning) {
             $this->processNextCommand();
         }
+        return 0;
     }
 
     private function processNextCommand(): void

@@ -22,7 +22,7 @@ readonly class ConsoleRenderer
     ) {
     }
 
-    public function render(Throwable $exception): void
+    public function render(Throwable $exception): int
     {
         $debugSession = new DebugSession(
             $this->output,
@@ -31,6 +31,6 @@ readonly class ConsoleRenderer
         );
 
         $this->headerRenderer->render($exception);
-        $debugSession->run();
+        return $debugSession->run();
     }
 }
