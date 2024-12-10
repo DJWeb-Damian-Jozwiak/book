@@ -9,8 +9,6 @@ use DJWeb\Framework\ErrorHandling\Backtrace;
 use DJWeb\Framework\ErrorHandling\Renderers\Helpers\DebugSession;
 use DJWeb\Framework\ErrorHandling\Renderers\Partials\ConsoleCommandProcessor;
 use DJWeb\Framework\ErrorHandling\Renderers\Partials\ConsoleHeaderRenderer;
-use DJWeb\Framework\ErrorHandling\Renderers\Partials\ConsoleTraceRenderer;
-use DJWeb\Framework\ErrorHandling\TraceCollection;
 use Throwable;
 
 readonly class ConsoleRenderer

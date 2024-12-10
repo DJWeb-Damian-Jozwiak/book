@@ -19,7 +19,7 @@ class ConsoleHandler extends BaseHandler
             ($this->output)($this->renderer->render($exception));
 
         } catch (Throwable) {
-            ($this->output)( 'Critical error occurred. Please check error logs.');
+            ($this->output)('Critical error occurred. Please check error logs.');
 
         }
     }
