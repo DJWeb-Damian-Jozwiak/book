@@ -35,7 +35,7 @@ class Kernel implements RequestHandlerInterface
         http_response_code($response->getStatusCode());
         $headers = array_filter(
             $response->getHeaders(),
-            fn($name) => $name !== 'Location',
+            static fn ($name) => $name !== 'Location',
             ARRAY_FILTER_USE_KEY
         );
         foreach ($headers as $name => $values) {

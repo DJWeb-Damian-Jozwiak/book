@@ -30,6 +30,7 @@ use DJWeb\Framework\View\TemplateLoader;
 
 class BladeAdapter extends BaseAdapter implements RendererContract
 {
+    public static bool $force_compile = false;
     private TemplateCompiler $compiler;
     private TemplateLoader $loader;
     private AssetManager $assetManager;
@@ -112,8 +113,7 @@ class BladeAdapter extends BaseAdapter implements RendererContract
     private function renderTemplate(string $template, array $data): string
     {
         $cached_file = $this->getCachedPath($template);
-
-        if (! $this->isCached($template, $cached_file)) {
+        if (! $this->isCached($template, $cached_file) || self::$force_compile) {
             $content = $this->loader->load($template);
             $compiled = $this->compiler->compile($content);
             $this->cache($cached_file, $compiled);
@@ -165,7 +165,7 @@ class BladeAdapter extends BaseAdapter implements RendererContract
     {
         extract($data);
         ob_start();
-        include_once $cached_file;
+        include $cached_file;
         return ob_get_clean();
     }
 }

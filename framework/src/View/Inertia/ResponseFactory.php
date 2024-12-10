@@ -14,17 +14,14 @@ class ResponseFactory
 {
     public function createResponse(array $page): ResponseInterface
     {
-        // Jeśli to visit request (nie XHR) - zwracamy HTML
         if (! $this->isXmlHttpRequest()) {
             return $this->htmlResponse($page);
         }
 
-        // Jeśli to Inertia i chce HTML (czyli nawigacja przez link) - zwracamy 409
         if ($this->isInertiaRequest() && $this->wantsHtml()) {
             return $this->locationResponse($page['url'] ?? '/');
         }
 
-        // W innych przypadkach zwracamy JSON
         return $this->jsonResponse($page);
     }
 
@@ -48,7 +45,7 @@ class ResponseFactory
 
     private function jsonResponse(array $page): ResponseInterface
     {
-        return (new JsonResponse($page))
+        return new JsonResponse($page)
             ->withHeader('X-Inertia', 'true')
             ->withHeader('Vary', 'Accept');
     }

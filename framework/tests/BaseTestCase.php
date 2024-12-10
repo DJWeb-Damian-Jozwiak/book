@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class BaseTestCase extends TestCase
 {
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         Application::withInstance(null);
     }
