@@ -41,10 +41,10 @@ abstract class JoinDecorator implements JoinClauseContract
 
     public function getSQL(): string
     {
-        $sql = $this->queryBuilder->getSQL();
+        $sql = '';
         foreach ($this->joins as $join) {
             $sql .= ' ' . $join->getSQL();
         }
-        return $sql;
+        return trim($sql);
     }
 }
