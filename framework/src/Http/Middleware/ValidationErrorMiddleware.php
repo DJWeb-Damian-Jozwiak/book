@@ -29,7 +29,6 @@ class ValidationErrorMiddleware implements MiddlewareInterface
         }
     }
 
-
     private function isJsonRequest(ServerRequestInterface $request): bool
     {
         $contentType = $request->getHeaderLine('Content-Type');
@@ -43,7 +42,7 @@ class ValidationErrorMiddleware implements MiddlewareInterface
     {
         return [
             'message' => $error->getMessage(),
-            'errors' => $error->validationErrors
+            'errors' => $error->validationErrors,
         ];
     }
 
