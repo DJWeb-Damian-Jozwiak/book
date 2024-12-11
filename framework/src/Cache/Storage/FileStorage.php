@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Cache\Storage;
 
+use Carbon\Carbon;
 use DJWeb\Framework\Cache\Contracts\StorageContract;
 use DJWeb\Framework\Storage\Directory;
 
@@ -22,6 +23,8 @@ class FileStorage implements StorageContract
     public function get(string $key): ?array
     {
         $file = $this->getPath($key);
+        $this->accessLog[$key] = Carbon::now()->getTimestamp();
+        $this->saveMeta();
         return file_exists($file) ? unserialize(file_get_contents($file)) : null;
     }
 
@@ -31,7 +34,7 @@ class FileStorage implements StorageContract
             $this->evictLRU();
         }
 
-        $this->accessLog[$key] = time();
+        $this->accessLog[$key] = Carbon::now()->getTimestamp();
         $this->saveMeta();
         return (bool)file_put_contents($this->getPath($key), serialize($data));
     }
@@ -77,6 +80,7 @@ class FileStorage implements StorageContract
     }
     private function evictLRU(): void
     {
+        $this->loadMeta();
         asort($this->accessLog);
         $key = array_key_first($this->accessLog);
         $this->delete($key);

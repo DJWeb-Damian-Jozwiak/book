@@ -12,6 +12,12 @@ use Redis;
 
 class CacheFactory
 {
+    private static ?Redis $redis = null;
+
+    public static function withRedis(Redis $redis): void
+    {
+        self::$redis = $redis;
+    }
     public static function create(): CacheItemPool
     {
         $driver = Config::get('cache.default_driver');
@@ -35,22 +41,22 @@ class CacheFactory
 
     private static function createRedisStorage(array $config): RedisStorage
     {
-        $redis = new Redis();
-        $redis->connect(
+        self::$redis ??= new Redis();
+        self::$redis->connect(
             $config['host'] ?? 'localhost',
             $config['port'] ?? 6379,
             $config['timeout'] ?? 0.0,
         );
 
         if (isset($config['password'])) {
-            $redis->auth($config['password']);
+            self::$redis->auth($config['password']);
         }
 
         if (isset($config['database'])) {
-            $redis->select($config['database']);
+            self::$redis->select($config['database']);
         }
 
-        $storage = new RedisStorage($redis, $config['prefix'] ?? 'cache:');
+        $storage = new RedisStorage(self::$redis, $config['prefix'] ?? 'cache:');
         if (isset($config['max_memory'])) {
             $storage->maxCapacity($config['max_memory']);
         }
