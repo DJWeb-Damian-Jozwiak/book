@@ -11,5 +11,6 @@ class BaseTestCase extends TestCase
     protected function tearDown(): void
     {
         Application::withInstance(null);
+        $_SERVER = [];
     }
 }

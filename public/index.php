@@ -12,6 +12,9 @@ $errorHandler = new WebHandler(
         debug: true,
         backtrace: new Backtrace()
     ),
+    function (string $output) {
+        echo $output;
+    }
 );
 $errorHandler->register();
 try {
