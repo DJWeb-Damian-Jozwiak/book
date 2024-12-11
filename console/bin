@@ -11,7 +11,7 @@ require_once 'vendor/autoload.php';
 require_once 'helpers/functions.php';
 
 $app = Application:: getInstance();
-$handler = new ConsoleHandler(new ConsoleRendererFactory($app)->create());
+$handler = new ConsoleHandler(new ConsoleRendererFactory($app)->create(), function ( $output ){});
 $handler->register();
 $app->bind('base_path', dirname(__DIR__));
 $app->registerCommands(

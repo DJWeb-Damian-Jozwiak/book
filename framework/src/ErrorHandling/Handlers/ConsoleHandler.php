@@ -10,16 +10,16 @@ use Throwable;
 
 class ConsoleHandler extends BaseHandler
 {
-    public function __construct(private ConsoleRenderer $renderer) {
+    public function __construct(private ConsoleRenderer $renderer, private \Closure $output) {
     }
 
     public function handleException(Throwable $exception): void
     {
         try {
-            $this->renderer->render($exception);
+            ($this->output)($this->renderer->render($exception));
 
         } catch (Throwable) {
-            echo 'Critical error occurred. Please check error logs.';
+            ($this->output)('Critical error occurred. Please check error logs.');
 
         }
     }

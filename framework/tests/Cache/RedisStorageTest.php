@@ -19,8 +19,7 @@ class RedisStorageTest extends TestCase
         $this->storage = new RedisStorage($this->redisMock);
     }
 
-    /** @test */
-    public function it_configures_eviction_policy(): void
+    public function testItConfiguresEvictionPolicy(): void
     {
         $this->redisMock->expects($this->exactly(2))
             ->method('config');

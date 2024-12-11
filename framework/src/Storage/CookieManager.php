@@ -12,6 +12,8 @@ final class CookieManager
     public function set(string $name, mixed $value, CookieOptions $options = new CookieOptions()): void
     {
         $encrypted = new EncryptionService()->encrypt($value);
+        //for testing, in real app available in next request
+        $_COOKIE[$name] = $encrypted;
         setcookie($name, $encrypted, $options->toArray());
     }
 
@@ -37,6 +39,7 @@ final class CookieManager
     public function remove(string $name): void
     {
         $past = Carbon::now()->subHour()->getTimestamp();
+        $_COOKIE[$name] = '';
         setcookie($name, '', new CookieOptions(expires: $past)->toArray());
     }
 }
