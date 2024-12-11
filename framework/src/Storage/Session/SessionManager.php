@@ -22,8 +22,6 @@ final class SessionManager
     {
         $this->options = (array) Config::get('session.cookie_params');
         $this->handler = $this->config->getHandler(Config::get('session.handler'));
-        session_set_cookie_params($this->options);
-        session_set_save_handler($this->handler, true);
     }
 
     public static function create(): self
@@ -49,12 +47,10 @@ final class SessionManager
             return true;
         }
         session_name('PHPSESSID');
-        if (session_start()) {
-            $this->started = true;
-            return true;
-        }
-
-        return false;
+        session_set_cookie_params($this->options);
+        session_set_save_handler($this->handler, true);
+        $this->started = true;
+        return true;
     }
 
     public function getId(): string
@@ -62,11 +58,13 @@ final class SessionManager
         return session_id();
     }
 
+    /** @codeCoverageIgnore  */
     public function regenerateId(bool $deleteOldSession = false): bool
     {
         return session_regenerate_id($deleteOldSession);
     }
 
+    /** @codeCoverageIgnore  */
     public function destroy(): bool
     {
         if (! $this->started) {

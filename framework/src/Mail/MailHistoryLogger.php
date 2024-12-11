@@ -34,27 +34,19 @@ readonly class MailHistoryLogger implements MailHistoryLoggerContract
         $history->save();
     }
 
-    public function cc(Email $email): ?string
+    public function cc(Email $email): string
     {
-        $cc = $email->getCc();
-        if ($cc) {
-            return implode(',', array_map(
-                static fn ($address) => $address->getAddress(),
-                $cc
-            ));
-        }
-        return null;
+        return implode(',', array_map(
+            static fn ($address) => $address->getAddress(),
+            $email->getCc()
+        ));
     }
 
-    public function bcc(Email $email): ?string
+    public function bcc(Email $email): string
     {
-        $bcc = $email->getBcc();
-        if ($bcc) {
-            return implode(',', array_map(
-                static fn ($address) => $address->getAddress(),
-                $bcc
-            ));
-        }
-        return null;
+        return implode(',', array_map(
+            static fn ($address) => $address->getAddress(),
+            $email->getBcc()
+        ));
     }
 }
