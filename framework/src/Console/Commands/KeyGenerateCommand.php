@@ -12,7 +12,7 @@ use DJWeb\Framework\Storage\EnvFileHandler;
 #[AsCommand('key:generate')]
 final class KeyGenerateCommand extends Command
 {
-    private const string KEY_LINE = 'APP_KEY=';
+    private const string KEY_LINE = 'APP_KEY';
 
     public function run(): int
     {

@@ -15,10 +15,9 @@ class Vite
         if (Config::get('app.env') === 'local') {
             return $this->devConfig($assets);
         }
-        $manifestPath = Application::getInstance()->base_path . '/public/build/manifest.json';
+        $manifestPath = Application::getInstance()->base_path . '/public/build/.vite/manifest.json';
         $manifest = file_exists($manifestPath)
-            ? json_decode(file_get_contents($manifestPath), true)
-            : [];
+            ? json_decode(file_get_contents($manifestPath), true) : [];
 
         return $this->prodConfig($manifest, $assets);
     }
@@ -38,22 +37,14 @@ class Vite
     /**
      * @param mixed $manifest
      * @param array $assets
+     *
      * @return string
      */
     public function prodConfig(array $manifest, array $assets): string
     {
-        $manifest = array_filter($manifest, fn(string $asset) => isset($manifest[$asset]));
+        $tags = [];
         foreach ($assets as $asset) {
-
             $file = $manifest[$asset]['file'];
-            $css = $manifest[$asset]['css'] ?? [];
-
-            // Add CSS files
-            foreach ($css as $cssFile) {
-                $tags[] = '<link rel="stylesheet" href="/build/' . $cssFile . '">';
-            }
-
-            // Add JS file
             $tags[] = '<script type="module" src="/build/' . $file . '"></script>';
         }
 

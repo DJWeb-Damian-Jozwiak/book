@@ -10,15 +10,18 @@ use Throwable;
 
 class WebHandler extends BaseHandler
 {
-    public function __construct(private WebRenderer $renderer) {
+    public function __construct(private WebRenderer $renderer, private \Closure $output)
+    {
     }
 
     public function handleException(Throwable $exception): void
     {
         try {
-            echo $this->renderer->render($exception)->getBody()->getContents();
+            ($this->output)(
+                $this->renderer->render($exception)->getBody()->getContents()
+            );
         } catch (Throwable) {
-            echo 'Critical error occurred. Please check error logs.';
+            ($this->output)('Critical error occurred. Please check error logs.');
         }
     }
 }

@@ -13,7 +13,6 @@ class Directory
 
         }
     }
-
     public static function ensureDirectoryIsWritable(string $path): void
     {
         if(! is_writable($path)) {
@@ -21,5 +20,4 @@ class Directory
 
         }
     }
-
 }
