@@ -17,7 +17,7 @@ class MakeMail extends MakeCommand
     protected function getPath(string $name): string
     {
         $name = str_replace('\\', '/', $name);
-        return $this->container->getBinding('app.mail_path') . '/' . $name . '.php';
+        return $this->container->getBinding('app.mail_path') . '/' . $name;
     }
 
     protected function getStub(): string
