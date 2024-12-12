@@ -25,6 +25,7 @@ readonly class QueryLoggerListener
             $event->executionTime * 1000,
             $event->connection ?? 'unknown'
         );
+        $event->stopPropagation();
 
         file_put_contents($path, $logEntry, FILE_APPEND);
     }
