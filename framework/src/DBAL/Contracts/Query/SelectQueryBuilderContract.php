@@ -21,6 +21,9 @@ interface SelectQueryBuilderContract extends QueryBuilderContract
     public function rightJoin(string $table, string $first, string $operator, string $second): self;
     public function innerJoin(string $table, string $first, string $operator, string $second): self;
 
+    public function orderBy(string $column): self;
+    public function orderByDesc(string $column): self;
+
     /**
      * @return array<string, mixed>|null
      */

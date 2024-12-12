@@ -33,7 +33,7 @@ class ScheduleWork extends Command
         $app = Application::getInstance();
         $configPath = $app->base_path . '/config/schedule.php';
 
-        if (!file_exists($configPath)) {
+        if (! file_exists($configPath)) {
             throw new \RuntimeException('Schedule configuration file not found');
         }
 

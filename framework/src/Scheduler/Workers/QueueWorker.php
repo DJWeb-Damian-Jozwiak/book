@@ -18,7 +18,7 @@ readonly class QueueWorker
         while (true) {
             $job = $this->queue->pop();
 
-            if(!$this->shouldContinue($iterations++)) {
+            if(! $this->shouldContinue($iterations)) {
                 break;
             }
             $iterations++;

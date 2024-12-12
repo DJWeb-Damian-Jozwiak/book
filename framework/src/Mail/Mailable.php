@@ -17,8 +17,10 @@ abstract class Mailable
 
     public function build(): Email
     {
+
         $this->envelope = $this->envelope();
         $this->content = $this->content();
+
         $email = new Email();
         $email->from($this->envelope->from->toSymfonyAddress())
             ->subject($this->envelope->subject)

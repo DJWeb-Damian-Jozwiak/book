@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DJWeb\Framework\Scheduler\Queue;
 
 use Carbon\Carbon;
-use DJWeb\Framework\DBAL\Contracts\ConnectionContract;
 use DJWeb\Framework\DBAL\Contracts\Query\QueryBuilderFacadeContract;
 use DJWeb\Framework\DBAL\Query\Builders\QueryBuilder;
 use DJWeb\Framework\Encryption\EncryptionService;
@@ -25,7 +24,7 @@ readonly class DatabaseQueue implements QueueContract
             'id' => $id,
             'payload' => $payload,
             'available_at' => Carbon::now()->toDateTimeString(),
-        ]);
+        ])->execute();
         return $id;
     }
 
@@ -37,7 +36,7 @@ readonly class DatabaseQueue implements QueueContract
             'id' => $id,
             'payload' => $payload,
             'available_at' => $delay->format('Y-m-d H:i:s'),
-        ]);
+        ])->execute();
         return $id;
     }
 
@@ -58,7 +57,7 @@ readonly class DatabaseQueue implements QueueContract
             ->select()
             ->orderBy('available_at')
             ->first();
-        if(!$item) {
+        if(! $item) {
             return null;
         }
         $this->builder->delete('jobs')->where('id', '=', $item['id'])->delete();

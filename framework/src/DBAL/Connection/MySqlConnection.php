@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\DBAL\Connection;
 
+use Carbon\Carbon;
 use DJWeb\Framework\Config\Config;
 use DJWeb\Framework\DBAL\Contracts\ConnectionContract;
 use DJWeb\Framework\Events\Database\QueryExecutedEvent;
@@ -13,8 +14,8 @@ use SensitiveParameter;
 
 class MySqlConnection implements ConnectionContract
 {
+    public ?EventManager $eventManager = null;
     private ?PDO $connection = null;
-    private ?EventManager $eventManager = null;
 
     public function withEventManager(EventManager $eventManager): static
     {
@@ -43,7 +44,6 @@ class MySqlConnection implements ConnectionContract
             $this->connect();
         }
 
-        $startTime = new \DateTimeImmutable();
         $start = microtime(true);
 
         $statement = $this->connection->prepare($sql);
@@ -55,7 +55,7 @@ class MySqlConnection implements ConnectionContract
         $this->eventManager?->dispatch(new QueryExecutedEvent(
             sql: $sql,
             parameters: $params,
-            startTime: $startTime,
+            startTime: Carbon::now(),
             executionTime: $executionTime,
             connection: $this->connection->getAttribute(\PDO::ATTR_CONNECTION_STATUS)
         ));
@@ -97,7 +97,7 @@ class MySqlConnection implements ConnectionContract
         return $id === false ? null : $id;
     }
 
-    protected function connectMysql(
+    public function connectMysql(
         ?string $host,
         ?int $port,
         ?string $database,

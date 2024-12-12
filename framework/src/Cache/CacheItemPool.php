@@ -27,7 +27,7 @@ class CacheItemPool implements CacheItemPoolInterface
         $item = new CacheItem($key);
 
         if ($data = $this->storage->get($key)) {
-            if ($data['expiry'] === null || $data['expiry'] > time()) {
+            if ($data['expiry'] === null || $data['expiry'] > Carbon::now()->getTimestamp()) {
                 return $item
                     ->set($data['value'])
                     ->withIsHit(true)

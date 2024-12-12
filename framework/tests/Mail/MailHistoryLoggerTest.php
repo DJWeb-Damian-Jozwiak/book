@@ -17,18 +17,26 @@ class MailHistoryLoggerTest extends BaseTestCase
     public function testLog()
     {
         $returnedConfig = [
-            'paths' => [
-                'template_path' => __DIR__ . '/../resources/views/blade',
-                'cache_path' => __DIR__ . '/../storage/cache/blade',
-            ],
-            'components' => [
-                'namespace' => '\\Tests\\Helpers\\View\\Components\\',
-            ]
+            'host' => 'localhost',
+            'port' => 587,
+            'username' => 'user',
+            'password' => 'PASSWORD',
         ];
         $app = Application::getInstance();
         $config = $this->createMock(ConfigContract::class);
         $app->set(ConfigContract::class, $config);
-        $config->expects($this->any())->method('get')->willReturn($returnedConfig);
+        $config->expects($this->any())->method('get')->willReturnCallback(fn(string $key) => match ($key) {
+            'views.default' => 'blade',
+            'views.engines.blade' => [
+                'paths' => [
+                    'template_path' => __DIR__ . '/../resources/views/blade',
+                    'cache_path' => __DIR__ . '/../storage/cache/blade',
+                ],
+                'components' => [
+                    'namespace' => '\\Tests\\Helpers\\View\\Components\\',
+                ]
+            ]
+        });
         $builder = $this->createMock(InsertQueryBuilderContract::class);
         $stmt = $this->createMock(PDOStatement::class);
         $builder->expects($this->once())->method('table')->willReturnSelf();

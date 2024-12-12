@@ -15,7 +15,6 @@ class ExampleMailable extends Mailable
 {
     public function content(): Content
     {
-        MailerFactory::createSmtpMailer(...Config::get('mail.default'))->send(new ExampleMailable());
         return new Content('mail/test.blade.php', ['name' => 'test']);
     }
 

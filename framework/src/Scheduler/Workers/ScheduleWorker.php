@@ -20,7 +20,7 @@ readonly class ScheduleWorker
     {
         $iterations = 0;
         while (true) {
-            if (!$this->shouldContinue($iterations++)) {
+            if (! $this->shouldContinue($iterations)) {
                 break;
             }
 

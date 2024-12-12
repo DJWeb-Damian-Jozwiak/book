@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Storage\Session\Handlers;
 
+use Carbon\Carbon;
 use DJWeb\Framework\Config\Config;
 use DJWeb\Framework\DBAL\Models\Entities\Session;
 use DJWeb\Framework\Storage\Session\SessionSecurity;
@@ -44,7 +45,7 @@ class DatabaseSessionHandler implements \SessionHandlerInterface
             return '';
         }
         $lifetime = Config::get('session.cookie_params.lifetime', 0);
-        if ($session->last_activity + $lifetime < time()) {
+        if ($session->last_activity + $lifetime < Carbon::now()->getTimestamp()) {
             $this->destroy($id);
             return '';
         }
