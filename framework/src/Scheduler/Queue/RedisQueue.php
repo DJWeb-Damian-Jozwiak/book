@@ -11,17 +11,20 @@ use Redis;
 
 class RedisQueue implements QueueContract
 {
-
-    private Redis $redis;
     private string $prefix = 'queue:';
 
-    public function __construct()
+    public function __construct(private Redis $redis = new Redis())
     {
-        $this->redis = new Redis();
         $this->redis->connect(
             Config::get('redis.host'),
             Config::get('redis.port')
         );
+    }
+
+    public function withRedis(Redis $redis): static
+    {
+        $this->redis = $redis;
+        return $this;
     }
     public function push(JobContract $job): string
     {
@@ -31,7 +34,7 @@ class RedisQueue implements QueueContract
             time(),
             json_encode([
                 'id' => $id,
-                'job' => serialize($job)
+                'job' => serialize($job),
             ])
         );
         return $id;
@@ -45,7 +48,7 @@ class RedisQueue implements QueueContract
             $delay->getTimestamp(),
             json_encode([
                 'id' => $id,
-                'job' => serialize($job)
+                'job' => serialize($job),
             ])
         );
         return $id;
@@ -58,6 +61,7 @@ class RedisQueue implements QueueContract
             '0',
             time().''
         );
+        $this->redis->zRem($this->prefix . 'delayed', $id);
     }
 
     public function size(): int
@@ -78,7 +82,7 @@ class RedisQueue implements QueueContract
             ['limit' => [0, 1]]
         );
 
-        if (empty($jobs)) {
+        if (!$jobs) {
             return null;
         }
 

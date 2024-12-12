@@ -30,10 +30,12 @@ abstract class Job implements JobContract
 
     /**
      * @param array<string, mixed> $data
+     *
      * @return void
      */
     public function __unserialize(array $data): void
     {
+        $this->collectSerializableProperties();
         foreach ($this->serializableProperties as $serializeName => $propertyName) {
             if (isset($data[$serializeName])) {
                 $this->{$propertyName} = $data[$serializeName];
@@ -47,10 +49,9 @@ abstract class Job implements JobContract
     {
         $reflector = new \ReflectionClass($this);
         $properties = $reflector->getProperties();
-        $properties = array_filter($properties, fn (\ReflectionProperty $property) => $property->isPublic());
+        $properties = array_filter($properties, static fn (\ReflectionProperty $property) => $property->isPublic());
         $properties = array_filter($properties, $this->filterProperty(...));
         $this->parseSerializable($properties);
-
 
         $constructor = $reflector->getConstructor();
         if ($constructor) {
@@ -60,7 +61,7 @@ abstract class Job implements JobContract
         }
     }
 
-    protected function filterProperty(ReflectionProperty $property): bool
+    protected function filterProperty(\ReflectionParameter|ReflectionProperty $property): bool
     {
         $attribute = $property->getAttributes(Serialize::class)[0] ?? null;
         return $attribute !== null;
@@ -68,7 +69,7 @@ abstract class Job implements JobContract
 
     private function parseSerializable(array $properties): void
     {
-        array_walk($properties, function (\ReflectionProperty $property) {
+        array_walk($properties, function (\ReflectionParameter|ReflectionProperty $property): void {
             $attribute = $property->getAttributes(Serialize::class)[0] ?? null;
             $name = $attribute->newInstance()->name ?? $property->getName();
             $this->serializableProperties[$name] = $property->getName();

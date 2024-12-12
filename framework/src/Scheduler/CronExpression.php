@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Scheduler;
 
+use Carbon\Carbon;
+
 class CronExpression
 {
     /**
@@ -21,7 +23,7 @@ class CronExpression
 
     public function isDue(): bool
     {
-        $now = new \DateTime();
+        $now = Carbon::now();
 
         return $this->matchesPart($now->format('i'), $this->parts[0]) &&  // minute
             $this->matchesPart($now->format('H'), $this->parts[1]) &&  // hour
@@ -43,7 +45,7 @@ class CronExpression
 
     private function matchesAnyPart(string $value, array $parts): bool
     {
-        return array_any($parts, fn($part) => $this->matchesSinglePart($value, $part));
+        return array_any($parts, fn ($part) => $this->matchesSinglePart($value, $part));
     }
 
     private function matchesSinglePart(string $value, string $part): bool
@@ -56,19 +58,18 @@ class CronExpression
             return $this->matchesRange($value, $part);
         }
 
-        return (int)$value === (int)$part;
+        return (int) $value === (int) $part;
     }
 
     private function matchesFrequency(string $value, string $part): bool
     {
         [$num, $freq] = explode('/', $part);
-        return $num === '*' && (int)$value % (int)$freq === 0;
+        return $num === '*' && (int) $value % (int) $freq === 0;
     }
 
     private function matchesRange(string $value, string $part): bool
     {
         [$start, $end] = explode('-', $part);
-        return (int)$value >= (int)$start && (int)$value <= (int)$end;
+        return (int) $value >= (int) $start && (int) $value <= (int) $end;
     }
-
 }
