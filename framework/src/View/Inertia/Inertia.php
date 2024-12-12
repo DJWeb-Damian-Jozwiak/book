@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace DJWeb\Framework\View\Inertia;
 
 use DJWeb\Framework\Config\Config;
-use DJWeb\Framework\Http\Response;
-use DJWeb\Framework\Http\Stream;
 use Psr\Http\Message\ResponseInterface;
 
 class Inertia
@@ -22,22 +20,23 @@ class Inertia
     private static array $props = [];
     private static string $rootView = 'inertia.blade.php';
 
+    public static function getProps(): array
+    {
+        return self::$sharedProps;
+    }
+
     public function head(): string
     {
-        if (! $this->isInertiaRequest()) {
-            $page = $this->getPage();
+        $page = $this->getPage();
 
-            return implode("\n", array_filter([
-                '<title>' . ($page['props']['title'] ?? Config::get('app.name', 'App')) . '</title>',
-                '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">',
-                sprintf(
-                    '<script>window.page = %s;</script>',
-                    json_encode($page)
-                ),
-            ]));
-        }
-
-        return '';
+        return implode("\n", array_filter([
+            '<title>' . ($page['props']['title'] ?? Config::get('app.name', 'App')) . '</title>',
+            '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">',
+            sprintf(
+                '<script>window.page = %s;</script>',
+                json_encode($page)
+            ),
+        ]));
     }
 
     /**
@@ -80,29 +79,6 @@ class Inertia
         self::$rootView = $view;
     }
 
-    public static function location(string $url): ResponseInterface
-    {
-        $headers = [
-            'X-Inertia-Location' => $url,
-            'Vary' => ['Accept', 'X-Requested-With'],
-        ];
-
-        return new Response(
-            headers: $headers,
-            body: new Stream()->withContent(''),
-            status: 409
-        );
-    }
-
-    public static function locationJs(string $url): void
-    {
-        echo sprintf(
-            '<script>window.location.href = "%s";</script>',
-            htmlspecialchars($url, ENT_QUOTES)
-        );
-        exit;
-    }
-
     /**
      * @return array<string, mixed>
      */
@@ -114,10 +90,5 @@ class Inertia
             'url' => $_SERVER['REQUEST_URI'] ?? '/',
             'version' => 1.0,
         ];
-    }
-
-    private function isInertiaRequest(): bool
-    {
-        return isset($_SERVER['HTTP_X_INERTIA']) && $_SERVER['HTTP_X_INERTIA'] === 'true';
     }
 }

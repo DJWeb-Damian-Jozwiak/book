@@ -26,27 +26,9 @@ class JsonResponse extends Response
         );
     }
 
-    public function withFlags(int $flags): self
-    {
-        $new = clone $this;
-        $new->flags = $flags;
-
-        $body = $new->encodeData($new->data);
-        return $this->withBody(new Stream()->withContent($body));
-    }
-
-    public function withData(mixed $data): self
-    {
-        $new = clone $this;
-        $new->data = $data;
-
-        $body = $new->encodeData($data);
-        return $this->withBody(new Stream()->withContent($body));
-    }
-
-    private function encodeData(mixed $data): string
+     private function encodeData(mixed $data): string
     {
         return json_encode($data, $this->flags);
-    }
+     }
 
 }

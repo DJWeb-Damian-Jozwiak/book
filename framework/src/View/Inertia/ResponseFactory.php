@@ -45,7 +45,7 @@ class ResponseFactory
 
     private function jsonResponse(array $page): ResponseInterface
     {
-        return (new JsonResponse($page))
+        return new JsonResponse($page)
             ->withHeader('X-Inertia', 'true')
             ->withHeader('Vary', 'Accept');
     }

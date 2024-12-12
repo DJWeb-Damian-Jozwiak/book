@@ -30,7 +30,10 @@ class File
 
     public static function ensureFileExists(string $path): void
     {
+        set_error_handler(static function (): void {
+        });
         $content = file_get_contents($path);
+        restore_error_handler();
         if ($content === false) {
             throw new \RuntimeException("Unable to read file: {$path}");
         }
@@ -48,5 +51,4 @@ class File
             throw new \RuntimeException("Unable to read file: {$path}");
         }
     }
-
 }

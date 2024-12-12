@@ -36,6 +36,13 @@ class ModelTest extends BaseTestCase
         );
     }
 
+    public function testSerializationIsNotAllowed()
+    {
+        $this->expectException(\LogicException::class);
+        $post = new Post();
+        json_encode($post);
+    }
+
     public function testIsNew()
     {
         $post = new Post();

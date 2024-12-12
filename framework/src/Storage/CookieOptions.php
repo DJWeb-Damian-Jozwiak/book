@@ -37,23 +37,4 @@ final readonly class CookieOptions
             'samesite' => $this->samesite,
         ];
     }
-
-    public static function default(): self
-    {
-        return new self();
-    }
-
-    public static function forever(): self
-    {
-        return new self(
-            expires: Carbon::now()->addYears(5)->getTimestamp()
-        );
-    }
-
-    public static function temporary(): self
-    {
-        return new self(
-            expires: Carbon::now()->addMinutes(10)->getTimestamp()
-        );
-    }
 }

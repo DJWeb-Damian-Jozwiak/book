@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import path from 'path'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import path from 'path';
 
 export default defineConfig({
     plugins: [vue({
@@ -9,13 +9,23 @@ export default defineConfig({
             propsDestructure: true
         }
     })],
+    build: {
+        outDir: 'public/build',
+        manifest: true,
+        rollupOptions: {
+            input: 'resources/js/app.js'
+        },
+        emptyOutDir: true
+    },
     resolve: {
         alias: {
             '@': path.resolve(__dirname, './resources/js')
         }
     },
-    build: {
-        outDir: 'public/build',
-        manifest: true,
-    },
-})
+    publicDir: false,        // Wyłącz kopiowanie plików z public
+    server: {
+        hmr: {
+            host: 'localhost'
+        }
+    }
+});
