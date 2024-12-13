@@ -267,7 +267,6 @@ class RequestFactoryTest extends TestCase
         $this->assertEquals($expectedAttributes, $requestWithoutRole->getAttributes());
     }
 
-    #[RunInSeparateProcess]
     public function testCreateFromGlobalsHandlesJsonData(): void
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';

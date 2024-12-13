@@ -25,6 +25,7 @@ class TextFormatterTest extends TestCase
 [2024-10-28 12:00:00] ALERT: Test message Context: {"test":"test"} Metadata: []
 
 TEXT;
+        $expected = str_replace("\r\n", PHP_EOL, $expected);
 
         $this->assertEquals($expected, $result);
     }
