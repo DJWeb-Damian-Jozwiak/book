@@ -82,7 +82,7 @@ class RedisQueue implements QueueContract
             ['limit' => [0, 1]]
         );
 
-        if (!$jobs) {
+        if (! $jobs) {
             return null;
         }
 
