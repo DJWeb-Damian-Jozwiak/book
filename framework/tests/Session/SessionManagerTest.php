@@ -59,7 +59,6 @@ class SessionManagerTest extends BaseTestCase
 //    #[RunInSeparateProcess]
 //    public function testStartWhenSessionAlreadyActive(): void
 //    {
-//        $this->markTestSkipped();
 //        session_start();
 //
 //        $manager = SessionManager::create();
