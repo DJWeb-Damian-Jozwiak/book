@@ -48,6 +48,7 @@ class BladeControllerTest extends BaseTestCase
         $response = $app->handle();
         $this->assertStringContainsString('Hello world blade', $response->getBody()->getContents());
         $this->assertStringContainsString('</button>', $response->getBody()->getContents());
+        BladeAdapter::buildDefault()->clearCache(__DIR__ . '/../storage/cache/blade');
     }
 
     public function testMissingBladeTemplate(): void
