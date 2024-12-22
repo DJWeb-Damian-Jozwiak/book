@@ -36,6 +36,7 @@ final class SessionManager
         return $manager;
     }
 
+    /** @codeCoverageIgnore  */
     public function start(): bool
     {
         if ($this->started) {
