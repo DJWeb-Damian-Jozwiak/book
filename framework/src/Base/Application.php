@@ -13,13 +13,17 @@ use DJWeb\Framework\Exceptions\Container\ContainerError;
 class Application extends Container
 {
     public string $base_path{
-        get => $this->getBinding('base_path') ?? '';
+        get {
+            /** @var ?string $path */
+            $path = $this->getBinding('base_path');
+            return $path ?? '';
+        }
     }
 
     public ?ConfigContract $config{
         get {
             $this->config ??= $this->get(ConfigContract::class);
-            $this->config->loadConfig();
+            $this->config?->loadConfig();
             return $this->config;
         }
     }
