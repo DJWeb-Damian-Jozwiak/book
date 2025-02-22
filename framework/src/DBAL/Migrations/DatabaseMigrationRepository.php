@@ -15,7 +15,7 @@ use DJWeb\Framework\DBAL\Schema\MySQL\Schema;
 
 class DatabaseMigrationRepository implements MigrationRepositoryContract
 {
-    private const MIGRATIONS_TABLE = 'migrations';
+    private const string MIGRATIONS_TABLE = 'migrations';
     private QueryBuilderFacadeContract $queryBuilder;
 
     public function __construct()
@@ -53,13 +53,16 @@ class DatabaseMigrationRepository implements MigrationRepositoryContract
             ->delete();
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getRan(): array
     {
         return array_column($this->getMigrations(), 'migration');
     }
 
     /**
-     * @return array<int, string>
+     * @return array<int, array<string, mixed>>
      */
     public function getMigrations(): array
     {
