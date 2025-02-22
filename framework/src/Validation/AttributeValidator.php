@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DJWeb\Framework\Validation;
 
+use DJWeb\Framework\Validation\Attributes\ValidationAttribute;
 use DJWeb\Framework\Validation\Contracts\ValidationRule;
 use DJWeb\Framework\Validation\Contracts\Validator;
 
@@ -53,12 +54,12 @@ class AttributeValidator implements Validator
             $attributes,
             static function (\ReflectionAttribute $attribute) {
                 $rule = $attribute->newInstance();
-                return $rule instanceof ValidationRule;
+                return $rule instanceof ValidationAttribute;
             }
         );
         $value = $data[$property->getName()] ?? null;
         foreach ($attributes as $attribute) {
-            /** @var ValidationRule $rule */
+            /** @var ValidationAttribute $rule */
             $rule = $attribute->newInstance();
             $rule->withData($data);
             if (! $rule->validate($value)) {
