@@ -12,6 +12,13 @@ final class Auth
     private static ?RoleManager $roleManager = null;
     private static ?PermissionManager $permissionManager = null;
 
+    public static function empty(): void
+    {
+        self::$userManager = null;
+        self::$roleManager = null;
+        self::$permissionManager = null;
+    }
+
     public static function attempt(User $user, string $password, bool $remember = false): bool
     {
         return self::getUserManager()->attempt($user, $password, $remember);
@@ -79,7 +86,8 @@ final class Auth
 
     private static function getUserManager(): UserManager
     {
-        return self::$userManager ?? new UserManager();
+        self::$userManager ??= new UserManager();
+        return self::$userManager;
     }
 
     private static function getRoleManager(): RoleManager
