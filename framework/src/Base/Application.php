@@ -31,7 +31,7 @@ class Application extends Container
         }
     }
 
-    private ?LoggerInterface $_logger;
+    private ?LoggerInterface $_logger = null;
 
     public LoggerInterface $logger{
         get {
