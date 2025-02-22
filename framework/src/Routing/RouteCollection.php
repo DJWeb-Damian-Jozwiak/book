@@ -13,7 +13,7 @@ use Psr\Http\Message\RequestInterface;
 class RouteCollection implements \IteratorAggregate, \Countable
 {
     /**
-     * @var array<int, Route>
+     * @var array<int, string>
      */
     public array $middlewareBefore {
         get {
@@ -29,7 +29,7 @@ class RouteCollection implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @var array<int, Route>
+     * @var array<int, string>
      */
     public array $middlewareAfter {
         get {
@@ -45,7 +45,7 @@ class RouteCollection implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @var array<int, Route>
+     * @var array<int, string>
      */
     public array $withoutMiddleware {
         get {
