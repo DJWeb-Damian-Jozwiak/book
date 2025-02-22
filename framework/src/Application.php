@@ -18,13 +18,17 @@ use Psr\Http\Message\ServerRequestInterface;
 class Application extends Container
 {
     public string $base_path{
-        get => $this->getBinding('base_path') ?? '';
+        get {
+            /** @var ?string $path */
+            $path = $this->getBinding('base_path');
+            return $path ?? '';
+        }
     }
 
     public ?ConfigBase $config{
         get {
             $this->config ??= $this->get(ContainerContract::class);
-            $this->config->loadConfig();
+            $this->config?->loadConfig();
             return $this->config;
         }
     }
