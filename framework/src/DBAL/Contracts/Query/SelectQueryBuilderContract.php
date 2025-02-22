@@ -6,6 +6,11 @@ namespace DJWeb\Framework\DBAL\Contracts\Query;
 
 interface SelectQueryBuilderContract extends QueryBuilderContract
 {
+    /**
+     * @param array<int, string> $columns
+     *
+     * @return $this
+     */
     public function select(array $columns = ['*']): self;
 
     public function limit(int $limit): self;
