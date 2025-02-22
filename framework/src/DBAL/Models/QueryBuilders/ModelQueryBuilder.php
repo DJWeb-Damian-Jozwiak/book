@@ -6,6 +6,7 @@ namespace DJWeb\Framework\DBAL\Models\QueryBuilders;
 
 use DJWeb\Framework\DBAL\Contracts\Query\DeleteQueryBuilderContract;
 use DJWeb\Framework\DBAL\Contracts\Query\InsertQueryBuilderContract;
+use DJWeb\Framework\DBAL\Contracts\Query\QueryBuilderContract;
 use DJWeb\Framework\DBAL\Contracts\Query\QueryBuilderFacadeContract;
 use DJWeb\Framework\DBAL\Contracts\Query\SelectQueryBuilderContract;
 use DJWeb\Framework\DBAL\Contracts\Query\UpdateQueryBuilderContract;
@@ -13,6 +14,9 @@ use DJWeb\Framework\DBAL\Models\Model;
 use DJWeb\Framework\DBAL\Query\Builders\QueryBuilder;
 use DJWeb\Framework\DBAL\Query\Builders\SelectQueryBuilder;
 
+/**
+ * @method where(string $column, string $operator, mixed $value, bool $and = true): QueryBuilderContract
+ */
 class ModelQueryBuilder
 {
     public readonly QueryBuilderFacadeContract $facade;
