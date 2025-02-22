@@ -10,6 +10,7 @@ use DJWeb\Framework\Container\Container;
 use DJWeb\Framework\Container\Contracts\ContainerContract;
 use DJWeb\Framework\Container\Contracts\ServiceProviderContract;
 use DJWeb\Framework\Exceptions\Container\ContainerError;
+use DJWeb\Framework\Log\Logger;
 use DJWeb\Framework\Log\LoggerFactory;
 use DJWeb\Framework\ServiceProviders\SchemaServiceProvider;
 use Psr\Log\LoggerInterface;
@@ -43,7 +44,9 @@ class Application extends Container
             }
             $this->_logger ??= $logger;
             $this->set(LoggerInterface::class, $this->_logger);
-            return $this->_logger;
+            /** @var Logger $logger */
+            $logger = $this->_logger;
+            return $logger;
         }
     }
     protected static ?self $instance = null;

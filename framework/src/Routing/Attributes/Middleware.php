@@ -10,6 +10,11 @@ use DJWeb\Framework\Routing\Route as RouteRouting;
 #[Attribute(Attribute::TARGET_METHOD | Attribute::TARGET_CLASS)]
 class Middleware
 {
+    /**
+     * @param array<int, string> $beforeGlobal
+     * @param array<int, string> $afterGlobal
+     * @param array<int, string> $withoutMiddleware
+     */
     public function __construct(
         private array $beforeGlobal = [],
         private array $afterGlobal = [],

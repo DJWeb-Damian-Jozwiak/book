@@ -42,7 +42,7 @@ class RegisterControllerRoutes
 
     private function mapMethod(ReflectionMethod $method): Route
     {
-        $routeAttribute = $method->getAttributes(RouteAttribute::class)[0]?->newInstance();
+        $routeAttribute = $method->getAttributes(RouteAttribute::class)[0]->newInstance();
         $handler = new RouteHandler($method->class, $method->name);
         $route = new Route($routeAttribute->path, $routeAttribute->methods[0], $handler);
         $middleware = $method->getAttributes(Middleware::class)[0] ?? null;
