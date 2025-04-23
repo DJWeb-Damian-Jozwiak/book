@@ -7,7 +7,7 @@ namespace DJWeb\Framework\DBAL\Contracts\Migrations;
 interface MigrationRepositoryContract
 {
     /**
-     * @return array<int, string>
+     * @return array<int, array<string, mixed>>
      */
     public function getMigrations(): array;
 
