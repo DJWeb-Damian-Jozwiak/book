@@ -36,7 +36,6 @@ class MiddlewareConfig
         $router = $kernel->router;
         $middlewareWithBefore = $router->routes->middlewareBefore;
         $middlewareWithAfter = $router->routes->middlewareAfter;
-        /** @phpstan-ignore-next-line */
         return array_map(
             static fn (string $middlewareClass) => $kernel->container->get($middlewareClass),
             [

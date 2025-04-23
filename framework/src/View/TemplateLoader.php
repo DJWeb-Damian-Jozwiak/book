@@ -16,6 +16,8 @@ class TemplateLoader
         if (! file_exists($path)) {
             throw new \RuntimeException("Template not found: {$path}");
         }
-        return file_get_contents($path);
+        /** @var string $content */
+        $content = file_get_contents($path);
+        return $content;
     }
 }

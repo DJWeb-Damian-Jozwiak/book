@@ -8,4 +8,11 @@ interface ValidationRule
 {
     public function validate(mixed $value): bool;
 
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return $this
+     */
+    public function withData(array $data): static;
+
 }

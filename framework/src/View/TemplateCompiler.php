@@ -40,19 +40,19 @@ class TemplateCompiler
 
     private function compileComments(string $content): string
     {
-        return preg_replace('/\{\{--(.*?)--\}\}/s', '<?php /* $1 */ ?>', $content);
+        return preg_replace('/\{\{--(.*?)--\}\}/s', '<?php /* $1 */ ?>', $content) ?? '';
     }
 
     private function compileEchos(string $content): string
     {
         // Raw echo {!! $var !!}
-        $content = preg_replace('/\{!!(.*?)!!\}/', '<?php echo $1; ?>', $content);
+        $content = preg_replace('/\{!!(.*?)!!\}/', '<?php echo $1; ?>', $content) ?? '';
 
         // Escaped echo {{ $var }}
         return preg_replace(
             '/\{\{(.*?)\}\}/',
             '<?php echo htmlspecialchars($1, ENT_QUOTES, \'UTF-8\'); ?>',
             $content
-        );
+        ) ?? '';
     }
 }
