@@ -28,7 +28,6 @@ class MigrationResolver implements MigrationResolverContract
         }
         $files = scandir($this->migrationPath);
         $files = array_filter(
-            /** @phpstan-ignore-next-line */
             $files,
             static fn (string $file) => $file !== '.' && $file !== '..'
         );
