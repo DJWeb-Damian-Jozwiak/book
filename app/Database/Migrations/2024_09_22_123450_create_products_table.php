@@ -24,7 +24,6 @@ return new class extends Migration
             new DateTimeColumn('updated_at', currentOnUpdate: true),
             new PrimaryColumn('id'),
         ]);
-        $this->schema->uniqueIndex('products', 'unique_users_email', 'email');
     }
 
     /**
