@@ -32,7 +32,7 @@ class ServerRequest extends BaseRequest implements ServerRequestInterface
         UriInterface $uri,
         StreamInterface $body,
         HeaderManager $headerManager,
-        private  array $serverParams,
+        private ?array $serverParams,
         private array $cookieParams,
         protected QueryParamsManager $queryParamsManager,
         private UploadedFilesManager $uploadedFilesManager,
