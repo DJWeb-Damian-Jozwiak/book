@@ -65,7 +65,9 @@ class BladeAdapter extends BaseAdapter implements RendererContract
     {
 
         if ($this->currentSection) {
-            $this->sections[$this->currentSection] = ob_get_clean();
+            /** @var string $buffer */
+            $buffer = ob_get_clean();
+            $this->sections[$this->currentSection] = $buffer;
             $this->currentSection = '';
         }
     }
@@ -91,6 +93,10 @@ class BladeAdapter extends BaseAdapter implements RendererContract
 
         $content = $this->renderTemplate($template, $data);
 
+        /**
+         * template is extended in views, in a render template method with layouts
+         */
+        /** @phpstan-ignore-next-line  */
         if ($this->extendedTemplate !== null) {
             return $this->render($this->extendedTemplate, $data);
         }
@@ -107,6 +113,11 @@ class BladeAdapter extends BaseAdapter implements RendererContract
         return new BladeAdapter($template_path, $cache_path, $namespace);
     }
 
+    /**
+     * @param string $template
+     * @param array<string, mixed> $data
+     * @return string
+     */
     private function renderTemplate(string $template, array $data): string
     {
         $cached_file = $this->getCachedPath($template);
@@ -157,11 +168,18 @@ class BladeAdapter extends BaseAdapter implements RendererContract
         File::create($path, $content);
     }
 
+    /**
+     * @param string $cached_file
+     * @param array<string, mixed> $data
+     * @return string
+     */
     private function evaluateTemplate(string $cached_file, array $data): string
     {
         extract($data);
         ob_start();
         include_once $cached_file;
-        return ob_get_clean();
+        /** @var string $buffer */
+        $buffer = ob_get_clean();
+        return $buffer;
     }
 }
