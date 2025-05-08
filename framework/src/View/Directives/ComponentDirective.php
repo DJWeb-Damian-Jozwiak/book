@@ -58,8 +58,8 @@ class ComponentDirective extends Directive
                 $counter++;
 
                 $componentName = $this->formatComponentName($matches[1]);
-                $attributes = $this->parseAttributes($matches[2] ?? '');
-                $slot = $matches[3] ?? '';
+                $attributes = $this->parseAttributes($matches[2]);
+                $slot = $matches[3];
 
                 $varName = "\$__component_{$counter}";
 
@@ -68,7 +68,7 @@ class ComponentDirective extends Directive
                 return $this->getPhpCompiledString($varName, $componentName, $attributes, $compiledSlot);
             },
             $content
-        );
+        ) ?? '';
     }
 
     private function parseAttributes(string $attributesString): string

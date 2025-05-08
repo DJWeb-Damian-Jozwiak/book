@@ -10,16 +10,6 @@ use ReflectionProperty;
 
 abstract class Component
 {
-    /**
-     * @var ?array<string, mixed>
-     */
-    private ?array $publicProperties {
-        get {
-            $this->publicProperties ??= $this->getPublicProperties();
-            return $this->publicProperties;
-        }
-    }
-
     private ?string $slot = null;
     /**
      * @var array<string, string>

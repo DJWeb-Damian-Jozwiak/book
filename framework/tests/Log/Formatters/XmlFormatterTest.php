@@ -34,6 +34,7 @@ class XmlFormatterTest extends TestCase
 </log>
 
 XML;
+        $expected = str_replace("\r\n", PHP_EOL, $expected);
         $this->assertEquals($expected, $result);
     }
 }

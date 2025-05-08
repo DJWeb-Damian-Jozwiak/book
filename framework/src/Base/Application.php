@@ -12,6 +12,7 @@ use DJWeb\Framework\Container\Contracts\ServiceProviderContract;
 use DJWeb\Framework\DBAL\Contracts\Schema\SchemaContract;
 use DJWeb\Framework\Events\EventManager;
 use DJWeb\Framework\Exceptions\Container\ContainerError;
+use DJWeb\Framework\Log\Logger;
 use DJWeb\Framework\Log\LoggerFactory;
 use DJWeb\Framework\ServiceProviders\SchemaServiceProvider;
 use Psr\Log\LoggerInterface;
@@ -19,7 +20,11 @@ use Psr\Log\LoggerInterface;
 class Application extends Container
 {
     public string $base_path{
-        get => $this->getBinding('base_path') ?? '';
+        get {
+            /** @var ?string $path */
+            $path = $this->getBinding('base_path');
+            return $path ?? '';
+        }
     }
 
     public EventManager $events {
@@ -33,10 +38,12 @@ class Application extends Container
     public ?ConfigContract $config{
         get {
             $this->config ??= $this->get(ConfigContract::class);
-            $this->config->loadConfig();
+            $this->config?->loadConfig();
             return $this->config;
         }
     }
+
+    private ?LoggerInterface $_logger = null;
 
     public LoggerInterface $logger{
         get {
@@ -47,7 +54,9 @@ class Application extends Container
             }
             $this->_logger ??= $logger;
             $this->set(LoggerInterface::class, $this->_logger);
-            return $this->_logger;
+            /** @var Logger $logger */
+            $logger = $this->_logger;
+            return $logger;
         }
     }
     protected static ?self $instance = null;

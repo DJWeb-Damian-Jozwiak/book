@@ -44,6 +44,12 @@ abstract class Controller
         $this->viewRenderer = $renderer;
     }
 
+    /**
+     * @param string $view
+     * @param array<string, mixed> $data
+     * @return ResponseInterface
+     * @throws \Exception
+     */
     public function render(string $view, array $data = []): ResponseInterface
     {
         $this->renderer ??= $this->viewManager->build($this->viewRenderer);
